@@ -1,0 +1,10 @@
+.loginDiw {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 10px;
+}
+
+.textInput {
+    display: block;
+    margin-top: 10px;
+}
