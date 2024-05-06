@@ -4,7 +4,7 @@ const mysql = require('mysql2');
 const connection = mysql.createConnection({
     host: 'localhost',       // Veritabanı sunucunuzun IP adresi veya 'localhost'
     user: 'root',            // Veritabanı kullanıcı adı
-    password: '1436XYzt+++',    // Veritabanı şifresi
+    password: 'E@1q2w3e4r',    // Veritabanı şifresi
     database: 'Hospital'      // Veritabanı adı (oluşturulmuş olmalı)
 });
 
@@ -20,50 +20,50 @@ connection.connect((err) => {
 // SQL tablolarını oluştur
 const createTables = () => {
     const sqlCommands = [
-        `CREATE TABLE IF NOT EXISTS Hastalar (
-            HastaID INT PRIMARY KEY AUTO_INCREMENT,
-            Ad VARCHAR(50) NOT NULL,
-            Soyad VARCHAR(50) NOT NULL,
-            DogumTarihi DATE NOT NULL,
-            Cinsiyet ENUM('Erkek', 'Kadin') NOT NULL,
-            TelefonNumarasi VARCHAR(15),
-            Adres TEXT
+        `CREATE TABLE IF NOT EXISTS Patients (
+            patientID INT PRIMARY KEY AUTO_INCREMENT,
+            name VARCHAR(50) NOT NULL,
+            surname VARCHAR(50) NOT NULL,
+            birthDate DATE NOT NULL,
+            gender ENUM('man', 'woman') NOT NULL,
+            phoneNumber VARCHAR(15),
+            address TEXT
         );`,
 
-        `CREATE TABLE IF NOT EXISTS Doktorlar (
-            DoktorID INT PRIMARY KEY AUTO_INCREMENT,
-            Ad VARCHAR(50) NOT NULL,
-            Soyad VARCHAR(50) NOT NULL,
-            UzmanlikAlani VARCHAR(100),
-            CalistigiHastane VARCHAR(100)
+        `CREATE TABLE IF NOT EXISTS Doctors (
+            doctorID INT PRIMARY KEY AUTO_INCREMENT,
+            name VARCHAR(50) NOT NULL,
+            surname VARCHAR(50) NOT NULL,
+            specialization VARCHAR(100),
+            hospital VARCHAR(100)
         );`,
 
-        `CREATE TABLE IF NOT EXISTS Yoneticiler (
-            YoneticiID INT PRIMARY KEY AUTO_INCREMENT,
-            Ad VARCHAR(50),
-            Soyad VARCHAR(50)
+        `CREATE TABLE IF NOT EXISTS Managers (
+            managerID INT PRIMARY KEY AUTO_INCREMENT,
+            name VARCHAR(50),
+            surname VARCHAR(50)
         );`,
 
-        `CREATE TABLE IF NOT EXISTS Randevular (
-            RandevuID INT PRIMARY KEY AUTO_INCREMENT,
-            HastaID INT,
-            DoktorID INT,
-            RandevuTarihi DATE NOT NULL,
-            RandevuSaati TIME NOT NULL,
-            FOREIGN KEY (HastaID) REFERENCES Hastalar(HastaID),
-            FOREIGN KEY (DoktorID) REFERENCES Doktorlar(DoktorID)
+        `CREATE TABLE IF NOT EXISTS Appointments (
+            appointmentID INT PRIMARY KEY AUTO_INCREMENT,
+            patientID INT,
+            doctorID INT,
+            appointmentDate DATE NOT NULL,
+            appointmentTime TIME NOT NULL,
+            FOREIGN KEY (patientID) REFERENCES Patients(patientID),
+            FOREIGN KEY (doctorID) REFERENCES Doctors(doctorID)
         );`,
 
-        `CREATE TABLE IF NOT EXISTS TibbiRaporlar (
-            RaporID INT PRIMARY KEY AUTO_INCREMENT,
-            HastaID INT,
-            DoktorID INT,
-            RaporTarihi DATE NOT NULL,
-            RaporIcerigi TEXT,
-            RaporURL VARCHAR(255),
-            RaporJSON JSON,
-            FOREIGN KEY (HastaID) REFERENCES Hastalar(HastaID),
-            FOREIGN KEY (DoktorID) REFERENCES Doktorlar(DoktorID)
+        `CREATE TABLE IF NOT EXISTS MedicalReports (
+            reportID INT PRIMARY KEY AUTO_INCREMENT,
+            patientID INT,
+            doctorID INT,
+            reportDate DATE NOT NULL,
+            reportContent TEXT,
+            reportURL VARCHAR(255),
+            reportJSON JSON,
+            FOREIGN KEY (patientID) REFERENCES Patients(patientID),
+            FOREIGN KEY (doctorID) REFERENCES Doctors(doctorID)
         );`
     ];
 
@@ -77,6 +77,7 @@ const createTables = () => {
         });
     });
 };
+
 
 // Tabloları oluştur
 createTables();

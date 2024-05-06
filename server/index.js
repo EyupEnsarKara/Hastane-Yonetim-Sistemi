@@ -25,12 +25,14 @@ connection.connect((err) => {
 
 app.post('/addPatient', (req, res) => {
     const { name, surName, birthDate, gender, phoneNumber, adress } = req.body;
+    console.log("Başarılı")
     connection.query(`
     INSERT INTO Hastalar (Ad, Soyad, DogumTarihi, Cinsiyet, TelefonNumarasi, Adres)
              VALUES (?, ?, ?, ?, ?, ?)
     `, [name, surName, birthDate, gender, phoneNumber, adress], (err) => {
         if (err)
             console.log("Veri eklemede hata oluştu");
+
     })
 })
 
