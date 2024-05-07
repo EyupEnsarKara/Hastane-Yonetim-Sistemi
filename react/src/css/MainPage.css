@@ -1,0 +1,6 @@
+.MainPage {
+    flex-direction: column;
+    display: flex;
+    justify-items: flex-start;
+    gap: 10px;
+}
