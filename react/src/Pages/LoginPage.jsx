@@ -9,19 +9,19 @@ function LoginPage() {
     let birthDate = '';
     let gender = '';
     let phoneNumber = '';
-    let adress = '';
+    let address = '';
     const logInfos = () => {
-        console.log(name, surName, birthDate, gender, phoneNumber, adress)
+        console.log(name, surName, birthDate, gender, phoneNumber, address)
 
     }
     const addPatient = () => {
         axios.post('http://localhost:4444/addPatient', {
             name: name,
-            surName: surName,
             birthDate: birthDate,
+            surName: surName,
             gender: gender,
             phoneNumber: phoneNumber,
-            adress: adress
+            address: address
         });
     }
 
@@ -37,7 +37,7 @@ function LoginPage() {
                 <option value='man'>Man</option>
             </select>
             <input type="tel" placeholder='Phone Number' className='textInput' onChange={(value) => (phoneNumber = value.target.value)} />
-            <input type="text" placeholder='Adress' className='textInput-adress' onChange={(value) => (adress = value.target.value)} />
+            <input type="text" placeholder='Address' className='textInput-adress' onChange={(value) => (address = value.target.value)} />
 
             <button className='addButton' onClick={addPatient}>Login</button>
 

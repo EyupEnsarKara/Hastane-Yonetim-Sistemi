@@ -1,6 +1,6 @@
-class Patient {
-  constructor(patientID, name, surname, birthDate, gender, phoneNumber, address) {
-    this.patientID = patientID;
+class PatientClass {
+  constructor(connection, name, surname, birthDate, gender, phoneNumber, address) {
+    this.connection = connection;
     this.name = name;
     this.surname = surname;
     this.birthDate = birthDate;
@@ -8,26 +8,21 @@ class Patient {
     this.phoneNumber = phoneNumber;
     this.address = address;
   }
+
   addToDatabase() {
-    const sql = `INSERT INTO Patients (patientID, name, surname, birthDate, gender, phoneNumber, address) VALUES (${this.patientID}, '${this.name}', '${this.surname}', '${this.birthDate}', '${this.gender}', '${this.phoneNumber}', '${this.address}')`;
-    connection.query(sql, (err, result) => {
+    const sql = `INSERT INTO Patients ( name, surname, birthDate, gender, phoneNumber, address) VALUES ( '${this.name}', '${this.surname}', '${this.birthDate}', '${this.gender}', '${this.phoneNumber}', '${this.address}')`;
+    this.connection.query(sql, (err, result) => {
       if (err) throw err;
       console.log("Patient eklendi!");
     });
   }
-  // Randevu ekleme metodu
-  addAppointment(appointment) {
-    // Burada randevu eklenirken ilgili veritabanı tablosuna eklemeniz gerekir.
-  }
 
-  // Tıbbi rapor ekleme metodu
-  addMedicalReport(medicalReport) {
-    // Burada tıbbi rapor eklenirken ilgili veritabanı tablosuna eklemeniz gerekir.
-  }
+  // Diğer metodlar...
 }
 
-class Doctor {
-  constructor(doctorID, name, surname, specialization, hospital) {
+class DoctorClass {
+  constructor(connection, doctorID, name, surname, specialization, hospital) {
+    this.connection = connection;
     this.doctorID = doctorID;
     this.name = name;
     this.surname = surname;
@@ -36,20 +31,18 @@ class Doctor {
   }
   addToDatabase() {
     const sql = `INSERT INTO Doctors (doctorID, name, surname, specialization, hospital) VALUES (${this.doctorID}, '${this.name}', '${this.surname}', '${this.specialization}', '${this.hospital}')`;
-    connection.query(sql, (err, result) => {
+    this.connection.query(sql, (err, result) => {
       if (err) throw err;
       console.log("Doctor eklendi!");
     });
   }
 
-  // Randevu ekleme metodu
-  addAppointment(appointment) {
-    // Burada doktorun randevu tablosuna randevu eklenirken ilgili veritabanı tablosuna eklemeniz gerekir.
-  }
+  // Diğer metodlar...
 }
 
-class Appointment {
-  constructor(appointmentID, patientID, doctorID, date, time) {
+class AppointmentClass {
+  constructor(connection, appointmentID, patientID, doctorID, date, time) {
+    this.connection = connection;
     this.appointmentID = appointmentID;
     this.patientID = patientID;
     this.doctorID = doctorID;
@@ -58,15 +51,16 @@ class Appointment {
   }
   addToDatabase() {
     const sql = `INSERT INTO Appointments (appointmentID, patientID, doctorID, date, time) VALUES (${this.appointmentID}, ${this.patientID}, ${this.doctorID}, '${this.date}', '${this.time}')`;
-    connection.query(sql, (err, result) => {
+    this.connection.query(sql, (err, result) => {
       if (err) throw err;
       console.log("Appointment eklendi!");
     });
   }
 }
 
-class MedicalReport {
-  constructor(reportID, patientID, doctorID, reportDate, content, result) {
+class MedicalReportClass {
+  constructor(connection, reportID, patientID, doctorID, reportDate, content, result) {
+    this.connection = connection;
     this.reportID = reportID;
     this.patientID = patientID;
     this.doctorID = doctorID;
@@ -76,11 +70,11 @@ class MedicalReport {
   }
   addToDatabase() {
     const sql = `INSERT INTO MedicalReports (reportID, patientID, doctorID, reportDate, content, result) VALUES (${this.reportID}, ${this.patientID}, ${this.doctorID}, '${this.reportDate}', '${this.content}', '${this.result}')`;
-    connection.query(sql, (err, result) => {
+    this.connection.query(sql, (err, result) => {
       if (err) throw err;
       console.log("MedicalReport eklendi!");
     });
   }
 }
 
-
+module.exports = { PatientClass, DoctorClass, AppointmentClass, MedicalReportClass };

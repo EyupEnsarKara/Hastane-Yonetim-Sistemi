@@ -1,3 +1,5 @@
+const { PatientClass, DoctorClass, AppointmentClass, MedicalReportClass } = require('./classes');
+
 const express = require('express');
 const cors = require('cors');
 const { host, database, password, user, port } = require('./config.json')
@@ -22,30 +24,37 @@ connection.connect((err) => {
     console.log("Veritabanına bağlanıldı.");
 })
 
-
+// /addPatient endpoint'i
 app.post('/addPatient', (req, res) => {
-    const { name, surName, birthDate, gender, phoneNumber, adress } = req.body;
-    console.log("Başarılı")
-    connection.query(`
-    INSERT INTO Hastalar (Ad, Soyad, DogumTarihi, Cinsiyet, TelefonNumarasi, Adres)
-             VALUES (?, ?, ?, ?, ?, ?)
-    `, [name, surName, birthDate, gender, phoneNumber, adress], (err) => {
-        if (err)
-            console.log("Veri eklemede hata oluştu");
+    const { name, surName, birthDate, gender, phoneNumber, address } = req.body;
+    const patient = new PatientClass(connection, name, surName, birthDate, gender, phoneNumber, address);
+    patient.addToDatabase();
+    //res.status(200).json({ message: 'Hasta başarıyla eklendi.' });
+});
 
-    })
-})
+// /addDoctor endpoint'i
+app.post('/addDoctor', (req, res) => {
+    const { connection, name, surName, specialization, hospital } = req.body;
+    const doctor = new DoctorClass(connection, name, surName, specialization, hospital);
+    doctor.addToDatabase();
+    //res.status(200).json({ message: 'Doktor başarıyla eklendi.' });
+});
 
+// /addAppointment endpoint'i
+app.post('/addAppointment', (req, res) => {
+    const { connection, patientID, doctorID, date, time } = req.body;
+    const appointment = new AppointmentClass(connection, patientID, doctorID, date, time);
+    appointment.addToDatabase();
+    //res.status(200).json({ message: 'Randevu başarıyla eklendi.' });
+});
 
-
-
-
-
-
-
-
-
-
+// /addMedicalReport endpoint'i
+app.post('/addMedicalReport', (req, res) => {
+    const { connection, patientID, doctorID, report } = req.body;
+    const medicalReport = new MedicalReportClass(connection, patientID, doctorID, report);
+    medicalReport.addToDatabase();
+    //res.status(200).json({ message: 'Tıbbi rapor başarıyla eklendi.' });
+});
 
 
 app.listen(port, () => {
