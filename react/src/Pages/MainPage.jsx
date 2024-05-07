@@ -6,8 +6,8 @@ function MainPage() {
     const navigate = useNavigate();
     return (
         <div className='MainPage'>
-            <button>Login</button>
-            <button onClick={() => (navigate('/register'))}>Register</button>
+            <button className='main-button'>Login</button>
+            <button className='main-button' onClick={() => (navigate('/register'))}>Register</button>
         </div>
     )
 }
