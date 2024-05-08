@@ -7,7 +7,9 @@ import NavBar from './Pages/NavBar'
 
 
 function App() {
-  const [count, setCount] = useState(0)
+  localStorage.setItem('userType', 'user');
+  localStorage.removeItem('userType');
+
 
   return (
     <center>

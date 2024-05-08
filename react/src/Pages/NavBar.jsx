@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 
 function NavBar() {
     const navigate = useNavigate();
+    const userType = localStorage.getItem('userType');
 
     return (
         <nav className="navbar">
@@ -12,13 +13,40 @@ function NavBar() {
                     <img src="src/assets/heart-attack.png" width="60" height="60" alt="Image not found." />
                 </a>
                 <ul className="navbar-menu">
-                    <li className="navbar-item">
-                        <a onClick={() => (navigate('/login'))} className="navbar-link">Login</a>
-                    </li>
-                    <li className="navbar-item">
-                        <a onClick={() => (navigate('/register'))} className="navbar-link">Sign up</a>
-                    </li>
-                    {/* Daha fazla link eklemek için buraya ekleyebilirsiniz */}
+                    {userType === 'admin' && (
+                        <>
+                            <li className="navbar-item">
+                                <a onClick={() => (navigate('/admin/dashboard'))} className="navbar-link">Dashboard</a>
+                            </li>
+                            <li className="navbar-item">
+                                <a onClick={() => (navigate('/admin/users'))} className="navbar-link">Users</a>
+                            </li>
+                        </>
+                    )}
+
+                    {userType === 'user' && (
+                        <>
+                            <li className="navbar-item">
+                                <a onClick={() => (navigate('/profile'))} className="navbar-link">Profile</a>
+                            </li>
+                            <li className="navbar-item">
+                                <a onClick={() => (navigate('/settings'))} className="navbar-link">Settings</a>
+                            </li>
+                        </>
+                    )}
+
+                    {!userType && (
+                        <>
+                            <li className="navbar-item">
+                                <a onClick={() => (navigate('/login'))} className="navbar-link">Login</a>
+                            </li>
+                            <li className="navbar-item">
+                                <a onClick={() => (navigate('/register'))} className="navbar-link">Sign up</a>
+                            </li>
+                        </>
+                    )}
+
+
                 </ul>
             </div>
         </nav>
@@ -26,3 +54,11 @@ function NavBar() {
 }
 
 export default NavBar;
+
+
+{/* <li className="navbar-item">
+                        <a onClick={() => (navigate('/login'))} className="navbar-link">Login</a>
+                    </li>
+                    <li className="navbar-item">
+                        <a onClick={() => (navigate('/register'))} className="navbar-link">Sign up</a>
+                    </li> */}

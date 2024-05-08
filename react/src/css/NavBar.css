@@ -7,6 +7,7 @@
     /* Navbar iç boşlukları */
 }
 
+
 .navbar-container {
     display: flex;
     justify-content: space-between;
@@ -22,6 +23,7 @@
     /* Link altı çizgisini kaldırır */
     font-size: 1.5rem;
     /* Logo metin boyutu */
+    cursor: pointer;
 }
 
 .navbar-menu {
