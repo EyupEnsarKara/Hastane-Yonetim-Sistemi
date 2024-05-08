@@ -1,72 +1,9 @@
-@keyframes slideBarAnimation {
-    0% {
-        background-color: #4CAF50;
-        /* Başlangıç rengi */
-    }
-
-    25% {
-        background-color: #FFC107;
-        /* İlk geçiş rengi */
-    }
-
-    50% {
-        background-color: #2196F3;
-        /* İkinci geçiş rengi */
-    }
-
-    75% {
-        background-color: #FF5722;
-        /* Üçüncü geçiş rengi */
-    }
-
-    100% {
-        background-color: #4CAF50;
-        /* Başlangıç rengine geri dönme */
-    }
-}
-
-@keyframes slideButtonAnimation {
-    0% {
-        background-color: #4CAF50;
-        /* Başlangıç rengi */
-    }
-
-    25% {
-        background-color: #FF5722;
-        /* İlk geçiş rengi */
-    }
-
-    50% {
-        background-color: #2196F3;
-        /* İkinci geçiş rengi */
-    }
-
-    75% {
-        background-color: #FFC107;
-        /* Üçüncü geçiş rengi */
-    }
-
-    100% {
-        background-color: #4CAF50;
-        /* Başlangıç rengine geri dönme */
-    }
-}
-
-.slider {
-    height: 2px;
-    width: 100%;
-    background-color: #4CAF50;
-    /* Slider'ın başlangıç rengi */
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    animation: slideBarAnimation 5s linear infinite;
-    /* Slider için animasyon */
-}
-
 .button-container {
     display: flex;
     position: relative;
+    flex-direction: row;
+    gap: 20px;
+
 }
 
 .login-type-selector {
@@ -88,19 +25,21 @@
 }
 
 .loginDiv {
-    width: 100%;
+    width: 20%;
     max-width: 400px;
     margin: 0 auto;
     padding: 20px;
-    background-color: #f5f5f5;
     border-radius: 10px;
     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
     position: relative;
     overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
 }
 
 .login-input {
-    width: 100%;
+    width: 95%;
     padding: 10px;
     margin-bottom: 10px;
     border: 1px solid #ccc;

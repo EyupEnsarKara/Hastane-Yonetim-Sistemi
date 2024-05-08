@@ -1,10 +1,11 @@
-import React from 'react'
+import React, { useState } from 'react'
 import '../css/MainPage.css'
 import { useNavigate } from 'react-router-dom'
 import LoginContainer from '../Components/LoginContainer';
 
 function MainPage() {
     const navigate = useNavigate();
+    const [selectedInputType, setSelectedInputType] = useState('login')
     return (
         <div className='MainPage'>
             <div className="content">
@@ -13,7 +14,8 @@ function MainPage() {
             <div className="MainPage-desc">
                 <p>Hospital</p>
             </div>
-            <LoginContainer />
+            {selectedInputType == 'login' ? < LoginContainer /> : <p>test</p>}
+            {selectedInputType !== 'register' && <p onClick={() => (setSelectedInputType('register'))} className='registerText'>Create An Account</p>}
 
 
 
