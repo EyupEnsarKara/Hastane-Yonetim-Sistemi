@@ -16,6 +16,7 @@ function RegisterPage() {
             name: name,
             birthDate: birthDate,
             surName: surName,
+            password: password,
             gender: gender,
             phoneNumber: phoneNumber,
             address: address

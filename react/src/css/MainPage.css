@@ -1,7 +1,23 @@
 .MainPage {
 
     flex-direction: column;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 
+}
+
+.name {
+    font-size: 30px;
+    font-family: 'Montserrat', sans-serif;
+    /* Font tipi */
+    color: #2c3e50;
+    /* Açık mavi veya yeşil tonlarına uygun renk */
+}
+
+.content {
+
+    margin-top: 2%;
 }
 
 body {

@@ -24,6 +24,7 @@ const createTables = () => {
             patientID INT PRIMARY KEY AUTO_INCREMENT,
             name VARCHAR(50) NOT NULL,
             surname VARCHAR(50) NOT NULL,
+            password VARCHAR(255) NOT NULL,
             birthDate DATE NOT NULL,
             gender ENUM('man', 'woman') NOT NULL,
             phoneNumber VARCHAR(15),
@@ -34,6 +35,7 @@ const createTables = () => {
             doctorID INT PRIMARY KEY AUTO_INCREMENT,
             name VARCHAR(50) NOT NULL,
             surname VARCHAR(50) NOT NULL,
+            password VARCHAR(255) NOT NULL,
             specialization VARCHAR(100),
             hospital VARCHAR(100)
         );`,
@@ -41,7 +43,8 @@ const createTables = () => {
         `CREATE TABLE IF NOT EXISTS Managers (
             managerID INT PRIMARY KEY AUTO_INCREMENT,
             name VARCHAR(50),
-            surname VARCHAR(50)
+            surname VARCHAR(50),
+            password VARCHAR(255) NOT NULL
         );`,
 
         `CREATE TABLE IF NOT EXISTS Appointments (

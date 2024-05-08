@@ -1,8 +1,9 @@
 class PatientClass {
-  constructor(connection, name, surname, birthDate, gender, phoneNumber, address) {
+  constructor(connection, name, surname, password, birthDate, gender, phoneNumber, address) {
     this.connection = connection;
     this.name = name;
     this.surname = surname;
+    this.password = password;
     this.birthDate = birthDate;
     this.gender = gender;
     this.phoneNumber = phoneNumber;
@@ -10,7 +11,7 @@ class PatientClass {
   }
 
   addToDatabase() {
-    const sql = `INSERT INTO Patients ( name, surname, birthDate, gender, phoneNumber, address) VALUES ( '${this.name}', '${this.surname}', '${this.birthDate}', '${this.gender}', '${this.phoneNumber}', '${this.address}')`;
+    const sql = `INSERT INTO Patients ( name, surname, password,birthDate, gender, phoneNumber, address) VALUES ( '${this.name}', '${this.surname}','${this.password}' ,'${this.birthDate}', '${this.gender}', '${this.phoneNumber}', '${this.address}')`;
     this.connection.query(sql, (err, result) => {
       if (err) throw err;
       console.log("Patient eklendi!");
@@ -21,16 +22,17 @@ class PatientClass {
 }
 
 class DoctorClass {
-  constructor(connection, doctorID, name, surname, specialization, hospital) {
+  constructor(connection, doctorID, name, surname, password, specialization, hospital) {
     this.connection = connection;
     this.doctorID = doctorID;
     this.name = name;
     this.surname = surname;
+    this.password = password;
     this.specialization = specialization;
     this.hospital = hospital;
   }
   addToDatabase() {
-    const sql = `INSERT INTO Doctors (doctorID, name, surname, specialization, hospital) VALUES (${this.doctorID}, '${this.name}', '${this.surname}', '${this.specialization}', '${this.hospital}')`;
+    const sql = `INSERT INTO Doctors (name, surname, password,specialization, hospital) VALUES ('${this.name}', '${this.surname}','${this.password}', '${this.specialization}', '${this.hospital}')`;
     this.connection.query(sql, (err, result) => {
       if (err) throw err;
       console.log("Doctor eklendi!");

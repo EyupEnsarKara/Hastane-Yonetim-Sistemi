@@ -32,16 +32,16 @@ connection.connect((err) => {
 
 // /addPatient endpoint'i
 app.post('/addPatient', (req, res) => {
-    const { name, surName, birthDate, gender, phoneNumber, address } = req.body;
-    const patient = new PatientClass(connection, name, surName, birthDate, gender, phoneNumber, address);
+    const { name, surName, password, birthDate, gender, phoneNumber, address } = req.body;
+    const patient = new PatientClass(connection, name, surName, password, birthDate, gender, phoneNumber, address);
     patient.addToDatabase();
     //res.status(200).json({ message: 'Hasta başarıyla eklendi.' });
 });
 
 // /addDoctor endpoint'i
 app.post('/addDoctor', (req, res) => {
-    const { connection, name, surName, specialization, hospital } = req.body;
-    const doctor = new DoctorClass(connection, name, surName, specialization, hospital);
+    const { connection, name, surName, password, specialization, hospital } = req.body;
+    const doctor = new DoctorClass(connection, name, surName, password, specialization, hospital);
     doctor.addToDatabase();
     //res.status(200).json({ message: 'Doktor başarıyla eklendi.' });
 });

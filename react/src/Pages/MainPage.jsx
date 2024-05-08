@@ -7,8 +7,12 @@ function MainPage() {
     const navigate = useNavigate();
     return (
         <div className='MainPage'>
-
-            <h1 className='MainPage-title'>Welcome to the Main Page</h1>
+            <div class="content">
+                <img src="src/assets/heart-attack.png" width="100" height="100" alt="Image is not found" />
+            </div>
+            <div class="name">
+                <p>Hospital</p>
+            </div>
 
         </div>
     )
