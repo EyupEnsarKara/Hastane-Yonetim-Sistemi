@@ -15,7 +15,7 @@ function LoginPage() {
 
     }
     const addPatient = () => {
-        axios.post('http://localhost:4444/addPatient', {
+        axios.post('https://localhost:4444/addPatient', {
             name: name,
             birthDate: birthDate,
             surName: surName,

@@ -4,6 +4,8 @@ const express = require('express');
 const cors = require('cors');
 const { host, database, password, user, port } = require('./config.json')
 const mysql = require('mysql2');
+const htpps = require('https');
+const fs = require('fs');
 
 const app = express();
 app.use(cors());
@@ -15,6 +17,10 @@ const connection = mysql.createConnection({
     password: password,
     user: user
 });
+const certOptions = {
+    key: fs.readFileSync('localhost-key.pem'),
+    cert: fs.readFileSync('localhost.pem')
+};
 
 connection.connect((err) => {
     if (err) {
@@ -56,7 +62,14 @@ app.post('/addMedicalReport', (req, res) => {
     //res.status(200).json({ message: 'Tıbbi rapor başarıyla eklendi.' });
 });
 
+const server = htpps.createServer(certOptions, app);
 
-app.listen(port, () => {
-    console.log("Server Started in port:" + port)
-})
+
+// app.listen(port, () => {
+//     console.log("Server Started in port:" + port)
+// })
+
+
+server.listen(port, () => {
+    console.log("htpps Server Started in port:" + port);
+});
