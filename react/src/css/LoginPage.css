@@ -5,9 +5,10 @@
     /* aligns items on the line (the y-axis if flex-direction is row) */
     align-items: center;
     /* aligns items on the cross-axis (the x-axis if flex-direction is row) */
-    height: 100vh;
+    height: 40vh;
+    margin-top: 50px;
     /* viewport height - this makes the div take up the full height of the screen */
-    margin-bottom: 10px;
+
 }
 
 .textInput {

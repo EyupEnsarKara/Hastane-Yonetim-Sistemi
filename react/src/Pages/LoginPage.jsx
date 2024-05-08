@@ -4,16 +4,11 @@ import axios from 'axios'
 
 function LoginPage() {
 
-    let name = '';
-    let surName = '';
-    let birthDate = '';
-    let gender = '';
-    let phoneNumber = '';
-    let address = '';
-    const logInfos = () => {
-        console.log(name, surName, birthDate, gender, phoneNumber, address)
 
-    }
+    let phoneNumber = '';
+    let password = '';
+
+
     const addPatient = () => {
         axios.post('https://localhost:4444/addPatient', {
             name: name,
@@ -28,16 +23,8 @@ function LoginPage() {
 
     return (
         <div className='loginDiv'>
-            <input type="text" placeholder='Name' className='textInput' onChange={(value) => (name = value.target.value)} />
-            <input type="text" placeholder='SurName' className='textInput' onChange={(value) => (surName = value.target.value)} />
-            <input type="date" placeholder='Birthdate' className='textInput' onChange={(value) => (birthDate = value.target.value)} />
-            <select className='textInput' onChange={(value) => (gender = value.target.value)}>
-                <option value=''>Select Gender</option>
-                <option value='woman'>Woman</option>
-                <option value='man'>Man</option>
-            </select>
             <input type="tel" placeholder='Phone Number' className='textInput' onChange={(value) => (phoneNumber = value.target.value)} />
-            <input type="text" placeholder='Address' className='textInput-adress' onChange={(value) => (address = value.target.value)} />
+            <input type="password" placeholder='Password' className='textInput' onChange={(value) => (password = value.target.value)} />
 
             <button className='addButton' onClick={addPatient}>Login</button>
 

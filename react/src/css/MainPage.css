@@ -4,6 +4,16 @@
 
 }
 
+body {
+    background-image: url('./src/assets/back.webp');
+    /* Arka plan resmi */
+    background-size: 100% 100%;
+    /* Resmin ekran boyutuna oturacak şekilde boyutlandırılması */
+    background-repeat: no-repeat;
+    /* Resmin tekrarlanmaması */
+    background-attachment: fixed;
+    /* Resmin ekranla sabit kalması */
+}
 
 .main-button {
     background-color: #4CAF50;
