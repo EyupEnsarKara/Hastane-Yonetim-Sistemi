@@ -46,3 +46,27 @@ body {
 .main-button:hover {
     background-color: #45a049;
 }
+
+MainPage-button-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin-top: 10px;
+}
+
+.MainPage-button {
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    margin-top: 10px;
+    display: block;
+}
+
+.MainPage-button:hover {
+    background-color: #45a049;
+}
