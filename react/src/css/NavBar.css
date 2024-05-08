@@ -1,0 +1,43 @@
+.navbar {
+    background-color: #333;
+    /* Navbar arka plan rengi */
+    color: #fff;
+    /* Navbar metin rengi */
+    padding: 1rem;
+    /* Navbar iç boşlukları */
+}
+
+.navbar-container {
+    display: flex;
+    justify-content: space-between;
+    /* Öğeleri sağa ve sola doğru konumlandırır */
+    align-items: center;
+    /* Öğeleri dikeyde ortalar */
+}
+
+.navbar-logo {
+    color: #fff;
+    /* Logo metin rengi */
+    text-decoration: none;
+    /* Link altı çizgisini kaldırır */
+    font-size: 1.5rem;
+    /* Logo metin boyutu */
+}
+
+.navbar-menu {
+    list-style: none;
+    /* Menü öğelerindeki liste işaretlerini kaldırır */
+    display: flex;
+}
+
+.navbar-item {
+    margin-right: 1rem;
+    /* Menü öğeleri arasındaki sağ boşluk */
+}
+
+.navbar-link {
+    color: #fff;
+    /* Menü linklerinin metin rengi */
+    text-decoration: none;
+    /* Link altı çizgisini kaldırır */
+}

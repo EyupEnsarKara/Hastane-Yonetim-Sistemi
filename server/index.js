@@ -18,8 +18,8 @@ const connection = mysql.createConnection({
     user: user
 });
 const certOptions = {
-    key: fs.readFileSync('localhost-key.pem'),
-    cert: fs.readFileSync('localhost.pem')
+    key: fs.readFileSync('e-localhost-key.pem'),
+    cert: fs.readFileSync('e-localhost.pem')
 };
 
 connection.connect((err) => {
