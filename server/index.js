@@ -2,7 +2,7 @@ const { PatientClass, DoctorClass, AppointmentClass, MedicalReportClass } = requ
 
 const express = require('express');
 const cors = require('cors');
-const { host, database, password, user, port } = require('./config.json')
+const { host, database, password, user, port, certfileKey, certfile } = require('./config.json')
 const mysql = require('mysql2');
 const htpps = require('https');
 const fs = require('fs');
@@ -18,8 +18,8 @@ const connection = mysql.createConnection({
     user: user
 });
 const certOptions = {
-    key: fs.readFileSync('e-localhost-key.pem'),
-    cert: fs.readFileSync('e-localhost.pem')
+    key: fs.readFileSync(certfileKey),
+    cert: fs.readFileSync(certfile)
 };
 
 connection.connect((err) => {
