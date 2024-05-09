@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import '../css/LoginContainer.css';
+import axios from 'axios';
 
 function LoginContainer() {
     const [active, setActive] = useState('');
@@ -10,10 +11,9 @@ function LoginContainer() {
         setActive(index);
     };
 
+
     const loginCheck = () => {
-        // Giriş kontrolü burada gerçekleştirilebilir
-        console.log("Phone Number:", phoneNumber);
-        console.log("Password:", password);
+
     };
 
     return (

@@ -16,9 +16,14 @@ function RegisterContainer() {
     };
 
     const loginCheck = () => {
-        // Giriş kontrolü burada gerçekleştirilebilir
-        console.log("Phone Number:", phoneNumber);
-        console.log("Password:", password);
+        axios.post('https://localhost:4444/addPatient', {
+            name: name,
+            birthDate: birthDate,
+            surName: surName,
+            gender: gender,
+            phoneNumber: phoneNumber,
+            address: address
+        });
     };
 
     return (

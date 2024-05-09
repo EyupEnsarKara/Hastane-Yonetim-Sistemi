@@ -74,4 +74,5 @@ MainPage-button-container {
 .registerText {
     cursor: pointer;
     font-size: large;
+    margin-top: 0px;
 }

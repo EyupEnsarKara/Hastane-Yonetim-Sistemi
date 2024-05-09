@@ -16,7 +16,7 @@ function MainPage() {
                 <p>Hospital</p>
             </div>
             {selectedInputType == 'login' ? < LoginContainer /> : <RegisterContainer />}
-            {selectedInputType !== 'register' && <p onClick={() => (setSelectedInputType('register'))} className='registerText'>Create An Account</p>}
+            {selectedInputType != 'register' ? <p onClick={() => (setSelectedInputType('register'))} className='registerText'>Create An Account</p> : <p onClick={() => (setSelectedInputType('login'))} className='registerText'>Login</p>}
 
 
 
