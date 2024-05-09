@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'
 import './App.css'
 import MainPage from './Pages/MainPage'
 import NavBar from './Pages/NavBar'
+import NotFound from './Pages/NotFound'
 
 
 function App() {
@@ -18,6 +19,7 @@ function App() {
         <div>
           <Routes>
             <Route path='/' element={<MainPage />} />
+            <Route path='*' element={<NotFound />} />
           </Routes>
         </div>
       </Router>

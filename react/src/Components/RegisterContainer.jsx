@@ -15,11 +15,12 @@ function RegisterContainer() {
         setActive(index);
     };
 
-    const loginCheck = () => {
+    const CreateAnAccount = () => {
         axios.post('https://localhost:4444/addPatient', {
             name: name,
             birthDate: birthDate,
             surName: surName,
+            password: password,
             gender: gender,
             phoneNumber: phoneNumber,
             address: address
@@ -45,7 +46,7 @@ function RegisterContainer() {
             <input className='login-input' type="tel" placeholder='Phone Number' onChange={(e) => (setPhoneNumber(e.target.value))} />
             <input className='login-input' type="text" placeholder='Address' onChange={(e) => (setAddress(e.target.value))} />
 
-            <button className='login-button' onClick={loginCheck}>Click</button>
+            <button className='login-button' onClick={CreateAnAccount}>Click</button>
         </div>
     );
 }
