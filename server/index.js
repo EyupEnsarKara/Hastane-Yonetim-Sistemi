@@ -22,13 +22,18 @@ const certOptions = {
     cert: fs.readFileSync(certfile)
 };
 
+
 connection.connect((err) => {
     if (err) {
         console.log("Veritabanına bağlanılamadı.");
         return;
     }
     console.log("Veritabanına bağlanıldı.");
+
 })
+const newPatient = new PatientClass(connection, 'John', 'Doe', 'password123', '1990-01-01', 'man', '123456789', '123 Street, City');
+newPatient.addToDatabase();
+
 
 // /addPatient endpoint'i
 app.post('/addPatient', (req, res) => {

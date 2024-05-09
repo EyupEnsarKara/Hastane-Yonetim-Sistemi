@@ -20,39 +20,45 @@ connection.connect((err) => {
 // SQL tablolarını oluştur
 const createTables = () => {
     const sqlCommands = [
-        `CREATE TABLE IF NOT EXISTS Patients (
-            patientID INT PRIMARY KEY AUTO_INCREMENT,
+
+        `CREATE TABLE IF NOT EXISTS Persons (
+            personID INT PRIMARY KEY AUTO_INCREMENT,
             name VARCHAR(50) NOT NULL,
             surname VARCHAR(50) NOT NULL,
-            password VARCHAR(255) NOT NULL,
+            password VARCHAR(255) NOT NULL
+        );`,
+
+        `CREATE TABLE IF NOT EXISTS Patients (
+            patientID INT PRIMARY KEY AUTO_INCREMENT,
+            personID INT,
             birthDate DATE NOT NULL,
             gender ENUM('man', 'woman') NOT NULL,
             phoneNumber VARCHAR(15),
-            address TEXT
+            address TEXT,
+            FOREIGN KEY (personID) REFERENCES Persons(personID)
         );`,
 
         `CREATE TABLE IF NOT EXISTS Doctors (
             doctorID INT PRIMARY KEY AUTO_INCREMENT,
-            name VARCHAR(50) NOT NULL,
-            surname VARCHAR(50) NOT NULL,
-            password VARCHAR(255) NOT NULL,
+            personID INT,
             specialization VARCHAR(100),
-            hospital VARCHAR(100)
+            hospital VARCHAR(100),
+            FOREIGN KEY (personID) REFERENCES Persons(personID)
         );`,
 
         `CREATE TABLE IF NOT EXISTS Managers (
             managerID INT PRIMARY KEY AUTO_INCREMENT,
-            name VARCHAR(50),
-            surname VARCHAR(50),
-            password VARCHAR(255) NOT NULL
+            personID INT,
+            FOREIGN KEY (personID) REFERENCES Persons(personID)
         );`,
+        `INSERT INTO Persons (name, surname, password) VALUES ('Admin', 'Admin', 'password123');`,
+        `INSERT INTO Managers (personID) SELECT personID FROM Persons WHERE name = 'Admin' AND surname = 'Admin';`,
 
         `CREATE TABLE IF NOT EXISTS Appointments (
             appointmentID INT PRIMARY KEY AUTO_INCREMENT,
             patientID INT,
             doctorID INT,
-            appointmentDate DATE NOT NULL,
-            appointmentTime TIME NOT NULL,
+            appointmentDateTime DATETIME NOT NULL,
             FOREIGN KEY (patientID) REFERENCES Patients(patientID),
             FOREIGN KEY (doctorID) REFERENCES Doctors(doctorID)
         );`,
@@ -60,11 +66,10 @@ const createTables = () => {
         `CREATE TABLE IF NOT EXISTS MedicalReports (
             reportID INT PRIMARY KEY AUTO_INCREMENT,
             patientID INT,
-            doctorID INT,
+            doctorID INT, 
             reportDate DATE NOT NULL,
             reportContent TEXT,
             reportURL VARCHAR(255),
-            reportJSON JSON,
             FOREIGN KEY (patientID) REFERENCES Patients(patientID),
             FOREIGN KEY (doctorID) REFERENCES Doctors(doctorID)
         );`
