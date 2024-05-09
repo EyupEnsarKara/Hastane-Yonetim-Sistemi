@@ -11,14 +11,25 @@ class PatientClass {
   }
 
   addToDatabase() {
-    const sql = `INSERT INTO Patients ( name, surname, password,birthDate, gender, phoneNumber, address) VALUES ( '${this.name}', '${this.surname}','${this.password}' ,'${this.birthDate}', '${this.gender}', '${this.phoneNumber}', '${this.address}')`;
+    const sql = `INSERT INTO Persons (name, surname, password) VALUES ('${this.name}', '${this.surname}', '${this.password}')`;
     this.connection.query(sql, (err, result) => {
-      if (err) throw err;
-      console.log("Patient eklendi!");
+      if (err) {
+        console.error("Error adding person:", err);
+        throw err;
+      }
+      console.log("tsttt")
+      const personID = result.insertId;
+      const patientSql = `INSERT INTO Patients (personID, birthDate, gender, phoneNumber, address) VALUES (${personID}, '${this.birthDate}', '${this.gender}', '${this.phoneNumber}', '${this.address}')`;
+      this.connection.query(patientSql, (err, result) => {
+        if (err) {
+          console.error("Error adding patient:", err);
+          throw err;
+        }
+        console.log("Patient added successfully!");
+      });
     });
   }
 
-  // Diğer metodlar...
 }
 
 class DoctorClass {
@@ -32,14 +43,24 @@ class DoctorClass {
     this.hospital = hospital;
   }
   addToDatabase() {
-    const sql = `INSERT INTO Doctors (name, surname, password,specialization, hospital) VALUES ('${this.name}', '${this.surname}','${this.password}', '${this.specialization}', '${this.hospital}')`;
+    const sql = `INSERT INTO Persons (name, surname, password) VALUES ('${this.name}', '${this.surname}', '${this.password}')`;
     this.connection.query(sql, (err, result) => {
-      if (err) throw err;
-      console.log("Doctor eklendi!");
+      if (err) {
+        console.error("Error adding person:", err);
+        throw err;
+      }
+      const personID = result.insertId;
+      const doctorSql = `INSERT INTO Doctors (personID, specialization, hospital) VALUES (${personID}, '${this.specialization}', '${this.hospital}')`;
+      this.connection.query(doctorSql, (err, result) => {
+        if (err) {
+          console.error("Error adding doctor:", err);
+          throw err;
+        }
+        console.log("Doctor added successfully!");
+      });
     });
   }
 
-  // Diğer metodlar...
 }
 
 class AppointmentClass {
