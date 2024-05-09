@@ -8,6 +8,7 @@ function NavBar() {
     const location = useLocation();
     const currentPath = location.pathname;
 
+
     return (
         <nav className="navbar">
             {currentPath !== '/' && (
@@ -18,7 +19,7 @@ function NavBar() {
 
                     </a>
                     <ul className="navbar-menu">
-                        {userType === 'admin' && (
+                        {currentPath.includes('/admin') && (
                             <>
                                 <li className="navbar-item">
                                     <a onClick={() => (navigate('/admin/dashboard'))} className="navbar-link">Dashboard</a>

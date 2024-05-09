@@ -1,0 +1,9 @@
+.dashboard {
+    background-color: rgba(211, 211, 211, 0.5);
+    /* 0.5 represents the opacity value */
+    width: 92%;
+    height: 80vh;
+
+}
+
+.dashboard-total-patients {}
