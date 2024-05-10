@@ -2,7 +2,6 @@ import React, { useState } from 'react'
 import '../css/RegisterContainer.css'
 
 function RegisterContainer() {
-    const [active, setActive] = useState('Patient');
     const [name, setName] = useState('');
     const [surName, setSurName] = useState('');
     const [phoneNumber, setPhoneNumber] = useState('');
@@ -10,6 +9,7 @@ function RegisterContainer() {
     const [birthDate, setBirthDate] = useState('');
     const [gender, setGender] = useState('');
     const [address, setAddress] = useState('');
+
 
 
     const CreateAnAccount = () => {
@@ -27,7 +27,7 @@ function RegisterContainer() {
     return (
         <div className='loginDiv'>
             <div className='button-container'>
-                <button className={`login-type-selector ${active === 'Patient' ? 'active' : ''}`}>Patient</button>
+                <button className={`login-type-selector ${'active'}`}>Patient</button>
 
             </div>
             <input className='login-input' type="text" placeholder='Name' onChange={(e) => (setName(e.target.value))} />
