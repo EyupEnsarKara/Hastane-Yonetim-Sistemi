@@ -67,6 +67,39 @@ app.post('/addMedicalReport', (req, res) => {
     //res.status(200).json({ message: 'Tıbbi rapor başarıyla eklendi.' });
 });
 
+app.post('/checkLogin', (req, res) => {
+    const { username, password, userType } = req.body;
+
+    if (userType === 'patient') {
+        connection.query('SELECT * FROM patients WHERE name = ? AND password = ?', [username, password], (err, results) => {
+            if (results.length > 0) {
+                res.status(200).json({ message: 'Hasta girişi başarılı.' });
+            } else {
+                res.status(400).json({ message: 'Kullanıcı adı veya şifre hatalı.' });
+            }
+        });
+    } else if (userType === 'doctor') {
+        connection.query('SELECT * FROM doctors WHERE name = ? AND password = ?', [username, password], (err, results) => {
+            if (results.length > 0) {
+                res.status(200).json({ message: 'Doktor girişi başarılı.' });
+            } else {
+                res.status(400).json({ message: 'Kullanıcı adı veya şifre hatalı.' });
+            }
+        });
+    } else if (userType === 'admin') {
+        connection.query('SELECT * FROM doctors WHERE name = ? AND password = ?', [username, password], (err, results) => {
+            if (results.length > 0) {
+                res.status(200).json({ message: 'Doktor girişi başarılı.' });
+            } else {
+                res.status(400).json({ message: 'Kullanıcı adı veya şifre hatalı.' });
+            }
+        });
+    } else {
+        res.status(400).json({ message: 'Geçersiz kullanıcı türü.' });
+    }
+});
+
+
 const server = htpps.createServer(certOptions, app);
 
 
