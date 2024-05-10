@@ -22,10 +22,16 @@ function NavBar() {
                         {currentPath.includes('/admin') && (
                             <>
                                 <li className="navbar-item">
-                                    <a onClick={() => (navigate('/admin/dashboard'))} className="navbar-link">Dashboard</a>
+                                    <a onClick={() => (navigate('/admin'))} className="navbar-link">Dashboard</a>
                                 </li>
                                 <li className="navbar-item">
-                                    <a onClick={() => (navigate('/admin/users'))} className="navbar-link">Users</a>
+                                    <a onClick={() => (navigate('/admin/patients'))} className="navbar-link">Patients</a>
+                                </li>
+                                <li className="navbar-item">
+                                    <a onClick={() => (navigate('/admin/doctors'))} className="navbar-link">Doctors</a>
+                                </li>
+                                <li className="navbar-item">
+                                    <a onClick={() => (navigate('/admin/appointments'))} className="navbar-link">Appointments</a>
                                 </li>
                             </>
                         )}
