@@ -68,6 +68,7 @@ app.post('/addMedicalReport', (req, res) => {
 });
 
 app.post('/checkLogin', (req, res) => {
+    connection.connect;
     const { username, password, userType } = req.body;
 
     if (userType === 'patient') {
@@ -97,6 +98,7 @@ app.post('/checkLogin', (req, res) => {
     } else {
         res.status(400).json({ message: 'Geçersiz kullanıcı türü.' });
     }
+    connection.end;
 });
 
 
