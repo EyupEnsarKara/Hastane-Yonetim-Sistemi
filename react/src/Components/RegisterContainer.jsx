@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import '../css/RegisterContainer.css'
 
 function RegisterContainer() {
-    const [active, setActive] = useState('');
+    const [active, setActive] = useState('Patient');
     const [name, setName] = useState('');
     const [surName, setSurName] = useState('');
     const [phoneNumber, setPhoneNumber] = useState('');
@@ -11,9 +11,6 @@ function RegisterContainer() {
     const [gender, setGender] = useState('');
     const [address, setAddress] = useState('');
 
-    const updateActive = (index) => {
-        setActive(index);
-    };
 
     const CreateAnAccount = () => {
         axios.post('https://localhost:4444/addPatient', {
@@ -30,8 +27,7 @@ function RegisterContainer() {
     return (
         <div className='loginDiv'>
             <div className='button-container'>
-                <button className={`login-type-selector ${active === 'Patient' ? 'active' : ''}`} onClick={() => updateActive('Patient')}>Patient</button>
-                <button className={`login-type-selector ${active === 'Doctor' ? 'active' : ''}`} onClick={() => updateActive('Doctor')}>Doctor</button>
+                <button className={`login-type-selector ${active === 'Patient' ? 'active' : ''}`}>Patient</button>
 
             </div>
             <input className='login-input' type="text" placeholder='Name' onChange={(e) => (setName(e.target.value))} />
