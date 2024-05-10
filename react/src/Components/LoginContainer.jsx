@@ -19,7 +19,7 @@ function LoginContainer() {
             "username": name,
             "password": password
         }
-        axios.post(`https://${host}:${port}/checkLogin`, paramaters);
+        console.log(axios.post(`https://${host}:${port}/checkLogin`, paramaters));
     };
 
     return (
