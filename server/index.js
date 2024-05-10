@@ -68,7 +68,7 @@ app.post('/addMedicalReport', (req, res) => {
 });
 
 app.post('/checkLogin', (req, res) => {
-    const { connection, username, password, userType } = req.body;
+    const { username, password, userType } = req.body;
 
     if (userType === 'patient') {
         connection.query('SELECT * FROM patients WHERE name = ? AND password = ?', [username, password], (err, results) => {
