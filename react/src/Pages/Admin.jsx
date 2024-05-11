@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { Route, Routes, useLocation, useNavigate } from 'react-router-dom'
 import AdminDashboard from './Admin/AdminDashboard'
 import NotFound from './NotFound'
+import AdminPatients from './Admin/AdminPatients';
 function Admin() {
     const navigate = useNavigate();
     const location = useLocation();
@@ -22,7 +23,7 @@ function Admin() {
                 break;
             case '/admin/patients':
                 console.log("patients");
-                setElement(<div>olduu</div>);
+                setElement(<AdminPatients />);
                 break;
             case '/admin/doctors':
                 console.log("doctors");
