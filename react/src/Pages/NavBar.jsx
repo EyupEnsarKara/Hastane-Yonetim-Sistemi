@@ -7,6 +7,7 @@ function NavBar() {
     const userType = localStorage.getItem('userType');
     const location = useLocation();
     const currentPath = location.pathname;
+    console.log(currentPath);
     useEffect(() => {
         switch (userType) {
             case 'admin':
@@ -31,7 +32,7 @@ function NavBar() {
                 <div className="navbar-container">
                     <img src="../../../src/assets/heart-attack.png" width="60" height="60" className='navbar-logo' onClick={() => (navigate('/'))} />
                     <ul className="navbar-menu">
-                        {currentPath.includes('/admin') && (
+                        {currentPath.startsWith('/admin') && (
                             <>
                                 <li className="navbar-item">
                                     <a onClick={() => (navigate('/admin'))} className="navbar-link">Dashboard</a>
@@ -55,7 +56,7 @@ function NavBar() {
                             </>
                         )}
 
-                        {currentPath.includes('/patient') && (
+                        {currentPath.startsWith('/patient') && (
                             <>
                                 <li className="navbar-item">
                                     <a onClick={() => (navigate('/patient'))} className="navbar-link">Dashboard</a>
