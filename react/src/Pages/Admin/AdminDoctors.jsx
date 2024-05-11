@@ -1,11 +1,13 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Dashboard from '../../Components/Dashboard'
 import AddPatientModal from '../../Components/AddPatientModal';
 import AddDoctorModal from '../../Components/AddDoctorModal';
+import { host, port } from '../../../config.json';
 
 //icon importları
 import { MdDelete } from "react-icons/md";
 import { CiEdit } from "react-icons/ci";
+import axios from 'axios';
 
 function AdminDoctors() {
     const doktorListesi = [
@@ -32,6 +34,14 @@ function AdminDoctors() {
     const [modalState, setModalState] = useState(false);
     const [currentPage, setCurrentPage] = useState(1);
     const [itemsPerPage] = useState(10);
+
+
+
+
+
+
+
+
 
     const lastIndex = currentPage * itemsPerPage;
     const firstIndex = lastIndex - itemsPerPage;

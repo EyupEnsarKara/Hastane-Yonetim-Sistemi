@@ -102,12 +102,22 @@ app.post('/checkLogin', (req, res) => {
     }
 
 });
+app.get('/getPatients', (req, res) => {
+    const query = `
+        SELECT Patients.*, Persons.name AS name, Persons.surname AS surname
+        FROM Patients
+        INNER JOIN Persons ON Patients.personID = Persons.personID
+    `;
+    connection.query(query, (err, results) => {
+        res.status(200).json({ result: results });
+    })
+})
+
+
 app.post('/deletePatient'), (req, res) => {
-
-
+    const id = 2;
+    Manager.deletePatient(connection, id)
 }
-const id = 2;
-Manager.deletePatient(connection, id)
 
 const server = htpps.createServer(certOptions, app);
 
