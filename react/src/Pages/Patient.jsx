@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react'
 import PatientDashboard from './Patient/PatientDashboard';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 
 function Patient() {
-    const navigation = useNavigate();
-
+    const navigate = useNavigate();
+    const location = useLocation();
     const [element, setElement] = useState((<PatientDashboard />));
 
     //kullanıcı filtresi
@@ -13,7 +13,25 @@ function Patient() {
         const user = localStorage.getItem('user');
         const userType = localStorage.getItem('userType');
         if (!user || userType != 'patient') navigation('/error');
-    })
+        switch (location.pathname) {
+            case '/patient':
+
+                setElement(<PatientDashboard />);
+                break;
+            case '/patient/appointments':
+
+                setElement(<div>patient appointments</div>);
+
+                break;
+            case '/patient/results':
+
+                setElement(<div>patient results</div>);
+
+                break;
+            default:
+                break;
+        }
+    }, [location.pathname, navigate]);
 
     return (
         <div>

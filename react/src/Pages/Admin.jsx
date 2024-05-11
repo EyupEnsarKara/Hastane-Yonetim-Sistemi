@@ -17,6 +17,9 @@ function Admin() {
         }
 
         switch (location.pathname) {
+            case '/admin':
+                setElement(<AdminDashboard />)
+                break;
             case '/admin/patients':
                 console.log("patients");
                 setElement(<div>olduu</div>);

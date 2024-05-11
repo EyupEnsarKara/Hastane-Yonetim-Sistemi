@@ -22,7 +22,7 @@
 }
 
 body {
-    background-image: url('./src/assets/back.webp');
+    background-image: url('../../../../../../src/assets/back.webp');
     /* Arka plan resmi */
     background-size: 100% 100%;
     /* Resmin ekran boyutuna oturacak şekilde boyutlandırılması */

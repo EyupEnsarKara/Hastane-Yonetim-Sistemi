@@ -1,9 +1,9 @@
 {
-    "host": "localhost",
+    "host": "sql.velnom.xyz",
     "user": "root",
-    "password": "E@1q2w3e4r",
+    "password": "1436XYzt+++",
     "database": "Hospital",
     "port": "4444",
-    "certfileKey": "e-localhost-key.pem",
-    "certfile": "e-localhost.pem"
+    "certfileKey": "localhost-key.pem",
+    "certfile": "localhost.pem"
 }

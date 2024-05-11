@@ -7,17 +7,20 @@ function NavBar() {
     const userType = localStorage.getItem('userType');
     const location = useLocation();
     const currentPath = location.pathname;
-    console.log(currentPath);
     useEffect(() => {
+        let path = location.pathname;
         switch (userType) {
             case 'admin':
-                navigate('/admin')
+                if (!path.startsWith('/admin'))
+                    navigate('/admin')
                 break;
             case 'patient':
-                navigate('/patient');
+                if (!path.startsWith('/patient'))
+                    navigate('/patient');
                 break;
             case 'doctor':
-                navigate('/doctor');
+                if (!path.startsWith('/doctor'))
+                    navigate('/doctor');
                 break;
 
             default:
