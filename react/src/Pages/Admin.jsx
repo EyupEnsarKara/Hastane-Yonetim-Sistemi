@@ -9,10 +9,11 @@ function Admin() {
     //kullanıcı filtresi
     useEffect(() => {
         const user = localStorage.getItem('user');
-        if (user) navigation('/error');
+        const userType = localStorage.getItem('userType');
+        if (!user || userType != 'admin') navigation('/error');
     })
 
-    localStorage.setItem('userType', 'admin')
+
     return (
         <div>
             {element}

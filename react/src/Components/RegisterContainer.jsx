@@ -1,5 +1,9 @@
 import React, { useState } from 'react'
 import '../css/RegisterContainer.css'
+import { host, port } from '../../config.json';
+import axios from 'axios';
+
+
 
 function RegisterContainer() {
     const [name, setName] = useState('');
@@ -13,7 +17,7 @@ function RegisterContainer() {
 
 
     const CreateAnAccount = () => {
-        axios.post('https://localhost:4444/addPatient', {
+        axios.post(`https://${host}:${port}/addPatient`, {
             name: name,
             birthDate: birthDate,
             surName: surName,
@@ -21,7 +25,11 @@ function RegisterContainer() {
             gender: gender,
             phoneNumber: phoneNumber,
             address: address
-        });
+        }).then(res => {
+            if (res.data.status == "ok") {
+                alert("kullanıcı ekleme başarılı");
+            }
+        })
     };
 
     return (

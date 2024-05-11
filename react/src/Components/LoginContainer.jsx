@@ -2,24 +2,49 @@ import React, { useEffect, useState } from 'react';
 import '../css/LoginContainer.css';
 import axios from 'axios';
 import { host, port } from '../../config.json';
+import { useNavigate } from 'react-router-dom';
 
 function LoginContainer() {
     const [active, setActive] = useState('patient');
     const [name, setName] = useState('');
     const [password, setPassword] = useState('');
-
+    const navigate = useNavigate();
     const updateActive = (index) => {
         setActive(index);
     };
 
 
     const loginCheck = () => {
+        console.log("click")
         const paramaters = {
             "userType": active,
             "username": name,
             "password": password
         }
-        console.log(axios.post(`https://${host}:${port}/checkLogin`, paramaters));
+        axios.post(`https://${host}:${port}/checkLogin`, paramaters).then((res) => {
+            console.log(res.data)
+            if (res.data.user) {
+                localStorage.setItem('userType', active);
+                localStorage.setItem('user', res.data.user)
+                switch (active) {
+                    case 'admin':
+                        navigate('admin/Dashboard');
+
+                        break;
+                    case 'patient':
+                        navigate('patient/Dashboard');
+                        break;
+                    case 'doctor':
+                        navigate('doctor/Dashboard');
+                    default:
+                        break;
+                }
+            }
+            else console.log("yok")
+        }).catch(err => {
+            console.log(err);
+        })
+
     };
 
     return (

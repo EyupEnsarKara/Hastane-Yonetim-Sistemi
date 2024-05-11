@@ -31,8 +31,7 @@ connection.connect((err) => {
     console.log("Veritabanına bağlanıldı.");
 
 })
-const newPatient = new PatientClass(connection, 'John', 'Doe', 'password123', '1990-01-01', 'man', '123456789', '123 Street, City');
-newPatient.addToDatabase();
+
 
 
 // /addPatient endpoint'i
@@ -40,7 +39,8 @@ app.post('/addPatient', (req, res) => {
     const { name, surName, password, birthDate, gender, phoneNumber, address } = req.body;
     const patient = new PatientClass(connection, name, surName, password, birthDate, gender, phoneNumber, address);
     patient.addToDatabase();
-    //res.status(200).json({ message: 'Hasta başarıyla eklendi.' });
+    res.status(200).json({ status: "ok" });
+
 });
 
 // /addDoctor endpoint'i
@@ -72,42 +72,42 @@ app.post('/checkLogin', (req, res) => {
     const { username, password, userType } = req.body;
 
     if (userType === 'patient') {
-        connection.query('SELECT * FROM patients WHERE name = ? AND password = ?', [username, password], (err, results) => {
+        connection.query('SELECT * FROM persons p JOIN patients pt ON p.personID = pt.personID WHERE p.name = ? AND p.password = ?', [username, password], (err, results) => {
+
             if (results.length > 0) {
-                res.status(200).json({ message: 'Hasta girişi başarılı.' });
-            } else {
-                res.status(400).json({ message: 'Kullanıcı adı veya şifre hatalı.' });
+                res.status(200).json({ user: results[0] });
+            }
+            else {
+                res.status(200).json({});
             }
         });
     } else if (userType === 'doctor') {
-        connection.query('SELECT * FROM doctors WHERE name = ? AND password = ?', [username, password], (err, results) => {
+        connection.query('SELECT * FROM persons p JOIN doctors d ON p.personID = d.personID WHERE p.name = ? AND p.password = ?', [username, password], (err, results) => {
             if (results.length > 0) {
-                res.status(200).json({ message: 'Doktor girişi başarılı.' });
-            } else {
-                res.status(400).json({ message: 'Kullanıcı adı veya şifre hatalı.' });
+                res.status(200).json({ user: results[0] });
             }
-        });
+            else {
+                res.status(200).json({});
+            }
+        })
     } else if (userType === 'admin') {
-        connection.query('SELECT * FROM doctors WHERE name = ? AND password = ?', [username, password], (err, results) => {
+        connection.query('SELECT * FROM persons p JOIN managers m ON p.personID = m.personID WHERE p.name = ? AND p.password = ?', [username, password], (err, results) => {
             if (results.length > 0) {
-                res.status(200).json({ message: 'Doktor girişi başarılı.' });
-            } else {
-                res.status(400).json({ message: 'Kullanıcı adı veya şifre hatalı.' });
+                res.status(200).json({ user: results[0] });
             }
-        });
-    } else {
-        res.status(400).json({ message: 'Geçersiz kullanıcı türü.' });
+            else {
+                res.status(200).json({});
+            }
+        })
     }
-    connection.end;
+
 });
 
 
 const server = htpps.createServer(certOptions, app);
 
 
-// app.listen(port, () => {
-//     console.log("Server Started in port:" + port)
-// })
+
 
 
 server.listen(port, () => {

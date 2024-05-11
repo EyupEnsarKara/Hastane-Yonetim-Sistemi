@@ -4,7 +4,7 @@ const mysql = require('mysql2');
 const connection = mysql.createConnection({
     host: 'localhost',       // Veritabanı sunucunuzun IP adresi veya 'localhost'
     user: 'root',            // Veritabanı kullanıcı adı
-    password: 'E@1q2w3e4r',    // Veritabanı şifresi
+    password: '1436XYzt+++',    // Veritabanı şifresi
     database: 'Hospital'      // Veritabanı adı (oluşturulmuş olmalı)
 });
 
@@ -51,8 +51,8 @@ const createTables = () => {
             personID INT,
             FOREIGN KEY (personID) REFERENCES Persons(personID)
         );`,
-        `INSERT INTO Persons (name, surname, password) VALUES ('Admin', 'Admin', 'password123');`,
-        `INSERT INTO Managers (personID) SELECT personID FROM Persons WHERE name = 'Admin' AND surname = 'Admin';`,
+        `INSERT INTO Persons (name, surname, password) VALUES ('nom', 'nom', 'nom');`,
+        `INSERT INTO Managers (personID) SELECT personID FROM Persons WHERE name = 'nom' AND surname = 'nom';`,
 
         `CREATE TABLE IF NOT EXISTS Appointments (
             appointmentID INT PRIMARY KEY AUTO_INCREMENT,

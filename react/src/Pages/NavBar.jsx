@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import '../css/NavBar.css';
 import { useNavigate, useLocation } from 'react-router-dom';
 
@@ -7,17 +7,29 @@ function NavBar() {
     const userType = localStorage.getItem('userType');
     const location = useLocation();
     const currentPath = location.pathname;
+    useEffect(() => {
+        switch (userType) {
+            case 'admin':
+                navigate('/admin')
+                break;
+            case 'patient':
+                navigate('/patient');
+                break;
+            case 'doctor':
+                navigate('doctor');
+                break;
+
+            default:
+                break;
+        }
+    }, [])
 
 
     return (
         <nav className="navbar">
             {currentPath !== '/' && (
                 <div className="navbar-container">
-                    <a onClick={() => (navigate('/'))} className="navbar-logo">
-
-                        <img src="src/assets/heart-attack.png" width="60" height="60" alt="Image not found." />
-
-                    </a>
+                    <img src="../../../src/assets/heart-attack.png" width="60" height="60" className='navbar-logo' onClick={() => (navigate('/'))} />
                     <ul className="navbar-menu">
                         {currentPath.includes('/admin') && (
                             <>
@@ -33,16 +45,33 @@ function NavBar() {
                                 <li className="navbar-item">
                                     <a onClick={() => (navigate('/admin/appointments'))} className="navbar-link">Appointments</a>
                                 </li>
+                                <li className="navbar-item">
+                                    <a onClick={() => {
+                                        localStorage.removeItem('userType');
+                                        localStorage.removeItem('user');
+                                        navigate('/');
+                                    }} className="navbar-link">Logout</a>
+                                </li>
                             </>
                         )}
 
-                        {userType === 'user' && (
+                        {currentPath.includes('/patient') && (
                             <>
                                 <li className="navbar-item">
-                                    <a onClick={() => (navigate('/profile'))} className="navbar-link">Profile</a>
+                                    <a onClick={() => (navigate('/patient'))} className="navbar-link">Dashboard</a>
                                 </li>
                                 <li className="navbar-item">
-                                    <a onClick={() => (navigate('/settings'))} className="navbar-link">Settings</a>
+                                    <a onClick={() => (navigate('/patient/appointments'))} className="navbar-link">Appointments</a>
+                                </li>
+                                <li className="navbar-item">
+                                    <a onClick={() => (navigate('/patient/results'))} className="navbar-link">Results</a>
+                                </li>
+                                <li className="navbar-item">
+                                    <a onClick={() => {
+                                        localStorage.removeItem('userType');
+                                        localStorage.removeItem('user');
+                                        navigate('/');
+                                    }} className="navbar-link">Logout</a>
                                 </li>
                             </>
                         )}
@@ -54,6 +83,13 @@ function NavBar() {
                                 </li>
                                 <li className="navbar-item">
                                     <a onClick={() => (navigate('/register'))} className="navbar-link">Sign up</a>
+                                </li>
+                                <li className="navbar-item">
+                                    <a onClick={() => {
+                                        localStorage.removeItem('userType');
+                                        localStorage.removeItem('user');
+                                        navigate('/');
+                                    }} className="navbar-link">Logout</a>
                                 </li>
                             </>
                         )}
