@@ -99,5 +99,23 @@ class MedicalReportClass {
     });
   }
 }
+class Manager {
+  static deletePatient(connection, id) {
+    connection.connect();
+    const sql = `Delete from Patients where patientID=${id}`;
 
-module.exports = { PatientClass, DoctorClass, AppointmentClass, MedicalReportClass };
+    connection.query(sql, (err, result) => {
+      if (err) {
+        console.log(err.message)
+      }
+
+
+      // Veritabanı bağlantısını kapat
+      connection.end();
+
+    });
+
+  }
+}
+
+module.exports = { PatientClass, DoctorClass, AppointmentClass, MedicalReportClass, Manager };

@@ -2,10 +2,10 @@ const mysql = require('mysql2');
 
 // Veritabanına bağlan
 const connection = mysql.createConnection({
-    host: 'localhost',       // Veritabanı sunucunuzun IP adresi veya 'localhost'
-    user: 'root',            // Veritabanı kullanıcı adı
-    password: '1436XYzt+++',    // Veritabanı şifresi
-    database: 'Hospital'      // Veritabanı adı (oluşturulmuş olmalı)
+    host: "sql.velnom.xyz",
+    user: "root",
+    password: "1436XYzt+++",
+    database: "Hospital"
 });
 
 // Bağlantıyı doğrula
@@ -75,6 +75,7 @@ const createTables = () => {
         );`
     ];
 
+
     sqlCommands.forEach((sql, index) => {
         connection.query(sql, (err) => {
             if (err) {
@@ -84,11 +85,43 @@ const createTables = () => {
             }
         });
     });
-};
 
-
+}
 // Tabloları oluştur
-createTables();
+//createTables();
+
+const createTrigger = () => {
+    const sqlTriggerCommands = [
+        `
+    CREATE TRIGGER prevent_delete_patient
+    BEFORE DELETE ON Patients
+    FOR EACH ROW
+    BEGIN
+    DECLARE appointment_count INT;
+
+    SELECT COUNT(*) INTO appointment_count
+    FROM Appointments
+    WHERE patientID = OLD.patientID;
+
+    IF appointment_count > 0 THEN
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'Bu hastanın aktif randevusu bulunmakta, silme işlemi engellendi.';
+    END IF;
+END  ;
+`
+
+    ];
+    sqlTriggerCommands.forEach((sql, index) => {
+        connection.query(sql, (err) => {
+            if (err) {
+                console.error(`Tablo oluşturulurken hata oluştu (SQL Komutu #${index + 1}):`, err);
+            } else {
+                console.log(`Tablo başarıyla oluşturuldu (SQL Komutu #${index + 1}).`);
+            }
+        });
+    });
+}
+createTrigger();
 
 // Bağlantıyı kapat
 connection.end((err) => {

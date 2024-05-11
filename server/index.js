@@ -1,4 +1,4 @@
-const { PatientClass, DoctorClass, AppointmentClass, MedicalReportClass } = require('./classes');
+const { PatientClass, DoctorClass, AppointmentClass, MedicalReportClass, Manager } = require('./classes');
 
 const express = require('express');
 const cors = require('cors');
@@ -102,7 +102,12 @@ app.post('/checkLogin', (req, res) => {
     }
 
 });
+app.post('/deletePatient'), (req, res) => {
 
+
+}
+const id = 2;
+Manager.deletePatient(connection, id)
 
 const server = htpps.createServer(certOptions, app);
 
