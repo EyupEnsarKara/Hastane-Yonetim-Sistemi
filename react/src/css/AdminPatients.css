@@ -42,3 +42,9 @@ tr:nth-child(even) {
 tr:hover {
     background-color: #ddd;
 }
+
+.icon {
+    height: 30px;
+    width: 30px;
+    cursor: pointer;
+}
