@@ -17,7 +17,7 @@ function NavBar() {
                 navigate('/patient');
                 break;
             case 'doctor':
-                navigate('doctor');
+                navigate('/doctor');
                 break;
 
             default:
@@ -76,14 +76,17 @@ function NavBar() {
                                 </li>
                             </>
                         )}
-
-                        {!userType && (
+                        {/* Doktor  */}
+                        {currentPath.startsWith('/doctor') && (
                             <>
                                 <li className="navbar-item">
-                                    <a onClick={() => (navigate('/login'))} className="navbar-link">Login</a>
+                                    <a onClick={() => (navigate('/patient'))} className="navbar-link">Dashboard</a>
                                 </li>
                                 <li className="navbar-item">
-                                    <a onClick={() => (navigate('/register'))} className="navbar-link">Sign up</a>
+                                    <a onClick={() => (navigate('/patient/appointments'))} className="navbar-link">Appointments</a>
+                                </li>
+                                <li className="navbar-item">
+                                    <a onClick={() => (navigate('/patient/results'))} className="navbar-link">Results</a>
                                 </li>
                                 <li className="navbar-item">
                                     <a onClick={() => {
