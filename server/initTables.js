@@ -93,22 +93,70 @@ const createTables = () => {
 const createTrigger = () => {
     const sqlTriggerCommands = [
         `
-    CREATE TRIGGER prevent_delete_patient
-    BEFORE DELETE ON Patients
-    FOR EACH ROW
-    BEGIN
-    DECLARE appointment_count INT;
+        CREATE TRIGGER before_delete_patient
+        BEFORE DELETE ON Patients
+        FOR EACH ROW
+        BEGIN
+            DECLARE appointment_count INT;
+        
+            SELECT COUNT(*) INTO appointment_count
+            FROM Appointments
+            WHERE patientID = OLD.patientID;
+        
+            IF appointment_count > 0 THEN
+                SIGNAL SQLSTATE '45000'
+                SET MESSAGE_TEXT = 'Bu hastanın aktif bir randevusu bulunmakta, silme işlemi engellendi.';
+            ELSE
+                DELETE FROM Persons
+                WHERE personID = OLD.personID;
+            END IF;
+        END  ;`,
+        `CREATE TRIGGER after_patient_update
+        AFTER UPDATE ON Patients
+        FOR EACH ROW
+        BEGIN
+            DECLARE person_name VARCHAR(50);
+            DECLARE person_surname VARCHAR(50);
+        
+            SELECT name, surname INTO person_name, person_surname
+            FROM Persons
+            WHERE personID = NEW.personID;
+        
+            IF NEW.personID <> OLD.personID THEN
+                UPDATE Patients
+                SET Patients.personID = NEW.personID
+                WHERE Patients.personID = OLD.personID;
+            END IF;
+        END;`,
+        `CREATE TRIGGER before_delete_doctor
+        BEFORE DELETE ON Doctors
+        FOR EACH ROW
+        BEGIN
+            DECLARE appointment_count INT;
 
-    SELECT COUNT(*) INTO appointment_count
-    FROM Appointments
-    WHERE patientID = OLD.patientID;
-
-    IF appointment_count > 0 THEN
-        SIGNAL SQLSTATE '45000'
-        SET MESSAGE_TEXT = 'Bu hastanın aktif randevusu bulunmakta, silme işlemi engellendi.';
-    END IF;
-END  ;
-`
+            SELECT COUNT(*) INTO appointment_count
+            FROM Appointments
+            WHERE doctorID = OLD.doctorID;
+            
+            IF appointment_count > 0 THEN
+                SIGNAL SQLSTATE '45000'
+                SET MESSAGE_TEXT = 'Bu doktorun hala randevuları bulunmaktadır. Doktor silinemez.';
+            ELSE
+    
+                DELETE FROM Persons
+                WHERE personID = OLD.personID;
+            END IF;
+        END;`,
+        `CREATE TRIGGER after_update_doctor
+        AFTER UPDATE ON Doctors
+        FOR EACH ROW
+        BEGIN
+            UPDATE Persons
+            SET name = (SELECT name FROM Doctors WHERE doctorID = NEW.doctorID),
+                surname = (SELECT surname FROM Doctors WHERE doctorID = NEW.doctorID),
+                password = (SELECT password FROM Doctors WHERE doctorID = NEW.doctorID)
+            WHERE personID = NEW.personID;
+        END;`,
 
     ];
     sqlTriggerCommands.forEach((sql, index) => {
