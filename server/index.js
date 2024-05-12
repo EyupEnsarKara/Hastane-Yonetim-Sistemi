@@ -102,9 +102,18 @@ app.post('/checkLogin', (req, res) => {
     }
 
 });
+// /editPatient endpoint'i
+app.post('/editPatient', (req, res) => {
+    const pt = req.body.editedPatient;
+    const { id, name, surname, password, birthDate, gender, phoneNumber, address } = pt;
+    //const patient = new PatientClass(connection, id, name, surName, password, birthDate, gender, phoneNumber, address);
+    console.log(req.body);
+});
+
+
 app.get('/getPatients', (req, res) => {
     const query = `
-        SELECT Patients.*, Persons.name AS name, Persons.surname AS surname
+        SELECT Patients.*, Persons.name, Persons.surname, Persons.password
         FROM Patients
         INNER JOIN Persons ON Patients.personID = Persons.personID
     `;

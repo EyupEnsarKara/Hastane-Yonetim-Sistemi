@@ -4,6 +4,7 @@ import "../../css/AdminPatients.css"
 import AddPatientModal from '../../Components/AddPatientModal';
 import axios from 'axios';
 import { host, port } from '../../../config.json';
+import EditPatientModal from '../../Components/EditPatientModal';
 
 //icon importları
 import { MdDelete } from "react-icons/md";
@@ -13,14 +14,11 @@ import { CiEdit } from "react-icons/ci";
 function AdminPatients() {
 
     const [patients, setPatients] = useState([]);
-    const [ad, setAd] = useState('');
-    const [soyad, setSoyad] = useState('');
-    const [dogumTarihi, setDogumTarihi] = useState('');
-    const [cinsiyet, setCinsiyet] = useState('');
-    const [hastalikGecmisi, setHastalikGecmisi] = useState('');
     const [modalState, setModalState] = useState(false);
+    const [editModalState, setEditModalState] = useState(false);
     const [currentPage, setCurrentPage] = useState(1);
     const [itemsPerPage] = useState(10);
+    const [selectedPatient, setSelectedPatient] = useState();
 
 
 
@@ -43,25 +41,10 @@ function AdminPatients() {
     const toggleModalState = () => {
         setModalState(!modalState);
     }
+    const toggleEditModalState = () => {
+        setEditModalState(!editModalState);
+    }
 
-
-    const handleEkle = () => {
-        if (!ad || !soyad || !dogumTarihi || !cinsiyet || !hastalikGecmisi) return;
-        onHastaEkle({ ad, soyad, dogumTarihi, cinsiyet, hastalikGecmisi });
-        setAd('');
-        setSoyad('');
-        setDogumTarihi('');
-        setCinsiyet('');
-        setHastalikGecmisi('');
-    };
-
-    const handleSil = (id) => {
-
-    };
-
-    const handleDuzenle = (id) => {
-        onHastaDuzenle(id);
-    };
 
 
     return (
@@ -76,6 +59,7 @@ function AdminPatients() {
                             <th>Person ID</th>
                             <th>Ad</th>
                             <th>Soyad</th>
+                            <th>Telefon Numarası</th>
                             <th>Doğum Tarihi</th>
                             <th>Cinsiyet</th>
                             <th>Hastalık Geçmişi</th>
@@ -88,11 +72,26 @@ function AdminPatients() {
                                 <td>{hasta.personID}</td>
                                 <td>{hasta.name}</td>
                                 <td>{hasta.surname}</td>
+                                <td>{hasta.phoneNumber}</td>
                                 <td>{new Date(hasta.birthDate).toLocaleDateString()}</td>
                                 <td>{hasta.gender}</td>
                                 <td>{hasta.address}</td>
-                                <td>
-                                    <CiEdit className='icon' />
+                                <td className='iconstab'>
+                                    <CiEdit className='icon' onClick={() => {
+                                        toggleEditModalState();
+                                        const pati = {
+                                            id: hasta.personID,
+                                            name: hasta.name,
+                                            surname: hasta.surname,
+                                            password: hasta.password,
+                                            phoneNumber: hasta.phoneNumber,
+                                            birthDate: new Date(new Date(hasta.birthDate).getTime() + (24 * 60 * 60 * 1000)).toISOString().split('T')[0],
+
+                                            gender: hasta.gender,
+                                            address: hasta.address
+                                        };
+                                        setSelectedPatient(pati);
+                                    }} />
                                     <MdDelete className='icon' />
                                 </td>
                             </tr>
@@ -109,7 +108,7 @@ function AdminPatients() {
                 </div>
                 <button onClick={() => (setModalState(!modalState))}>Hasta Ekle</button>
                 {modalState && (<AddPatientModal modalfunc={toggleModalState} />)}
-
+                {editModalState && (<EditPatientModal modalfunc={toggleEditModalState} patient={selectedPatient} />)}
             </div>
         </Dashboard>
     );

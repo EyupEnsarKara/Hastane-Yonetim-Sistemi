@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import '../css/AddPatientModal.css'
 import axios from 'axios'
 import { host, port } from '../../config.json'
@@ -13,7 +13,7 @@ function AddPatientModal({ modalfunc }) {
     const [surName, setSurName] = useState('');
     const [phoneNumber, setPhoneNumber] = useState('');
     const [password, setPassword] = useState('');
-    const [birthDate, setBirthDate] = useState('');
+    const [birthDate, setBirthDate] = useState();
     const [gender, setGender] = useState('');
     const [address, setAddress] = useState('');
 
@@ -36,6 +36,7 @@ function AddPatientModal({ modalfunc }) {
     };
 
 
+
     return (
         <div className="modal">
             <div className="overlay" onClick={() => (modalfunc())}></div>
@@ -45,7 +46,7 @@ function AddPatientModal({ modalfunc }) {
                 <input className='login-input' type="text" placeholder='Name' onChange={(e) => (setName(e.target.value))} />
                 <input className='login-input' type="text" placeholder='SurName' onChange={(e) => (setSurName(e.target.value))} />
                 <input className='login-input' type="password" placeholder='Password' onChange={(e) => (setPassword(e.target.value))} />
-                <input className='login-input' type="date" placeholder='Birthdate' onChange={(e) => (setBirthDate(e.target.value))} />
+                <input className='login-input' type="date" placeholder='Birthdate' value={birthDate} onChange={(e) => (setBirthDate(e.target.value))} />
                 <select className='login-input' onChange={(value) => (setGender(value.target.value))}>
                     <option value="">Select Gender</option>
                     <option value="woman">Woman</option>
