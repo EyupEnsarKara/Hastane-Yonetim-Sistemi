@@ -52,9 +52,8 @@ class PatientClass {
 }
 
 class DoctorClass {
-  constructor(connection, doctorID, name, surname, password, specialization, hospital) {
+  constructor(connection, name, surname, password, specialization, hospital) {
     this.connection = connection;
-    this.doctorID = doctorID;
     this.name = name;
     this.surname = surname;
     this.password = password;

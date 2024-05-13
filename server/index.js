@@ -46,10 +46,10 @@ app.post('/addPatient', (req, res) => {
 
 // /addDoctor endpoint'i
 app.post('/addDoctor', (req, res) => {
-    const { connection, name, surName, password, specialization, hospital } = req.body;
+    const { name, surName, password, specialization, hospital } = req.body;
     const doctor = new DoctorClass(connection, name, surName, password, specialization, hospital);
     doctor.addToDatabase();
-    //res.status(200).json({ message: 'Doktor başarıyla eklendi.' });
+    res.status(200).json({ status: "ok" });
 });
 
 // /addAppointment endpoint'i
@@ -132,6 +132,17 @@ app.get('/getPatients', (req, res) => {
         res.status(200).json({ result: results });
     })
 })
+app.get('/getDoctors', (req, res) => {
+    const query = `
+        SELECT Doctors.*, Persons.name, Persons.surname, Persons.password
+        FROM Doctors
+        INNER JOIN Persons ON Doctors.personID = Persons.personID
+    `;
+    connection.query(query, (err, results) => {
+        res.status(200).json({ result: results });
+    })
+})
+
 
 
 app.post('/deletePatient'), (req, res) => {
