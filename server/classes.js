@@ -1,6 +1,6 @@
 class PatientClass {
 
-  constructor(connection, id, name, surname, password, birthDate, gender, phoneNumber, address) {
+  constructor(connection, name, surname, password, birthDate, gender, phoneNumber, address, id = null) {
     this.connection = connection;
     this.id = id;
     this.name = name;
@@ -13,7 +13,6 @@ class PatientClass {
 
     if (this.id) {
       this.connection.query(`SELECT p.*, pt.* FROM Patients pt JOIN Persons p ON pt.personID = p.personID WHERE pt.patientID = ${this.id}`, (err, result) => {
-        console.log(result);
         if (err) {
           console.error("Error retrieving patient data:", err);
           throw err;
@@ -31,6 +30,15 @@ class PatientClass {
         this.phoneNumber = patientData.phoneNumber;
         this.address = patientData.address;
       });
+      console.log("sınıf oluştu atanan bilgiler");
+      console.log("Patient ID:", this.id);
+      console.log("Patient Name:", this.name);
+      console.log("Patient Surname:", this.surname);
+      console.log("Patient Password:", this.password);
+      console.log("Patient Birth Date:", this.birthDate);
+      console.log("Patient Gender:", this.gender);
+      console.log("Patient Phone Number:", this.phoneNumber);
+      console.log("Patient Address:", this.address);
     }
   }
 
@@ -54,14 +62,28 @@ class PatientClass {
       });
     });
   }
-  modifyPatient(name, surname, password, birthDate, gender, phoneNumber, address) {
-    this.name = name;
-    this.surname = surname;
-    this.password = password;
-    this.birthDate = birthDate;
-    this.gender = gender;
-    this.phoneNumber = phoneNumber;
-    this.address = address;
+  update(callback) {
+    const sql = `UPDATE Patients pt JOIN Persons p ON pt.personID = p.personID SET 
+        p.name = ?, 
+        p.surname = ?, 
+        p.password = ?, 
+        pt.birthDate = ?, 
+        pt.gender = ?, 
+        pt.phoneNumber = ?, 
+        pt.address = ? 
+        WHERE pt.patientID = ?`;
+
+    const params = [this.name, this.surname, this.password, this.birthDate, this.gender, this.phoneNumber, this.address, this.id];
+
+    this.connection.query(sql, params, (err, result) => {
+      if (err) {
+        console.error("Error updating patient data:", err);
+        callback(err, null);
+        return;
+      }
+      console.log("Patient data updated successfully.");
+      callback(null, result);
+    });
   }
   updateDatabase() {
     const sql = `UPDATE Persons SET name = '${this.name}', surname = '${this.surname}', password = '${this.password}' WHERE personID = ${this.id}`;

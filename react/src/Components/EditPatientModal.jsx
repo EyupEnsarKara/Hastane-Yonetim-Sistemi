@@ -13,7 +13,7 @@ function EditPatientModal({ patient, modalfunc }) {
         }));
     };
     const handleSubmit = () => {
-        // Burada axios ile güncelleme işlemi gerçekleştirilebilir.
+        console.log(editedPatient)
         axios.post(`https://${host}:${port}/editPatient`, { editedPatient }).then((res) => {
 
 
@@ -24,9 +24,10 @@ function EditPatientModal({ patient, modalfunc }) {
 
     return (
         <div className="modal">
+            <div className="overlay" onClick={() => (modalfunc())}></div>
             <div className="modal-content">
                 <span className="close" onClick={modalfunc}>&times;</span>
-                <h2>Edit Patient Information</h2>
+                <h2>Edit Patient Information Id:${editedPatient.id}</h2>
                 <div className="form-group">
                     <label>Name:</label>
                     <input type="text" name="name" value={editedPatient.name} onChange={handleChange} />

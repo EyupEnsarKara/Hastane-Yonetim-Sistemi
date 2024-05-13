@@ -28,7 +28,7 @@ function AdminPatients() {
 
             setPatients(res.data.result);
         }).catch(err => console.log(err))
-    }, [modalState])
+    }, [modalState, editModalState])
     const lastIndex = currentPage * itemsPerPage;
     const firstIndex = lastIndex - itemsPerPage;
     const currentItems = patients.slice(firstIndex, lastIndex);
@@ -78,7 +78,7 @@ function AdminPatients() {
                                 <td>{hasta.address}</td>
                                 <td className='iconstab'>
                                     <CiEdit className='icon' onClick={() => {
-                                        toggleEditModalState();
+
                                         const pati = {
                                             id: hasta.personID,
                                             name: hasta.name,
@@ -91,6 +91,7 @@ function AdminPatients() {
                                             address: hasta.address
                                         };
                                         setSelectedPatient(pati);
+                                        toggleEditModalState();
                                     }} />
                                     <MdDelete className='icon' />
                                 </td>

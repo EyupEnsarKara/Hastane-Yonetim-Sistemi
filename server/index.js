@@ -37,6 +37,7 @@ connection.connect((err) => {
 // /addPatient endpoint'i
 app.post('/addPatient', (req, res) => {
     const { name, surName, password, birthDate, gender, phoneNumber, address } = req.body;
+    console.log(req.body)
     const patient = new PatientClass(connection, name, surName, password, birthDate, gender, phoneNumber, address);
     patient.addToDatabase();
     res.status(200).json({ status: "ok" });
@@ -106,8 +107,16 @@ app.post('/checkLogin', (req, res) => {
 app.post('/editPatient', (req, res) => {
     const pt = req.body.editedPatient;
     const { id, name, surname, password, birthDate, gender, phoneNumber, address } = pt;
-    //const patient = new PatientClass(connection, id, name, surName, password, birthDate, gender, phoneNumber, address);
-    console.log(req.body);
+    console.log(pt)
+    const patient = new PatientClass(connection, name, surname, password, birthDate, gender, phoneNumber, address, id);
+    patient.update((err, result) => {
+        if (err) {
+            console.log("Error updating patient");
+            return;
+        }
+        console.log("Patient updated succsessfully");
+    })
+
 });
 
 
