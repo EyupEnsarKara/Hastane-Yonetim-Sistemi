@@ -1,8 +1,7 @@
 class PatientClass {
 
-  constructor(connection, name, surname, password, birthDate, gender, phoneNumber, address, id = null) {
+  constructor(connection, name, surname, password, birthDate, gender, phoneNumber, address) {
     this.connection = connection;
-    this.id = id;
     this.name = name;
     this.surname = surname;
     this.password = password;
@@ -11,35 +10,6 @@ class PatientClass {
     this.phoneNumber = phoneNumber;
     this.address = address;
 
-    if (this.id) {
-      this.connection.query(`SELECT p.*, pt.* FROM Patients pt JOIN Persons p ON pt.personID = p.personID WHERE pt.patientID = ${this.id}`, (err, result) => {
-        if (err) {
-          console.error("Error retrieving patient data:", err);
-          throw err;
-        }
-        if (result.length === 0) {
-          console.log("Patient not found!");
-          return;
-        }
-        const patientData = result[0];
-        this.name = patientData.name;
-        this.surname = patientData.surname;
-        this.password = patientData.password;
-        this.birthDate = patientData.birthDate;
-        this.gender = patientData.gender;
-        this.phoneNumber = patientData.phoneNumber;
-        this.address = patientData.address;
-      });
-      console.log("sınıf oluştu atanan bilgiler");
-      console.log("Patient ID:", this.id);
-      console.log("Patient Name:", this.name);
-      console.log("Patient Surname:", this.surname);
-      console.log("Patient Password:", this.password);
-      console.log("Patient Birth Date:", this.birthDate);
-      console.log("Patient Gender:", this.gender);
-      console.log("Patient Phone Number:", this.phoneNumber);
-      console.log("Patient Address:", this.address);
-    }
   }
 
 
@@ -50,7 +20,6 @@ class PatientClass {
         console.error("Error adding person:", err);
         throw err;
       }
-      console.log("tsttt")
       const personID = result.insertId;
       const patientSql = `INSERT INTO Patients (personID, birthDate, gender, phoneNumber, address) VALUES (${personID}, '${this.birthDate}', '${this.gender}', '${this.phoneNumber}', '${this.address}')`;
       this.connection.query(patientSql, (err, result) => {
@@ -62,39 +31,15 @@ class PatientClass {
       });
     });
   }
-  update(callback) {
-    const sql = `UPDATE Patients pt JOIN Persons p ON pt.personID = p.personID SET 
-        p.name = ?, 
-        p.surname = ?, 
-        p.password = ?, 
-        pt.birthDate = ?, 
-        pt.gender = ?, 
-        pt.phoneNumber = ?, 
-        pt.address = ? 
-        WHERE pt.patientID = ?`;
-
-    const params = [this.name, this.surname, this.password, this.birthDate, this.gender, this.phoneNumber, this.address, this.id];
-
-    this.connection.query(sql, params, (err, result) => {
-      if (err) {
-        console.error("Error updating patient data:", err);
-        callback(err, null);
-        return;
-      }
-      console.log("Patient data updated successfully.");
-      callback(null, result);
-    });
-  }
-  updateDatabase() {
-    const sql = `UPDATE Persons SET name = '${this.name}', surname = '${this.surname}', password = '${this.password}' WHERE personID = ${this.id}`;
-    this.connection.query(sql, (err, result) => {
+  updateInDatabase(personID) {
+    const updatePersonSql = `UPDATE Persons SET name='${this.name}', surname='${this.surname}', password='${this.password}' WHERE personID=${personID}`;
+    this.connection.query(updatePersonSql, (err, result) => {
       if (err) {
         console.error("Error updating person:", err);
         throw err;
       }
-      console.log("Person updated successfully!");
-      const patientSql = `UPDATE Patients SET birthDate = '${this.birthDate}', gender = '${this.gender}', phoneNumber = '${this.phoneNumber}', address = '${this.address}' WHERE patientID = ${this.id}`;
-      this.connection.query(patientSql, (err, result) => {
+      const updatePatientSql = `UPDATE Patients SET birthDate='${this.birthDate}', gender='${this.gender}', phoneNumber='${this.phoneNumber}', address='${this.address}' WHERE personID=${personID}`;
+      this.connection.query(updatePatientSql, (err, result) => {
         if (err) {
           console.error("Error updating patient:", err);
           throw err;
@@ -134,6 +79,9 @@ class DoctorClass {
       });
     });
   }
+  updateInDatabase(personID) {
+
+  }
 
 }
 
@@ -170,6 +118,23 @@ class MedicalReportClass {
     this.connection.query(sql, (err, result) => {
       if (err) throw err;
       console.log("MedicalReport eklendi!");
+    });
+  }
+  updateInDatabase(personID) {
+    const updatePersonSql = `UPDATE Persons SET name='${this.name}', surname='${this.surname}', password='${this.password}' WHERE personID=${personID}`;
+    this.connection.query(updatePersonSql, (err, result) => {
+      if (err) {
+        console.error("Error updating person:", err);
+        throw err;
+      }
+      const updateDoctorSql = `UPDATE Doctors SET specialization='${this.specialization}', hospital='${this.hospital}' WHERE personID=${personID}`;
+      this.connection.query(updateDoctorSql, (err, result) => {
+        if (err) {
+          console.error("Error updating doctor:", err);
+          throw err;
+        }
+        console.log("Doctor updated successfully!");
+      });
     });
   }
 }

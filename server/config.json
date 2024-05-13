@@ -4,6 +4,6 @@
     "password": "1436XYzt+++",
     "database": "Hospital",
     "port": "4444",
-    "certfileKey": "localhost-key.pem",
-    "certfile": "localhost.pem"
+    "certfileKey": "e-localhost-key.pem",
+    "certfile": "e-localhost.pem"
 }

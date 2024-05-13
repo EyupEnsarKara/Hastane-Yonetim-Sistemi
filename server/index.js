@@ -108,14 +108,16 @@ app.post('/editPatient', (req, res) => {
     const pt = req.body.editedPatient;
     const { id, name, surname, password, birthDate, gender, phoneNumber, address } = pt;
     console.log(pt)
-    const patient = new PatientClass(connection, name, surname, password, birthDate, gender, phoneNumber, address, id);
-    patient.update((err, result) => {
-        if (err) {
-            console.log("Error updating patient");
-            return;
-        }
-        console.log("Patient updated succsessfully");
-    })
+    const patient = new PatientClass(connection, name, surname, password, birthDate, gender, phoneNumber, address);
+    patient.updateInDatabase(id);
+    res.status(200).json({ status: "ok" });
+});
+app.post('/editDoctor', (req, res) => {
+    const dr = req.body.editedDoctor;
+    const { id, name, surname, password, specialization, hospital } = dr;
+    const doctor = new DoctorClass(connection, name, surname, password, specialization, hospital);
+    doctor.updateInDatabase(id);
+    res.status(200).json({ status: "ok" });
 
 });
 
