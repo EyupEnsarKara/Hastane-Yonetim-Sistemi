@@ -12,7 +12,6 @@ function EditDoctorModal({ doctor, modalfunc }) {
         }));
     };
     const handleSubmit = () => {
-        console.log(editedDoctor)
         axios.post(`https://${host}:${port}/editDoctor`, { editedDoctor }).then((res) => {
 
 
