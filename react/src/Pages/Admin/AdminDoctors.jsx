@@ -8,35 +8,21 @@ import { host, port } from '../../../config.json';
 import { MdDelete } from "react-icons/md";
 import { CiEdit } from "react-icons/ci";
 import axios from 'axios';
+import EditDoctorModal from '../../Components/EditDoctorModal';
 
 function AdminDoctors() {
-    const doktorListesi = [
-        { id: 1, ad: "Ahmet", soyad: "Yılmaz", dogumTarihi: "1990-05-15", cinsiyet: "Erkek", uzmanlikAlani: "Hipertansiyon" },
-        { id: 2, ad: "Ayşe", soyad: "Kara", dogumTarihi: "1985-10-20", cinsiyet: "Kadın", uzmanlikAlani: "Diyabet" },
-        { id: 10, ad: "Mehmet", soyad: "Demir", dogumTarihi: "1992-08-25", cinsiyet: "Erkek", uzmanlikAlani: "Kardiyoloji" },
-        { id: 3, ad: "Ali", soyad: "Can", dogumTarihi: "1995-03-12", cinsiyet: "Erkek", uzmanlikAlani: "Ortopedi" },
-        { id: 4, ad: "Ayşe", soyad: "Yıldız", dogumTarihi: "1988-07-18", cinsiyet: "Kadın", uzmanlikAlani: "Göz Hastalıkları" },
-        { id: 5, ad: "Mehmet", soyad: "Kaya", dogumTarihi: "1993-11-05", cinsiyet: "Erkek", uzmanlikAlani: "Kulak Burun Boğaz" },
-        { id: 6, ad: "Fatma", soyad: "Şahin", dogumTarihi: "1991-09-30", cinsiyet: "Kadın", uzmanlikAlani: "Nöroloji" },
-        { id: 7, ad: "Ahmet", soyad: "Demir", dogumTarihi: "1987-04-25", cinsiyet: "Erkek", uzmanlikAlani: "Kardiyoloji" },
-        { id: 8, ad: "Zeynep", soyad: "Yılmaz", dogumTarihi: "1994-02-15", cinsiyet: "Kadın", uzmanlikAlani: "Dermatoloji" },
-        { id: 9, ad: "Mustafa", soyad: "Aydın", dogumTarihi: "1990-06-20", cinsiyet: "Erkek", uzmanlikAlani: "Psikiyatri" },
-        { id: 10, ad: "Elif", soyad: "Kara", dogumTarihi: "1989-08-10", cinsiyet: "Kadın", uzmanlikAlani: "Kadın Hastalıkları" },
-        { id: 11, ad: "Ali", soyad: "Yılmaz", dogumTarihi: "1992-12-05", cinsiyet: "Erkek", uzmanlikAlani: "Ortopedi" },
-        { id: 12, ad: "Ayşe", soyad: "Kara", dogumTarihi: "1986-07-30", cinsiyet: "Kadın", uzmanlikAlani: "Göz Hastalıkları" }
-
-    ];
-    const [ad, setAd] = useState('');
-    const [soyad, setSoyad] = useState('');
-    const [dogumTarihi, setDogumTarihi] = useState('');
-    const [cinsiyet, setCinsiyet] = useState('');
-    const [hastalikGecmisi, setHastalikGecmisi] = useState('');
+    const [doctors, setDoctors] = useState([]);
     const [modalState, setModalState] = useState(false);
+    const [editModalState, setEditModalState] = useState(false);
     const [currentPage, setCurrentPage] = useState(1);
     const [itemsPerPage] = useState(10);
+    const [selectedDoctor, setSelectedDoctor] = useState();
 
-
-
+    useEffect(() => {
+        axios.get(`https://${host}:${port}/getDoctors`).then(res => {
+            setDoctors(res.data.result);
+        })
+    }, [modalState, editModalState])
 
 
 
@@ -45,9 +31,9 @@ function AdminDoctors() {
 
     const lastIndex = currentPage * itemsPerPage;
     const firstIndex = lastIndex - itemsPerPage;
-    const currentItems = doktorListesi.slice(firstIndex, lastIndex);
+    const currentItems = doctors.slice(firstIndex, lastIndex);
 
-    const totalPages = Math.ceil(doktorListesi.length / itemsPerPage);
+    const totalPages = Math.ceil(doctors.length / itemsPerPage);
 
     const handleClick = (event) => {
         setCurrentPage(Number(event.target.id));
@@ -55,6 +41,10 @@ function AdminDoctors() {
     const toggleModalState = () => {
         setModalState(!modalState);
     }
+    const toggleEditModalState = () => {
+        setEditModalState(!editModalState);
+    }
+
 
 
     return (
@@ -68,22 +58,31 @@ function AdminDoctors() {
                         <tr>
                             <th>Ad</th>
                             <th>Soyad</th>
-                            <th>Doğum Tarihi</th>
-                            <th>Cinsiyet</th>
                             <th>Uzmanlık alanı</th>
+                            <th>Çalıştığı Hastane</th>
                             <th>İşlemler</th>
                         </tr>
                     </thead>
                     <tbody>
-                        {currentItems.map(hasta => (
-                            <tr key={hasta.id}>
-                                <td>{hasta.ad}</td>
-                                <td>{hasta.soyad}</td>
-                                <td>{hasta.dogumTarihi}</td>
-                                <td>{hasta.cinsiyet}</td>
-                                <td>{hasta.uzmanlikAlani}</td>
+                        {currentItems.map(doctor => (
+                            <tr key={doctor.personID}>
+                                <td>{doctor.name}</td>
+                                <td>{doctor.surname}</td>
+                                <td>{doctor.specialization}</td>
+                                <td>{doctor.hospital}</td>
                                 <td>
-                                    <CiEdit className='icon' />
+                                    <CiEdit className='icon' onClick={() => {
+                                        const tempDoc = {
+                                            id: doctor.personID,
+                                            name: doctor.name,
+                                            surname: doctor.surname,
+                                            password: doctor.password,
+                                            specialization: doctor.specialization,
+                                            hospital: doctor.hospital
+                                        };
+                                        setSelectedDoctor(tempDoc);
+                                        toggleEditModalState();
+                                    }} />
                                     <MdDelete className='icon' />
                                 </td>
                             </tr>
@@ -100,6 +99,7 @@ function AdminDoctors() {
                 </div>
                 <button onClick={() => (setModalState(!modalState))}>Add Doctor</button>
                 {modalState && (<AddDoctorModal modalfunc={toggleModalState} />)}
+                {editModalState && (<EditDoctorModal modalfunc={toggleEditModalState} doctor={selectedDoctor} />)}
 
             </div>
         </Dashboard>
