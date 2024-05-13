@@ -147,16 +147,22 @@ class Manager {
     });
   }
   static deleteDoctor(connection, id, res) {
-    const sql = `Delete from Doctors where doctorID=${id}`;
-    connection.query(sql, (err, result) => {
-      console.log(err)
-      if (err) {
-        res.status(200).json({ message: err });
-      }
-      // Veritabanı bağlantısını kapat
+    // Önce Persons tablosundan ilgili kişiyi sileceğiz
+    const deletePersonSQL = `DELETE FROM Persons WHERE personID = ${id}`;
 
+    connection.query(deletePersonSQL, (personErr, personResult) => {
+      if (personErr) {
+        console.log(personErr);
+        res.status(500).json({ message: "Kişi silinirken bir hata oluştu." });
+        return; // Hata olduğunda fonksiyondan çık
+      }
+
+      // Kişi başarıyla silindi
+      res.status(200).json({ message: "Doktor ve kişi başarıyla silindi." });
     });
   }
+
+
 
 }
 
