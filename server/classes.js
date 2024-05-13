@@ -80,7 +80,21 @@ class DoctorClass {
     });
   }
   updateInDatabase(personID) {
-
+    const updatePersonSql = `UPDATE Persons SET name='${this.name}', surname='${this.surname}', password='${this.password}' WHERE personID=${personID}`;
+    this.connection.query(updatePersonSql, (err, result) => {
+      if (err) {
+        console.error("Error updating person:", err);
+        throw err;
+      }
+      const updateDoctorSql = `UPDATE Doctors SET specialization='${this.specialization}', hospital='${this.hospital}' WHERE personID=${personID}`;
+      this.connection.query(updateDoctorSql, (err, result) => {
+        if (err) {
+          console.error("Error updating doctor:", err);
+          throw err;
+        }
+        console.log("Doctor updated successfully!");
+      });
+    });
   }
 
 }
@@ -120,23 +134,7 @@ class MedicalReportClass {
       console.log("MedicalReport eklendi!");
     });
   }
-  updateInDatabase(personID) {
-    const updatePersonSql = `UPDATE Persons SET name='${this.name}', surname='${this.surname}', password='${this.password}' WHERE personID=${personID}`;
-    this.connection.query(updatePersonSql, (err, result) => {
-      if (err) {
-        console.error("Error updating person:", err);
-        throw err;
-      }
-      const updateDoctorSql = `UPDATE Doctors SET specialization='${this.specialization}', hospital='${this.hospital}' WHERE personID=${personID}`;
-      this.connection.query(updateDoctorSql, (err, result) => {
-        if (err) {
-          console.error("Error updating doctor:", err);
-          throw err;
-        }
-        console.log("Doctor updated successfully!");
-      });
-    });
-  }
+
 }
 class Manager {
   static deletePatient(connection, id) {
