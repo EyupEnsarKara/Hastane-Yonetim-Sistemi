@@ -142,8 +142,7 @@ class Manager {
 
     connection.query(sql, (err, result) => {
       if (err) {
-        res.status(500).json({ message: 'Bir hata oluştu.' });
-
+        res.status(500).json({ message: err });
       }
       // Veritabanı bağlantısını kapat
       connection.end();
@@ -154,7 +153,7 @@ class Manager {
     const sql = `Delete from Doctors where doctorID=${id}`;
     connection.query(sql, (err, result) => {
       if (err) {
-        res.status(500).json({ message: 'Bir hata oluştu.' });
+        res.status(500).json({ message: err });
       }
       // Veritabanı bağlantısını kapat
       connection.end();
