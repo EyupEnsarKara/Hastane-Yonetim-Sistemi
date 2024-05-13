@@ -10,6 +10,9 @@ function AdminDashboard() {
                 Total Patients = {count}
             </div>
             <button onClick={() => (setCount(count + 1))}>asd</button>
+            <button onClick={() => {
+                confirm("onayla beni");
+            }}>asds</button>
         </Dashboard>
     )
 }

@@ -22,6 +22,7 @@ function AdminDoctors() {
         axios.get(`https://${host}:${port}/getDoctors`).then(res => {
             setDoctors(res.data.result);
         })
+        console.log(doctors)
     }, [modalState, editModalState])
 
 
@@ -43,6 +44,16 @@ function AdminDoctors() {
     }
     const toggleEditModalState = () => {
         setEditModalState(!editModalState);
+    }
+    const handleDelete = (id) => {
+        axios.post(`https://${host}:${port}/deleteDoctor`, { id: id }).then(res => {
+            if (res.status == "ok") {
+                alert("Doktor silme başarılı");
+            }
+            else {
+                alert(`Bir hata oluştu : ${res.data.message}`);
+            }
+        })
     }
 
 
@@ -83,7 +94,7 @@ function AdminDoctors() {
                                         setSelectedDoctor(tempDoc);
                                         toggleEditModalState();
                                     }} />
-                                    <MdDelete className='icon' />
+                                    <MdDelete className='icon' onClick={() => { handleDelete(doctor.doctorID) }} />
                                 </td>
                             </tr>
                         ))}
