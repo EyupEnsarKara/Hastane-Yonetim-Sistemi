@@ -94,7 +94,7 @@ function AdminDoctors() {
                                         setSelectedDoctor(tempDoc);
                                         toggleEditModalState();
                                     }} />
-                                    <MdDelete className='icon' onClick={() => { handleDelete(doctor.doctorID) }} />
+                                    <MdDelete className='icon' onClick={() => { handleDelete(doctor.personID) }} />
                                 </td>
                             </tr>
                         ))}
