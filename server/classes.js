@@ -136,22 +136,31 @@ class MedicalReportClass {
 
 }
 class Manager {
-  static deletePatient(connection, id) {
+  static deletePatient(connection, id, res) {
     connection.connect();
     const sql = `Delete from Patients where patientID=${id}`;
 
     connection.query(sql, (err, result) => {
       if (err) {
-        console.log(err.message)
+        res.status(500).json({ message: 'Bir hata oluştu.' });
+
       }
-
-
       // Veritabanı bağlantısını kapat
       connection.end();
-
     });
-
   }
+  static deleteDoctor(connection, id, res) {
+    connection.connect();
+    const sql = `Delete from Doctors where doctorID=${id}`;
+    connection.query(sql, (err, result) => {
+      if (err) {
+        res.status(500).json({ message: 'Bir hata oluştu.' });
+      }
+      // Veritabanı bağlantısını kapat
+      connection.end();
+    });
+  }
+
 }
 
 module.exports = { PatientClass, DoctorClass, AppointmentClass, MedicalReportClass, Manager };

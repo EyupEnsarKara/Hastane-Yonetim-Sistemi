@@ -120,7 +120,17 @@ app.post('/editDoctor', (req, res) => {
     res.status(200).json({ status: "ok" });
 
 });
+app.post('deletePatient', (req, res) => {
+    const id = req.body.id;
+    Manager.deletePatient(connection, id, res);
+    res.status(200).json({ status: "ok" });
 
+});
+app.post('deleteDoctor', (req, res) => {
+    const id = req.body.id;
+    Manager.deleteDoctor(connection, id, res);
+    res.status(200).json({ status: "ok" });
+});
 
 app.get('/getPatients', (req, res) => {
     const query = `
