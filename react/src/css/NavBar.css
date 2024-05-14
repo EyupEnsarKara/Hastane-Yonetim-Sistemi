@@ -1,56 +1,48 @@
 .navbar {
-    /* Navbar arka plan rengi */
-    color: #fff;
-    /* Navbar metin rengi */
+    background-color: #f2f2f2;
+    /* Navbar background color (light gray) */
+    color: #333;
+    /* Navbar text color (dark gray) */
     padding: 1rem;
-    /* Navbar iç boşlukları */
+    /* Navbar padding */
 }
-
 
 .navbar-container {
     display: flex;
     justify-content: space-between;
-    /* Öğeleri sağa ve sola doğru konumlandırır */
-
-    /* Öğeleri dikeyde ortalar */
+    align-items: center;
+    /* Vertically align items */
 }
 
 .navbar-logo {
-    color: #fff;
-    /* Logo metin rengi */
-
+    color: #333;
+    /* Logo text color */
     text-decoration: none;
-    /* Link altı çizgisini kaldırır */
     font-size: 1.5rem;
-    /* Logo metin boyutu */
     cursor: pointer;
 }
 
 .navbar-menu {
     list-style: none;
-    /* Menü öğelerindeki liste işaretlerini kaldırır */
     display: flex;
 }
 
 .navbar-item {
     margin-right: 1rem;
-    /* Menü öğeleri arasındaki sağ boşluk */
 }
 
 .navbar-link {
-
-    color: #000;
-    /* Varsayılan link rengi */
-    /* Menü linklerinin metin rengi */
+    color: #333;
+    /* Default link color (dark gray) */
     cursor: pointer;
     text-decoration: none;
     transition: color 0.3s;
-    font-size: 30px;
+    font-size: 1.2rem;
+    /* Increased font size */
     font-family: 'Roboto', sans-serif;
-    margin-right: 1rem;
 }
 
 .navbar-link:hover {
-    color: #e10505;
-    /* Linkin üzerine gelince değişecek olan renk */
+    color: #e74c3c;
+    /* Color on hover (shades of red) */
 }

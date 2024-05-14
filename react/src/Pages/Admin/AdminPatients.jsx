@@ -1,18 +1,16 @@
-import React, { useState, useEffect } from 'react'
-import Dashboard from '../../Components/Dashboard'
-import "../../css/AdminPatients.css"
+import React, { useState, useEffect } from 'react';
+import Dashboard from '../../Components/Dashboard';
+import "../../css/AdminPatients.css";
 import AddPatientModal from '../../Components/AddPatientModal';
 import axios from 'axios';
 import { host, port } from '../../../config.json';
 import EditPatientModal from '../../Components/EditPatientModal';
 
-//icon importları
+// Icon imports
 import { MdDelete } from "react-icons/md";
-import { CiEdit } from "react-icons/ci";
-
+import { AiOutlineEdit } from "react-icons/ai";
 
 function AdminPatients() {
-
     const [patients, setPatients] = useState([]);
     const [modalState, setModalState] = useState(false);
     const [editModalState, setEditModalState] = useState(false);
@@ -21,52 +19,45 @@ function AdminPatients() {
     const [selectedPatient, setSelectedPatient] = useState();
     const [effect, updateEffect] = useState(false);
 
-
-
-
     useEffect(() => {
-        axios.get(`https://${host}:${port}/getPatients`).then(res => {
-
-            setPatients(res.data.result);
-        }).catch(err => console.log(err))
+        axios.get(`https://${host}:${port}/getPatients`)
+            .then(res => {
+                setPatients(res.data.result);
+            })
+            .catch(err => console.log(err))
     }, [modalState, editModalState, effect])
-
 
     const lastIndex = currentPage * itemsPerPage;
     const firstIndex = lastIndex - itemsPerPage;
     const currentItems = patients.slice(firstIndex, lastIndex);
-
     const totalPages = Math.ceil(patients.length / itemsPerPage);
 
     const handleClick = (event) => {
         setCurrentPage(Number(event.target.id));
     };
+
     const toggleModalState = () => {
         setModalState(!modalState);
-    }
+    };
+
     const toggleEditModalState = () => {
         setEditModalState(!editModalState);
-    }
+    };
+
     const handleDelete = (id) => {
-        console.log("tik")
-        axios.post(`https://${host}:${port}/deletePatient`, { id: id }).then(res => {
-            if (res.data.result && res.data.result.affectedRows > 0) {
-                alert('Kişi Başarıyla silindi.');
-                updateEffect(!effect);
-            }
-            else if (res.data.message) {
-                alert(res.data.message.sqlMessage)
-            }
-
-        })
-    }
-
-
+        axios.post(`https://${host}:${port}/deletePatient`, { id: id })
+            .then(res => {
+                if (res.data.result && res.data.result.affectedRows > 0) {
+                    alert('Kişi Başarıyla silindi.');
+                    updateEffect(!effect);
+                } else if (res.data.message) {
+                    alert(res.data.message.sqlMessage)
+                }
+            })
+    };
 
     return (
         <Dashboard>
-
-
             <div className="container">
                 <h2>Hasta Listesi</h2>
                 <table>
@@ -93,8 +84,7 @@ function AdminPatients() {
                                 <td>{hasta.gender}</td>
                                 <td>{hasta.address}</td>
                                 <td className='iconstab'>
-                                    <CiEdit className='icon' onClick={() => {
-
+                                    <AiOutlineEdit className='icon' onClick={() => {
                                         const pati = {
                                             id: hasta.personID,
                                             name: hasta.name,
@@ -102,19 +92,17 @@ function AdminPatients() {
                                             password: hasta.password,
                                             phoneNumber: hasta.phoneNumber,
                                             birthDate: new Date(new Date(hasta.birthDate).getTime() + (24 * 60 * 60 * 1000)).toISOString().split('T')[0],
-
                                             gender: hasta.gender,
                                             address: hasta.address
                                         };
                                         setSelectedPatient(pati);
                                         toggleEditModalState();
                                     }} />
-                                    <MdDelete className='icon' onClick={() => (handleDelete(hasta.patientID))} />
+                                    <MdDelete className='icon' onClick={() => handleDelete(hasta.patientID)} />
                                 </td>
                             </tr>
                         ))}
                     </tbody>
-
                 </table>
                 <div>
                     {Array(totalPages).fill().map((_, index) => (
@@ -123,11 +111,12 @@ function AdminPatients() {
                         </button>
                     ))}
                 </div>
-                <button onClick={() => (setModalState(!modalState))}>Hasta Ekle</button>
-                {modalState && (<AddPatientModal modalfunc={toggleModalState} />)}
-                {editModalState && (<EditPatientModal modalfunc={toggleEditModalState} patient={selectedPatient} />)}
+                <button onClick={toggleModalState}>Hasta Ekle</button>
+                {modalState && <AddPatientModal modalfunc={toggleModalState} />}
+                {editModalState && <EditPatientModal modalfunc={toggleEditModalState} patient={selectedPatient} />}
             </div>
         </Dashboard>
     );
 }
-export default AdminPatients
+
+export default AdminPatients;

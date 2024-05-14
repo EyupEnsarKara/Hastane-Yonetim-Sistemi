@@ -1,12 +1,12 @@
-import React, { useEffect, useState } from 'react'
-import Dashboard from '../../Components/Dashboard'
+import React, { useEffect, useState } from 'react';
+import Dashboard from '../../Components/Dashboard';
 import AddPatientModal from '../../Components/AddPatientModal';
 import AddDoctorModal from '../../Components/AddDoctorModal';
 import { host, port } from '../../../config.json';
-
-//icon importları
+import '../../css/AdminDoctors.css';
+// Icon imports
 import { MdDelete } from "react-icons/md";
-import { CiEdit } from "react-icons/ci";
+import { AiOutlineEdit } from "react-icons/ai";
 import axios from 'axios';
 import EditDoctorModal from '../../Components/EditDoctorModal';
 
@@ -20,60 +20,53 @@ function AdminDoctors() {
     const [effect, updateEffect] = useState(false);
 
     useEffect(() => {
-        axios.get(`https://${host}:${port}/getDoctors`).then(res => {
-            setDoctors(res.data.result);
-        })
-    }, [modalState, editModalState, effect])
-
-
-
-
-
+        axios.get(`https://${host}:${port}/getDoctors`)
+            .then(res => {
+                setDoctors(res.data.result);
+            })
+    }, [modalState, editModalState, effect]);
 
     const lastIndex = currentPage * itemsPerPage;
     const firstIndex = lastIndex - itemsPerPage;
     const currentItems = doctors.slice(firstIndex, lastIndex);
-
     const totalPages = Math.ceil(doctors.length / itemsPerPage);
 
     const handleClick = (event) => {
         setCurrentPage(Number(event.target.id));
     };
+
     const toggleModalState = () => {
         setModalState(!modalState);
-    }
+    };
+
     const toggleEditModalState = () => {
         setEditModalState(!editModalState);
-    }
+    };
+
     const handleDelete = (id) => {
-        axios.post(`https://${host}:${port}/deleteDoctor`, { id: id }).then(res => {
-            if (res.data.result && res.data.result.affectedRows > 0) {
-                alert('Kişi Başarıyla silindi.');
-                updateEffect(!effect);
-            }
-            else if (res.data.message) {
-                alert(res.data.message.sqlMessage)
-            }
-
-        })
-    }
-
-
+        axios.post(`https://${host}:${port}/deleteDoctor`, { id: id })
+            .then(res => {
+                if (res.data.result && res.data.result.affectedRows > 0) {
+                    alert('Doctor successfully deleted.');
+                    updateEffect(!effect);
+                } else if (res.data.message) {
+                    alert(res.data.message.sqlMessage);
+                }
+            })
+    };
 
     return (
         <Dashboard>
-
-
             <div className="container">
                 <h2>Doctors</h2>
                 <table>
                     <thead>
                         <tr>
-                            <th>Ad</th>
-                            <th>Soyad</th>
-                            <th>Uzmanlık alanı</th>
-                            <th>Çalıştığı Hastane</th>
-                            <th>İşlemler</th>
+                            <th>Name</th>
+                            <th>Surname</th>
+                            <th>Specialization</th>
+                            <th>Hospital</th>
+                            <th>Actions</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -84,7 +77,7 @@ function AdminDoctors() {
                                 <td>{doctor.specialization}</td>
                                 <td>{doctor.hospital}</td>
                                 <td>
-                                    <CiEdit className='icon' onClick={() => {
+                                    <AiOutlineEdit className='icon' onClick={() => {
                                         const tempDoc = {
                                             id: doctor.personID,
                                             name: doctor.name,
@@ -101,7 +94,6 @@ function AdminDoctors() {
                             </tr>
                         ))}
                     </tbody>
-
                 </table>
                 <div>
                     {Array(totalPages).fill().map((_, index) => (
@@ -110,13 +102,12 @@ function AdminDoctors() {
                         </button>
                     ))}
                 </div>
-                <button onClick={() => (setModalState(!modalState))}>Add Doctor</button>
-                {modalState && (<AddDoctorModal modalfunc={toggleModalState} />)}
-                {editModalState && (<EditDoctorModal modalfunc={toggleEditModalState} doctor={selectedDoctor} />)}
-
+                <button onClick={toggleModalState}>Add Doctor</button>
+                {modalState && <AddDoctorModal modalfunc={toggleModalState} />}
+                {editModalState && <EditDoctorModal modalfunc={toggleEditModalState} doctor={selectedDoctor} />}
             </div>
         </Dashboard>
     );
 }
 
-export default AdminDoctors
+export default AdminDoctors;

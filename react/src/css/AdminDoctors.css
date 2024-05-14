@@ -1,17 +1,10 @@
-body {
-    font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 0;
-    background-color: #f4f4f4;
-}
-
 .container {
     max-width: 800px;
     margin: 0 auto;
     padding: 20px;
 }
 
-h1 {
+h2 {
     text-align: center;
     margin-bottom: 20px;
 }
@@ -35,28 +28,33 @@ th {
     color: #fff;
 }
 
-tr:nth-child(even) {
+tbody tr:hover {
     background-color: #f2f2f2;
 }
 
-tr:hover {
-    background-color: #ddd;
-}
-
-/* Styling for icons */
 .icon {
-    height: 30px;
-    width: 30px;
+    height: 20px;
+    width: 20px;
     cursor: pointer;
+    margin-right: 10px;
     transition: transform 0.3s ease-in-out;
 }
 
 .icon:hover {
-    transform: scale(1.1);
+    transform: scale(1.2);
 }
 
-.iconstab {
-    width: 60px;
-    text-align: center;
-    /* Align icons in the center */
+button {
+    margin-top: 10px;
+    padding: 10px 20px;
+    background-color: #4CAF50;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease-in-out;
+}
+
+button:hover {
+    background-color: #45a049;
 }

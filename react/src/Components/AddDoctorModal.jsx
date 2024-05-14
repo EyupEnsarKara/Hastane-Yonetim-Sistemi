@@ -1,7 +1,8 @@
-import React, { useState } from 'react'
-import '../css/AddPatientModal.css'
-import axios from 'axios'
-import { host, port } from '../../config.json'
+import React, { useState } from 'react';
+import axios from 'axios';
+import { host, port } from '../../config.json';
+import '../css/AddDoctorModal.css';
+
 function AddDoctorModal({ modalfunc }) {
     const [name, setName] = useState('');
     const [surName, setSurName] = useState('');
@@ -9,9 +10,7 @@ function AddDoctorModal({ modalfunc }) {
     const [specialization, setSpecialization] = useState('');
     const [hospital, setHospital] = useState('');
 
-
-
-    const addPatient = () => {
+    const addDoctor = () => {
         axios.post(`https://${host}:${port}/addDoctor`, {
             name: name,
             surName: surName,
@@ -19,31 +18,43 @@ function AddDoctorModal({ modalfunc }) {
             specialization: specialization,
             hospital: hospital
         }).then(res => {
-            if (res.data.status == "ok") {
-                alert("kullanıcı ekleme başarılı");
+            if (res.data.status === "ok") {
+                alert("Doctor successfully added.");
                 modalfunc();
             }
-        })
+        });
     };
-
 
     return (
         <div className="modal">
-            <div className="overlay" onClick={() => (modalfunc())}></div>
+            <div className="overlay" onClick={() => modalfunc()}></div>
             <div className="modal-content">
-                <button className="close-modal">kap</button>
+                <button className="close-modal" onClick={modalfunc}>X</button>
                 <h2>Add Doctor</h2>
-                <input className='login-input' type="text" placeholder='Name' onChange={(e) => (setName(e.target.value))} />
-                <input className='login-input' type="text" placeholder='SurName' onChange={(e) => (setSurName(e.target.value))} />
-                <input className='login-input' type="password" placeholder='Password' onChange={(e) => (setPassword(e.target.value))} />
-                <input className='login-input' type="text" placeholder='Specialization' onChange={(e) => (setSpecialization(e.target.value))} />
-                <input className='login-input' type="text" placeholder='Hospital' onChange={(e) => (setHospital(e.target.value))} />
-
-
-                <button className='login-button' onClick={addPatient}>Click</button>
+                <div className="form-group">
+                    <label>Name:</label>
+                    <input className='login-input' type="text" placeholder='Name' onChange={(e) => setName(e.target.value)} />
+                </div>
+                <div className="form-group">
+                    <label>Surname:</label>
+                    <input className='login-input' type="text" placeholder='SurName' onChange={(e) => setSurName(e.target.value)} />
+                </div>
+                <div className="form-group">
+                    <label>Password:</label>
+                    <input className='login-input' type="password" placeholder='Password' onChange={(e) => setPassword(e.target.value)} />
+                </div>
+                <div className="form-group">
+                    <label>Specialization:</label>
+                    <input className='login-input' type="text" placeholder='Specialization' onChange={(e) => setSpecialization(e.target.value)} />
+                </div>
+                <div className="form-group">
+                    <label>Hospital:</label>
+                    <input className='login-input' type="text" placeholder='Hospital' onChange={(e) => setHospital(e.target.value)} />
+                </div>
+                <button className='login-button' onClick={addDoctor}>Add Doctor</button>
             </div>
         </div>
-    )
+    );
 }
 
-export default AddDoctorModal
+export default AddDoctorModal;

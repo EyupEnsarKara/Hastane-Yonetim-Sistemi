@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
 import '../css/EditPatientModal.css';
-import { host, port } from '../../config.json';
 import axios from 'axios';
+import { host, port } from '../../config.json';
 
 function EditPatientModal({ patient, modalfunc }) {
     const [editedPatient, setEditedPatient] = useState(patient);
+
     const handleChange = (e) => {
         const { name, value } = e.target;
         setEditedPatient(prevState => ({
@@ -12,22 +13,20 @@ function EditPatientModal({ patient, modalfunc }) {
             [name]: value
         }));
     };
+
     const handleSubmit = () => {
-        console.log(editedPatient)
         axios.post(`https://${host}:${port}/editPatient`, { editedPatient }).then((res) => {
-
-
-            alert("bilgiler başarıyla güncellendi.");
+            alert("Bilgiler başarıyla güncellendi.");
             modalfunc(); // Modalı kapat
-        })
+        });
     };
 
     return (
         <div className="modal">
-            <div className="overlay" onClick={() => (modalfunc())}></div>
+            <div className="overlay" onClick={() => modalfunc()}></div>
             <div className="modal-content">
-                <span className="close" onClick={modalfunc}>&times;</span>
-                <h2>Edit Patient Information Id:${editedPatient.id}</h2>
+                <span className="close" onClick={modalfunc}>×</span>
+                <h2>Edit Patient Information - ID: {editedPatient.id}</h2>
                 <div className="form-group">
                     <label>Name:</label>
                     <input type="text" name="name" value={editedPatient.name} onChange={handleChange} />
@@ -38,7 +37,7 @@ function EditPatientModal({ patient, modalfunc }) {
                 </div>
                 <div className="form-group">
                     <label>Password:</label>
-                    <input type="text" name="password" value={editedPatient.password} onChange={handleChange} />
+                    <input type="password" name="password" value={editedPatient.password} onChange={handleChange} />
                 </div>
                 <div className="form-group">
                     <label>Birth Date:</label>
@@ -47,24 +46,22 @@ function EditPatientModal({ patient, modalfunc }) {
                 <div className="form-group">
                     <label>Gender:</label>
                     <select name="gender" value={editedPatient.gender} onChange={handleChange}>
-                        <option value="male">Erkek</option>
-                        <option value="female">Kadın</option>
+                        <option value="male">Male</option>
+                        <option value="female">Female</option>
                     </select>
                 </div>
                 <div className="form-group">
                     <label>Phone Number:</label>
                     <input type="tel" name="phoneNumber" value={editedPatient.phoneNumber} onChange={handleChange} />
                 </div>
-
-
                 <div className="form-group">
-                    <label>Hastalık Geçmişi:</label>
+                    <label>Address:</label>
                     <textarea name="address" value={editedPatient.address} onChange={handleChange} />
                 </div>
-                <button onClick={handleSubmit}>Güncelle</button>
+                <button className="submit-button" onClick={handleSubmit}>Update</button>
             </div>
         </div>
     );
 }
 
-export default EditPatientModal
+export default EditPatientModal;
