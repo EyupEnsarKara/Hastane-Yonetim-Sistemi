@@ -57,7 +57,7 @@ app.post('/addAppointment', (req, res) => {
     const { connection, patientID, doctorID, date, time } = req.body;
     const appointment = new AppointmentClass(connection, patientID, doctorID, date, time);
     appointment.addToDatabase();
-    //res.status(200).json({ message: 'Randevu başarıyla eklendi.' });
+    res.status(200).json({ status: "ok" });
 });
 
 // /addMedicalReport endpoint'i
