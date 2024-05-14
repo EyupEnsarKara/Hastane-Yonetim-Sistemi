@@ -4,6 +4,7 @@ import AdminDashboard from './Admin/AdminDashboard'
 import NotFound from './NotFound'
 import AdminPatients from './Admin/AdminPatients';
 import AdminDoctors from './Admin/AdminDoctors';
+import AdminAppointments from './Admin/AdminAppointments';
 function Admin() {
     const navigate = useNavigate();
     const location = useLocation();
@@ -33,7 +34,7 @@ function Admin() {
                 break;
             case '/admin/appointments':
                 console.log("appointments");
-                setElement(<div>olduu3</div>);
+                setElement(<AdminAppointments />);
 
                 break;
             default:

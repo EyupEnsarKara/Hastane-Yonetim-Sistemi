@@ -123,7 +123,6 @@ app.post('/editDoctor', (req, res) => {
 app.post('/deletePatient', (req, res) => {
     const id = req.body.id;
     Manager.deletePatient(connection, id, res);
-    //res.status(200).json({ status: "ok" });
 
 });
 app.post('/deleteDoctor', (req, res) => {
@@ -148,6 +147,25 @@ app.get('/getDoctors', (req, res) => {
         SELECT Doctors.*, Persons.name, Persons.surname, Persons.password
         FROM Doctors
         INNER JOIN Persons ON Doctors.personID = Persons.personID
+    `;
+    connection.query(query, (err, results) => {
+        res.status(200).json({ result: results });
+    })
+})
+app.get('/getAppointments', (req, res) => {
+    const query = `
+        SELECT 
+            Persons.name AS patientName, 
+            Persons.surname AS patientSurname, 
+            DoctorPerson.name AS doctorName, 
+            DoctorPerson.surname AS doctorSurname, 
+            Appointments.appointmentDateTime,
+            Appointments.appointmentID
+        FROM Appointments
+        INNER JOIN Patients ON Appointments.patientID = Patients.patientID
+        INNER JOIN Persons ON Patients.personID = Persons.personID
+        INNER JOIN Doctors ON Appointments.doctorID = Doctors.doctorID
+        INNER JOIN Persons AS DoctorPerson ON Doctors.personID = DoctorPerson.personID
     `;
     connection.query(query, (err, results) => {
         res.status(200).json({ result: results });

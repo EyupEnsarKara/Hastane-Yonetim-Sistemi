@@ -17,13 +17,13 @@ function AdminDoctors() {
     const [currentPage, setCurrentPage] = useState(1);
     const [itemsPerPage] = useState(10);
     const [selectedDoctor, setSelectedDoctor] = useState();
+    const [effect, updateEffect] = useState(false);
 
     useEffect(() => {
         axios.get(`https://${host}:${port}/getDoctors`).then(res => {
             setDoctors(res.data.result);
         })
-        console.log(doctors)
-    }, [modalState, editModalState])
+    }, [modalState, editModalState, effect])
 
 
 
@@ -47,12 +47,14 @@ function AdminDoctors() {
     }
     const handleDelete = (id) => {
         axios.post(`https://${host}:${port}/deleteDoctor`, { id: id }).then(res => {
-            if (res.status == "ok") {
-                alert("Doktor silme başarılı");
+            if (res.data.result && res.data.result.affectedRows > 0) {
+                alert('Kişi Başarıyla silindi.');
+                updateEffect(!effect);
             }
-            else {
-                alert(`Bir hata oluştu : ${res.data.message}`);
+            else if (res.data.message) {
+                alert(res.data.message.sqlMessage)
             }
+
         })
     }
 
@@ -94,7 +96,7 @@ function AdminDoctors() {
                                         setSelectedDoctor(tempDoc);
                                         toggleEditModalState();
                                     }} />
-                                    <MdDelete className='icon' onClick={() => { handleDelete(doctor.personID) }} />
+                                    <MdDelete className='icon' onClick={() => { handleDelete(doctor.doctorID) }} />
                                 </td>
                             </tr>
                         ))}

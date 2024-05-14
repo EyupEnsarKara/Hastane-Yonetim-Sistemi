@@ -136,29 +136,25 @@ class MedicalReportClass {
 
 }
 class Manager {
-  static deletePatient(connection, id, res) {
-    const sql = `Delete from Patients where patientID=${id}`;
+  static deletePatient(connection, id, res) { //patient id yollanacak
+    const sql = `DELETE FROM patients WHERE patientID=${id}`
 
     connection.query(sql, (err, result) => {
       if (err) {
         res.status(200).json({ message: err });
       }
-      // Veritabanı bağlantısını kapat
+      else res.status(200).json({ result: result });
     });
   }
-  static deleteDoctor(connection, id, res) {
+  static deleteDoctor(connection, id, res) { //doctor id yollanacak
     // Önce Persons tablosundan ilgili kişiyi sileceğiz
-    const deletePersonSQL = `DELETE FROM Persons WHERE personID = ${id}`;
+    const sql = `DELETE FROM Doctors WHERE doctorID=${id}`
 
-    connection.query(deletePersonSQL, (personErr, personResult) => {
-      if (personErr) {
-        console.log(personErr);
-        res.status(500).json({ message: "Kişi silinirken bir hata oluştu." });
-        return; // Hata olduğunda fonksiyondan çık
+    connection.query(sql, (err, result) => {
+      if (err) {
+        res.status(200).json({ message: err });
       }
-
-      // Kişi başarıyla silindi
-      res.status(200).json({ message: "Doktor ve kişi başarıyla silindi." });
+      else res.status(200).json({ result: result });
     });
   }
 

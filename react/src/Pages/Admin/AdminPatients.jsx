@@ -19,6 +19,7 @@ function AdminPatients() {
     const [currentPage, setCurrentPage] = useState(1);
     const [itemsPerPage] = useState(10);
     const [selectedPatient, setSelectedPatient] = useState();
+    const [effect, updateEffect] = useState(false);
 
 
 
@@ -28,7 +29,9 @@ function AdminPatients() {
 
             setPatients(res.data.result);
         }).catch(err => console.log(err))
-    }, [modalState, editModalState])
+    }, [modalState, editModalState, effect])
+
+
     const lastIndex = currentPage * itemsPerPage;
     const firstIndex = lastIndex - itemsPerPage;
     const currentItems = patients.slice(firstIndex, lastIndex);
@@ -43,6 +46,19 @@ function AdminPatients() {
     }
     const toggleEditModalState = () => {
         setEditModalState(!editModalState);
+    }
+    const handleDelete = (id) => {
+        console.log("tik")
+        axios.post(`https://${host}:${port}/deletePatient`, { id: id }).then(res => {
+            if (res.data.result && res.data.result.affectedRows > 0) {
+                alert('Kişi Başarıyla silindi.');
+                updateEffect(!effect);
+            }
+            else if (res.data.message) {
+                alert(res.data.message.sqlMessage)
+            }
+
+        })
     }
 
 
@@ -93,7 +109,7 @@ function AdminPatients() {
                                         setSelectedPatient(pati);
                                         toggleEditModalState();
                                     }} />
-                                    <MdDelete className='icon' />
+                                    <MdDelete className='icon' onClick={() => (handleDelete(hasta.patientID))} />
                                 </td>
                             </tr>
                         ))}
