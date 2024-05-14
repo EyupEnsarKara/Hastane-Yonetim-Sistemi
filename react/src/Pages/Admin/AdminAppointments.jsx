@@ -3,9 +3,9 @@ import Dashboard from '../../Components/Dashboard'
 import axiosInstance from '../../axiosInstance';
 import AddAppointmentModal from '../../Components/AddAppointmentModal';
 import { host, port } from '../../../config.json';
-
 import { MdDelete } from "react-icons/md";
 import { CiEdit } from "react-icons/ci";
+
 
 function AdminAppointments() {
     const [appointments, setAppointments] = useState([]);
@@ -13,22 +13,20 @@ function AdminAppointments() {
     const [itemsPerPage] = useState(10);
     const [addModalState, setAddModalState] = useState(false);
 
-
     useEffect(() => {
         axiosInstance.get(`/getAppointments`).then(res => {
             console.log(res.data);
             setAppointments(res.data.result);
-            console.log(addModalState)
-        })
-    }, [addModalState])
+        });
+    }, [addModalState]);
+
     const handleClick = (event) => {
         setCurrentPage(Number(event.target.id));
     };
+
     const toggleAddModalState = () => {
         setAddModalState(!addModalState);
-    }
-
-
+    };
 
     const lastIndex = currentPage * itemsPerPage;
     const firstIndex = lastIndex - itemsPerPage;
@@ -45,14 +43,14 @@ function AdminAppointments() {
                             <th>Doctor</th>
                             <th>Patient</th>
                             <th>Date</th>
-                            <th>Config</th>
+                            <th>Actions</th>
                         </tr>
                     </thead>
                     <tbody>
                         {currentItems.map(appointment => (
                             <tr key={appointment.appointmentID}>
-                                <td>{appointment.doctorName + appointment.doctorSurname}</td>
-                                <td>{appointment.patientName + appointment.patientSurname}</td>
+                                <td>{appointment.doctorName} {appointment.doctorSurname}</td>
+                                <td>{appointment.patientName} {appointment.patientSurname}</td>
                                 <td>{new Date(appointment.appointmentDateTime).toLocaleDateString()}</td>
                                 <td>
                                     <CiEdit />
@@ -60,7 +58,6 @@ function AdminAppointments() {
                                 </td>
                             </tr>
                         ))}
-
                     </tbody>
                 </table>
                 <div>
@@ -70,16 +67,11 @@ function AdminAppointments() {
                         </button>
                     ))}
                 </div>
-                <button onClick={() => (toggleAddModalState())}>Add Appointment</button>
+                <button onClick={toggleAddModalState}>Add Appointment</button>
                 {addModalState && <AddAppointmentModal modalfunc={toggleAddModalState} />}
-
             </div>
-
-
-
         </Dashboard>
-
-    )
+    );
 }
 
-export default AdminAppointments
+export default AdminAppointments;
