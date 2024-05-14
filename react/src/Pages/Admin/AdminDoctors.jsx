@@ -7,7 +7,7 @@ import '../../css/AdminDoctors.css';
 // Icon imports
 import { MdDelete } from "react-icons/md";
 import { AiOutlineEdit } from "react-icons/ai";
-import axios from 'axios';
+import axiosInstance from '../../axiosInstance';
 import EditDoctorModal from '../../Components/EditDoctorModal';
 
 function AdminDoctors() {
@@ -20,10 +20,13 @@ function AdminDoctors() {
     const [effect, updateEffect] = useState(false);
 
     useEffect(() => {
-        axios.get(`https://${host}:${port}/getDoctors`)
+        axiosInstance.get('/getDoctors')
             .then(res => {
                 setDoctors(res.data.result);
             })
+            .catch(err => {
+                console.log(err);
+            });
     }, [modalState, editModalState, effect]);
 
     const lastIndex = currentPage * itemsPerPage;
@@ -44,7 +47,7 @@ function AdminDoctors() {
     };
 
     const handleDelete = (id) => {
-        axios.post(`https://${host}:${port}/deleteDoctor`, { id: id })
+        axiosInstance.post(`/deleteDoctor`, { id: id })
             .then(res => {
                 if (res.data.result && res.data.result.affectedRows > 0) {
                     alert('Doctor successfully deleted.');

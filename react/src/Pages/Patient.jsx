@@ -12,7 +12,7 @@ function Patient() {
     useEffect(() => {
         const user = localStorage.getItem('user');
         const userType = localStorage.getItem('userType');
-        if (!user || userType != 'patient') navigation('/error');
+        if (userType != 'patient') navigate('/error');
         switch (location.pathname) {
             case '/patient':
 

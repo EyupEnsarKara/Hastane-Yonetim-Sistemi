@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import axios from 'axios';
 import { host, port } from '../../config.json';
+import axiosInstance from '../axiosInstance';
 import '../css/EditDoctorModal.css';
 
 function EditDoctorModal({ doctor, modalfunc }) {
@@ -15,7 +15,7 @@ function EditDoctorModal({ doctor, modalfunc }) {
     };
 
     const handleSubmit = () => {
-        axios.post(`https://${host}:${port}/editDoctor`, { editedDoctor }).then((res) => {
+        axiosInstance.post(`/editDoctor`, { editedDoctor }).then((res) => {
             alert("Bilgiler başarıyla güncellendi.");
             modalfunc(); // Modalı kapat
         });

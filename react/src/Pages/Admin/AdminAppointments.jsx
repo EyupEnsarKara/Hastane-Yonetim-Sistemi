@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react';
-import Dashboard from '../../Components/Dashboard';
-import axios from 'axios';
+import React, { useEffect, useState } from 'react'
+import Dashboard from '../../Components/Dashboard'
+import axiosInstance from '../../axiosInstance';
 import AddAppointmentModal from '../../Components/AddAppointmentModal';
 import { host, port } from '../../../config.json';
 import { MdDelete } from "react-icons/md";
@@ -14,7 +14,8 @@ function AdminAppointments() {
     const [addModalState, setAddModalState] = useState(false);
 
     useEffect(() => {
-        axios.get(`https://${host}:${port}/getAppointments`).then(res => {
+        axiosInstance.get(`/getAppointments`).then(res => {
+            console.log(res.data);
             setAppointments(res.data.result);
         });
     }, [addModalState]);

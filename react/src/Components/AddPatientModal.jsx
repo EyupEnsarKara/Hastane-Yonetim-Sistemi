@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import '../css/AddPatientModal.css';
-import axios from 'axios';
 import { host, port } from '../../config.json';
 import Select from 'react-select';
+import axiosInstance from '../axiosInstance'
 
 function AddPatientModal({ modalfunc }) {
     const [name, setName] = useState('');
@@ -14,7 +14,7 @@ function AddPatientModal({ modalfunc }) {
     const [address, setAddress] = useState('');
 
     const addPatient = () => {
-        axios.post(`https://${host}:${port}/addPatient`, {
+        axiosInstance.post(`/addPatient`, {
             name: name,
             birthDate: birthDate,
             surName: surName,
