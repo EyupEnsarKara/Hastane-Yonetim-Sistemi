@@ -52,7 +52,7 @@ function NavBar() {
                                 <li className="navbar-item">
                                     <a onClick={() => {
                                         localStorage.removeItem('userType');
-                                        localStorage.removeItem('user');
+                                        localStorage.removeItem('token');
                                         navigate('/');
                                     }} className="navbar-link">Logout</a>
                                 </li>
@@ -73,7 +73,7 @@ function NavBar() {
                                 <li className="navbar-item">
                                     <a onClick={() => {
                                         localStorage.removeItem('userType');
-                                        localStorage.removeItem('user');
+                                        localStorage.removeItem('token');
                                         navigate('/');
                                     }} className="navbar-link">Logout</a>
                                 </li>
@@ -94,7 +94,7 @@ function NavBar() {
                                 <li className="navbar-item">
                                     <a onClick={() => {
                                         localStorage.removeItem('userType');
-                                        localStorage.removeItem('user');
+                                        localStorage.removeItem('token');
                                         navigate('/');
                                     }} className="navbar-link">Logout</a>
                                 </li>

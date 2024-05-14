@@ -6,6 +6,7 @@ import NotFound from './Pages/NotFound'
 import Admin from './Pages/Admin'
 import Patient from './Pages/Patient'
 import Doctor from './Pages/Doctor'
+import PrivateRoute from './PrivateRoute'
 
 function App() {
 
@@ -21,9 +22,21 @@ function App() {
           <Routes>
             <Route path='/' element={<MainPage />} />
             {/* <Route path='*' element={<NotFound />} /> */}
-            <Route path='admin/*' element={<Admin />} />
-            <Route path='patient/*' element={<Patient />} />
-            <Route path='doctor/*' element={<Doctor />} />
+            <Route path='admin/*' element={
+              <PrivateRoute>
+                <Admin />
+              </PrivateRoute>
+            } />
+            <Route path='patient/*' element={
+              <PrivateRoute>
+                <Patient />
+              </PrivateRoute>
+            } />
+            <Route path='doctor/*' element={
+              <PrivateRoute>
+                <Doctor />
+              </PrivateRoute>
+            } />
           </Routes>
         </div>
       </Router>

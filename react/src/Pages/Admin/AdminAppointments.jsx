@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import Dashboard from '../../Components/Dashboard'
-import axios from 'axios'
+import axiosInstance from '../../axiosInstance';
 import AddAppointmentModal from '../../Components/AddAppointmentModal';
 import { host, port } from '../../../config.json';
 
@@ -15,7 +15,7 @@ function AdminAppointments() {
 
 
     useEffect(() => {
-        axios.get(`https://${host}:${port}/getAppointments`).then(res => {
+        axiosInstance.get(`/getAppointments`).then(res => {
             console.log(res.data);
             setAppointments(res.data.result);
             console.log(addModalState)

@@ -22,10 +22,10 @@ function LoginContainer() {
             "password": password
         }
         axios.post(`https://${host}:${port}/checkLogin`, paramaters).then((res) => {
-            console.log(res.data)
-            if (res.data.user) {
+            //console.log(res.data)
+            if (res.data) {
                 localStorage.setItem('userType', active);
-                localStorage.setItem('user', res.data.user)
+                localStorage.setItem('token', res.data.token)
                 switch (active) {
                     case 'admin':
                         navigate('admin/Dashboard');
@@ -42,7 +42,7 @@ function LoginContainer() {
             }
             else console.log("yok")
         }).catch(err => {
-            console.log(err);
+            alert("geçersiz kullanıcı bilgileri");
         })
 
     };

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import Dashboard from '../../Components/Dashboard';
 import "../../css/AdminPatients.css";
 import AddPatientModal from '../../Components/AddPatientModal';
-import axios from 'axios';
+import axiosInstance from '../../axiosInstance'
 import { host, port } from '../../../config.json';
 import EditPatientModal from '../../Components/EditPatientModal';
 
@@ -20,7 +20,7 @@ function AdminPatients() {
     const [effect, updateEffect] = useState(false);
 
     useEffect(() => {
-        axios.get(`https://${host}:${port}/getPatients`)
+        axiosInstance.get(`/getPatients`)
             .then(res => {
                 setPatients(res.data.result);
             })
@@ -45,7 +45,7 @@ function AdminPatients() {
     };
 
     const handleDelete = (id) => {
-        axios.post(`https://${host}:${port}/deletePatient`, { id: id })
+        axiosInstance.post(`/deletePatient`, { id: id })
             .then(res => {
                 if (res.data.result && res.data.result.affectedRows > 0) {
                     alert('Kişi Başarıyla silindi.');
