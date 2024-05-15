@@ -77,8 +77,8 @@ app.post('/addDoctor', authenticateToken, async (req, res) => {
 
 // /addAppointment endpoint'i
 app.post('/addAppointment', authenticateToken, (req, res) => {
-    const { connection, patientID, doctorID, date, time } = req.body;
-    const appointment = new AppointmentClass(connection, patientID, doctorID, date, time);
+    const { patientID, doctorID, date } = req.body;
+    const appointment = new AppointmentClass(connection, patientID, doctorID, date);
     appointment.addToDatabase();
     res.status(200).json({ status: "ok" });
 });
@@ -165,6 +165,12 @@ app.post('/deleteDoctor', authenticateToken, (req, res) => {
     const id = req.body.id;
 
     Manager.deleteDoctor(connection, id, res);
+    //res.status(200).json({ status: "ok" });
+});
+
+app.post('/deleteAppointment', authenticateToken, (req, res) => {
+    const id = req.body.id;
+    Manager.deleteAppointment(connection, id, res);
     //res.status(200).json({ status: "ok" });
 });
 

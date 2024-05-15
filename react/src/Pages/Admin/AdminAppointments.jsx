@@ -12,13 +12,14 @@ function AdminAppointments() {
     const [currentPage, setCurrentPage] = useState(1);
     const [itemsPerPage] = useState(10);
     const [addModalState, setAddModalState] = useState(false);
+    const [effect, updateEffect] = useState(false);
 
     useEffect(() => {
         axiosInstance.get(`/getAppointments`).then(res => {
             console.log(res.data);
             setAppointments(res.data.result);
         });
-    }, [addModalState]);
+    }, [addModalState, effect]);
 
     const handleClick = (event) => {
         setCurrentPage(Number(event.target.id));
@@ -26,6 +27,18 @@ function AdminAppointments() {
 
     const toggleAddModalState = () => {
         setAddModalState(!addModalState);
+    };
+
+    const handleDelete = (id) => {
+        axiosInstance.post(`/deleteAppointment`, { id: id })
+            .then(res => {
+                if (res.data.result && res.data.result.affectedRows > 0) {
+                    alert('Appointment successfully deleted.');
+                    updateEffect(!effect);
+                } else if (res.data.message) {
+                    alert(res.data.message.sqlMessage);
+                }
+            })
     };
 
     const lastIndex = currentPage * itemsPerPage;
@@ -54,7 +67,7 @@ function AdminAppointments() {
                                 <td>{new Date(appointment.appointmentDateTime).toLocaleDateString()}</td>
                                 <td>
                                     <CiEdit />
-                                    <MdDelete />
+                                    <MdDelete className='icon' onClick={() => { handleDelete(appointment.appointmentID) }} />
                                 </td>
                             </tr>
                         ))}

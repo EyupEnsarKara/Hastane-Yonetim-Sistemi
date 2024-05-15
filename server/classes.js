@@ -99,16 +99,14 @@ class DoctorClass {
 }
 
 class AppointmentClass {
-  constructor(connection, appointmentID, patientID, doctorID, date, time) {
+  constructor(connection, patientID, doctorID, date) {
     this.connection = connection;
-    this.appointmentID = appointmentID;
     this.patientID = patientID;
     this.doctorID = doctorID;
     this.date = date;
-    this.time = time;
   }
   addToDatabase() {
-    const sql = `INSERT INTO Appointments (appointmentID, patientID, doctorID, date, time) VALUES (${this.appointmentID}, ${this.patientID}, ${this.doctorID}, '${this.date}', '${this.time}')`;
+    const sql = `INSERT INTO Appointments (patientID, doctorID,appointmentDateTime) VALUES ( ${this.patientID}, ${this.doctorID}, '${this.date}')`;
     this.connection.query(sql, (err, result) => {
       if (err) throw err;
       console.log("Appointment eklendi!");
@@ -149,6 +147,16 @@ class Manager {
   static deleteDoctor(connection, id, res) { //doctor id yollanacak
     // Önce Persons tablosundan ilgili kişiyi sileceğiz
     const sql = `DELETE FROM Doctors WHERE doctorID=${id}`
+
+    connection.query(sql, (err, result) => {
+      if (err) {
+        res.status(200).json({ message: err });
+      }
+      else res.status(200).json({ result: result });
+    });
+  }
+  static deleteAppointment(connection, id, res) { //appointment id yollanacak
+    const sql = `DELETE FROM Appointments WHERE appointmentID=${id}`
 
     connection.query(sql, (err, result) => {
       if (err) {
