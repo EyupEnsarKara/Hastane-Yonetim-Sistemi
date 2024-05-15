@@ -100,6 +100,7 @@ class DoctorClass {
 
 class AppointmentClass {
   constructor(connection, patientID, doctorID, date) {
+    //console.log("Values:", patientID, doctorID, date);
     this.connection = connection;
     this.patientID = patientID;
     this.doctorID = doctorID;
@@ -111,6 +112,15 @@ class AppointmentClass {
       if (err) throw err;
       console.log("Appointment eklendi!");
     });
+  }
+  updateInDatabase(appointmentID) {
+
+    const updateSql = `UPDATE Appointments SET patientID=${this.patientID}, doctorID=${this.doctorID}, appointmentDateTime='${this.date}' WHERE appointmentID=${appointmentID}`;
+    this.connection.query(updateSql, (err, result) => {
+      if (err) throw err;
+      console.log("Appointment updated successfully!");
+    });
+
   }
 }
 

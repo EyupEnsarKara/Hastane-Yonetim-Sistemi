@@ -1,17 +1,18 @@
-import React, { useEffect, useState } from 'react'
-import Dashboard from '../../Components/Dashboard'
+import React, { useEffect, useState } from 'react';
+import Dashboard from '../../Components/Dashboard';
 import axiosInstance from '../../axiosInstance';
 import AddAppointmentModal from '../../Components/AddAppointmentModal';
-import { host, port } from '../../../config.json';
 import { MdDelete } from "react-icons/md";
-import { CiEdit } from "react-icons/ci";
-
+import { AiOutlineEdit } from "react-icons/ai";
+import EditAppointmentModal from "../../Components/EditAppointmentModal";
 
 function AdminAppointments() {
     const [appointments, setAppointments] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
     const [itemsPerPage] = useState(10);
     const [addModalState, setAddModalState] = useState(false);
+    const [editModalState, setEditModalState] = useState(false);
+    const [selectedAppointment, setSelectedAppointment] = useState();
     const [effect, updateEffect] = useState(false);
 
     useEffect(() => {
@@ -19,7 +20,7 @@ function AdminAppointments() {
             console.log(res.data);
             setAppointments(res.data.result);
         });
-    }, [addModalState, effect]);
+    }, [addModalState, effect, editModalState]);
 
     const handleClick = (event) => {
         setCurrentPage(Number(event.target.id));
@@ -27,6 +28,10 @@ function AdminAppointments() {
 
     const toggleAddModalState = () => {
         setAddModalState(!addModalState);
+    };
+
+    const toggleEditModalState = () => {
+        setEditModalState(!editModalState);
     };
 
     const handleDelete = (id) => {
@@ -38,7 +43,7 @@ function AdminAppointments() {
                 } else if (res.data.message) {
                     alert(res.data.message.sqlMessage);
                 }
-            })
+            });
     };
 
     const lastIndex = currentPage * itemsPerPage;
@@ -66,15 +71,24 @@ function AdminAppointments() {
                                 <td>{appointment.patientName} {appointment.patientSurname}</td>
                                 <td>{new Date(appointment.appointmentDateTime).toLocaleDateString()}</td>
                                 <td>
-                                    <CiEdit />
-                                    <MdDelete className='icon' onClick={() => { handleDelete(appointment.appointmentID) }} />
+                                    <AiOutlineEdit className='icon' onClick={() => {
+                                        const tempAppointment = {
+                                            id: appointment.appointmentID,
+                                            doctorId: appointment.doctorID,
+                                            patientId: appointment.patientID,
+                                            appointmentDateTime: appointment.appointmentDateTime,
+                                        };
+                                        setSelectedAppointment(tempAppointment);
+                                        toggleEditModalState();
+                                    }} />
+                                    <MdDelete className='icon' onClick={() => handleDelete(appointment.appointmentID)} />
                                 </td>
                             </tr>
                         ))}
                     </tbody>
                 </table>
                 <div>
-                    {Array(totalPages).fill().map((_, index) => (
+                    {Array.from({ length: totalPages }, (_, index) => (
                         <button key={index + 1} id={index + 1} onClick={handleClick}>
                             {index + 1}
                         </button>
@@ -82,6 +96,12 @@ function AdminAppointments() {
                 </div>
                 <button onClick={toggleAddModalState}>Add Appointment</button>
                 {addModalState && <AddAppointmentModal modalfunc={toggleAddModalState} />}
+                {editModalState && selectedAppointment && (
+                    <EditAppointmentModal
+                        appointment={selectedAppointment}
+                        modalfunc={toggleEditModalState}
+                    />
+                )}
             </div>
         </Dashboard>
     );

@@ -143,7 +143,6 @@ app.post('/checkLogin', (req, res) => {
 app.post('/editPatient', authenticateToken, (req, res) => {
     const pt = req.body.editedPatient;
     const { id, name, surname, password, birthDate, gender, phoneNumber, address } = pt;
-    console.log(pt)
     const patient = new PatientClass(connection, name, surname, password, birthDate, gender, phoneNumber, address);
     patient.updateInDatabase(id);
     res.status(200).json({ status: "ok" });
@@ -155,6 +154,14 @@ app.post('/editDoctor', authenticateToken, (req, res) => {
     doctor.updateInDatabase(id);
     res.status(200).json({ status: "ok" });
 
+});
+app.post('/editAppointment', authenticateToken, (req, res) => {
+    console.log(req.body.editedAppointment.id)
+    const { id, patientId, doctorId, appointmentDateTime } = req.body.editedAppointment;
+
+    const appointment = new AppointmentClass(connection, patientId, doctorId, appointmentDateTime);
+    appointment.updateInDatabase(id);
+    res.status(200).json({ status: "ok" });
 });
 app.post('/deletePatient', authenticateToken, (req, res) => {
     const id = req.body.id;

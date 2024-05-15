@@ -113,8 +113,6 @@ function AddAppointmentModal({ modalfunc }) {
                     value={appointmentDateTime}
                     onChange={handleDateTimeChange}
                 />
-                {confirmationMessage && <p>{confirmationMessage}</p>}
-
                 <label htmlFor="doctorId">Select Doctor:</label>
                 <Select
                     id="doctorId"
