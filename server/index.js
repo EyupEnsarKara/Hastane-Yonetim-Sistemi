@@ -180,6 +180,11 @@ app.post('/deleteAppointment', authenticateToken, (req, res) => {
     Manager.deleteAppointment(connection, id, res);
     //res.status(200).json({ status: "ok" });
 });
+app.post('/deleteMedicalReport', authenticateToken, (req, res) => {
+    const id = req.body.id;
+    Manager.deleteMedicalReport(connection, id, res);
+
+});
 
 app.get('/getPatients', authenticateToken, (req, res) => {
     const query = `

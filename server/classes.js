@@ -175,7 +175,18 @@ class Manager {
       else res.status(200).json({ result: result });
     });
   }
+  static deleteMedicalReport(connection, id, res) {
+    const sql = `DELETE FROM MedicalReports WHERE reportID=${id}`
+    connection.query(sql, (err, result) => {
+      if (err) {
+        res.status(200).json({ message: err });
 
+      }
+      else res.status(200).json({ result: result });
+    });
+
+
+  }
 
 
 }
