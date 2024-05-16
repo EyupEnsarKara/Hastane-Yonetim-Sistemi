@@ -221,6 +221,16 @@ app.get('/getAppointments', authenticateToken, (req, res) => {
     })
 })
 
+app.get('/checkToken', (req, res) => {
+    const authHeader = req.headers['authorization'];
+    const token = authHeader && authHeader.split(' ')[1];
+    if (token == null) return res.sendStatus(401);
+
+    jwt.verify(token, secretKey, (err, user) => {
+        if (err) return res.status(403).json({ message: 'Token expired' });
+        res.status(200).json({ message: 'Token valid' });
+    });
+});
 
 
 app.post('/deletePatient'), authenticateToken, (req, res) => {

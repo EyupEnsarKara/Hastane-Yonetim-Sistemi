@@ -1,8 +1,13 @@
-import React from 'react';
-import { Navigate } from 'react-router-dom';
+import React, { useEffect } from 'react';
+import { Navigate, useNavigate } from 'react-router-dom';
 
 function PrivateRoute({ children }) {
     const token = localStorage.getItem('token');
+    const navigate = useNavigate();
+    useEffect(() => {
+
+        if (!token) navigate('/');
+    }, [])
 
     return token ? children : <Navigate to='/' />
 }
