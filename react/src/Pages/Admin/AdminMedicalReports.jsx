@@ -8,17 +8,6 @@ import axiosInstance from '../../axiosInstance';
 
 //icons
 import { BiShow } from "react-icons/bi";
-
-
-import Dashboard from '../../Components/Dashboard'
-import React, { useState, useEffect } from 'react';
-import { AiOutlineEdit } from "react-icons/ai";
-import { MdDelete } from "react-icons/md";
-import "../../css/AdminMedicalReports.css";
-import axiosInstance from '../../axiosInstance';
-
-//icons
-import { BiShow } from "react-icons/bi";
 import ViewReportModal from '../../Components/ViewReportModal';
 import AddMedicalReport from '../../Components/AddMedicalReport';
 
@@ -96,7 +85,7 @@ function AdminMedicalReports() {
                                 <td>{new Date(report.reportDate).toLocaleDateString()}</td>
                                 <td>
                                     <button ><AiOutlineEdit /></button>
-                                    <MdDelete className='icon' onClick={handleDelete(report.reportID)} />
+                                    <MdDelete className='icon' onClick={() => { handleDelete(report.reportID) }} />
                                 </td>
                             </tr>
                         ))}
