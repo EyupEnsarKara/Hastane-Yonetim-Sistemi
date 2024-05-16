@@ -3,7 +3,6 @@ import Dashboard from '../../Components/Dashboard';
 import "../../css/AdminPatients.css";
 import AddPatientModal from '../../Components/AddPatientModal';
 import axiosInstance from '../../axiosInstance'
-import { host, port } from '../../../config.json';
 import EditPatientModal from '../../Components/EditPatientModal';
 
 // Icon imports

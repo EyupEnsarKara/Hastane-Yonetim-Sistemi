@@ -47,7 +47,7 @@ function AddPatientModal({ modalfunc }) {
                 <h2>Hasta Ekle</h2>
                 <div className="modal-body">
                     <input className='input-field' type="text" placeholder='Name' value={name} onChange={(e) => setName(e.target.value)} />
-                    <input className='input-field' type="text" placeholder='SurName' value={surName} onChange={(e) => setSurName(e.target.value)} />
+                    <input className='input-field' type="text" placeholder='Surname' value={surName} onChange={(e) => setSurName(e.target.value)} />
                     <input className='input-field' type="password" placeholder='Password' value={password} onChange={(e) => setPassword(e.target.value)} />
                     <input className='input-field' type="date" placeholder='Birthdate' value={birthDate} onChange={(e) => setBirthDate(e.target.value)} />
                     <Select

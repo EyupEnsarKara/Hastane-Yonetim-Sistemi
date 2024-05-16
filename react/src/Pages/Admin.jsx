@@ -5,6 +5,8 @@ import NotFound from './NotFound'
 import AdminPatients from './Admin/AdminPatients';
 import AdminDoctors from './Admin/AdminDoctors';
 import AdminAppointments from './Admin/AdminAppointments';
+import AdminMedicalReports from './Admin/AdminMedicalReports';
+
 function Admin() {
     const navigate = useNavigate();
     const location = useLocation();
@@ -34,7 +36,10 @@ function Admin() {
             case '/admin/appointments':
                 console.log("appointments");
                 setElement(<AdminAppointments />);
-
+                break;
+            case '/admin/medical_reports':
+                console.log("medical_Reports");
+                setElement(<AdminMedicalReports />);
                 break;
             default:
                 break;
