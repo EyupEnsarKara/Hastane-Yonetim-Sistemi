@@ -6,6 +6,9 @@ import { MdDelete } from "react-icons/md";
 import "../../css/AdminMedicalReports.css";
 import axiosInstance from '../../axiosInstance';
 
+//icons
+import { BiShow } from "react-icons/bi";
+
 function AdminMedicalReports() {
     const [medicalReports, setMedicalReports] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
@@ -52,10 +55,13 @@ function AdminMedicalReports() {
                                 <td>{report.reportID}</td>
                                 <td>{report.patientName + " " + report.patientSurname}</td>
                                 <td>{report.doctorName + " " + report.doctorSurname}</td>
-                                <td>{report.reportUrl}</td>
+                                <td>
+                                    <div>{report.reportUrl}</div>
+                                    <BiShow className='icon' />
+                                </td>
                                 <td>{new Date(report.reportDate).toLocaleDateString()}</td>
                                 <td>
-                                    <button><AiOutlineEdit /></button>
+                                    <button ><AiOutlineEdit /></button>
                                     <button><MdDelete /></button>
                                 </td>
                             </tr>
