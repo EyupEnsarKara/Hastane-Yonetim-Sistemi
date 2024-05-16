@@ -50,6 +50,9 @@ function NavBar() {
                                     <a onClick={() => (navigate('/admin/appointments'))} className="navbar-link">Appointments</a>
                                 </li>
                                 <li className="navbar-item">
+                                    <a onClick={() => (navigate('/admin/medical_reports'))} className="navbar-link">Medical Reports</a>
+                                </li>
+                                <li className="navbar-item">
                                     <a onClick={() => {
                                         localStorage.removeItem('userType');
                                         localStorage.removeItem('token');

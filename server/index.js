@@ -220,7 +220,28 @@ app.get('/getAppointments', authenticateToken, (req, res) => {
         res.status(200).json({ result: results });
     })
 })
+app.post('/getMedicalReports', authenticateToken, (req, res) => {
+    const query = `
+        SELECT 
+            Persons.name AS patientName, 
+            Persons.surname AS patientSurname, 
+            DoctorPerson.name AS doctorName, 
+            DoctorPerson.surname AS doctorSurname, 
+            MedicalReports.reportUrl,
+            MedicalReports.reportID
+        FROM MedicalReports
+        INNER JOIN Patients ON MedicalReports.patientID = Patients.patientID
+        INNER JOIN Persons ON Patients.personID = Persons.personID
+        INNER JOIN Doctors ON MedicalReports.doctorID = Doctors.doctorID
+        INNER JOIN Persons AS DoctorPerson ON Doctors.personID = DoctorPerson.personID
+    `;
+    connection.query(query, (err, results) => {
+        res.status(200).json({ result: results });
+        console.log(results);
+        console.log(err);
 
+    })
+})
 app.get('/checkToken', (req, res) => {
     const authHeader = req.headers['authorization'];
     const token = authHeader && authHeader.split(' ')[1];
