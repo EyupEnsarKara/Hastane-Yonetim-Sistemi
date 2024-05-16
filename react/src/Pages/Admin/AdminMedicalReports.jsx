@@ -8,11 +8,15 @@ import axiosInstance from '../../axiosInstance';
 
 //icons
 import { BiShow } from "react-icons/bi";
+import ViewReportModal from '../../Components/ViewReportModal';
+import AddMedicalReport from '../../Components/AddMedicalReport';
 
 function AdminMedicalReports() {
     const [medicalReports, setMedicalReports] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
     const [itemsPerPage] = useState(10);
+    const [viewReportModalState, setViewReportModalState] = useState(false);
+    const [addReportModalState, setAddReportModalState] = useState(false);
 
     useState(() => {
 
@@ -22,7 +26,7 @@ function AdminMedicalReports() {
                 setMedicalReports(res.data.result);
             })
             .catch(err => console.log(err))
-    }, [])
+    }, [ViewReportModal, addReportModalState])
 
     const lastIndex = currentPage * itemsPerPage;
     const firstIndex = lastIndex - itemsPerPage;
@@ -32,6 +36,12 @@ function AdminMedicalReports() {
     const handleClick = (event) => {
         setCurrentPage(Number(event.target.id));
     };
+    const toggleViewReportState = () => {
+        setViewReportModalState(!viewReportModalState);
+    }
+    const toggleAddReportState = () => {
+        setAddReportModalState(!viewReportModalState);
+    }
 
 
     return (
@@ -57,7 +67,7 @@ function AdminMedicalReports() {
                                 <td>{report.doctorName + " " + report.doctorSurname}</td>
                                 <td>
                                     <div>{report.reportUrl}</div>
-                                    <BiShow className='icon' />
+                                    <BiShow className='icon' onClick={toggleViewReportState} />
                                 </td>
                                 <td>{new Date(report.reportDate).toLocaleDateString()}</td>
                                 <td>
@@ -78,6 +88,8 @@ function AdminMedicalReports() {
                 </div>
 
             </div>
+            {viewReportModalState && <ViewReportModal modalfunc={toggleViewReportState} />}
+            {addReportModalState && <AddMedicalReport modalfunc={setAddReportModalState} />}
 
 
         </Dashboard>

@@ -88,7 +88,7 @@ const createTables = () => {
 
 }
 // Tabloları oluştur
-//createTables();
+createTables();
 
 const createTrigger = () => {
     const sqlTriggerCommands = [
