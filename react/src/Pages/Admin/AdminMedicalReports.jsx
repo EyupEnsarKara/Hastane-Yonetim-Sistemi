@@ -13,8 +13,10 @@ function AdminMedicalReports() {
     const [medicalReports, setMedicalReports] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
     const [itemsPerPage] = useState(10);
+    const [effect, updateEffect] = useState(false);
 
-    useState(() => {
+
+    useEffect(() => {
 
         axiosInstance.post('/getMedicalReports')
             .then((res) => {
@@ -22,7 +24,7 @@ function AdminMedicalReports() {
                 setMedicalReports(res.data.result);
             })
             .catch(err => console.log(err))
-    }, [])
+    }, [effect])
 
     const lastIndex = currentPage * itemsPerPage;
     const firstIndex = lastIndex - itemsPerPage;
@@ -33,6 +35,18 @@ function AdminMedicalReports() {
         setCurrentPage(Number(event.target.id));
     };
 
+    const handleDelete = (id) => {
+        axiosInstance.post(`/deleteMedicalReport`, { id: id })
+            .then(res => {
+                if (res.data.result && res.data.result.affectedRows > 0) {
+                    alert('Rapor başarıyla silindi.');
+                    updateEffect(!effect);
+                } else if (res.data.message) {
+                    alert(res.data.message.sqlMessage)
+                }
+            })
+
+    }
 
     return (
         <Dashboard>
@@ -61,8 +75,8 @@ function AdminMedicalReports() {
                                 </td>
                                 <td>{new Date(report.reportDate).toLocaleDateString()}</td>
                                 <td>
-                                    <button ><AiOutlineEdit /></button>
-                                    <button><MdDelete /></button>
+                                    <AiOutlineEdit />
+                                    <MdDelete className='icon' onClick={handleDelete(report.reportID)} />
                                 </td>
                             </tr>
                         ))}
