@@ -47,13 +47,13 @@ function AdminMedicalReports() {
                         </tr>
                     </thead>
                     <tbody>
-                        {currentItems.map(hasta => (
-                            <tr key={hasta.report_id}>
-                                <td>{hasta.report_id}</td>
-                                <td>{hasta.patient_name}</td>
-                                <td>{hasta.doctor_name}</td>
-                                <td>{hasta.report_url}</td>
-                                <td>{hasta.creation_date}</td>
+                        {currentItems.map(report => (
+                            <tr key={report.reportID}>
+                                <td>{report.reportID}</td>
+                                <td>{report.patientName + " " + report.patientSurname}</td>
+                                <td>{report.doctorName + " " + report.doctorSurname}</td>
+                                <td>{report.reportUrl}</td>
+                                <td>{new Date(report.reportDate).toLocaleDateString()}</td>
                                 <td>
                                     <button><AiOutlineEdit /></button>
                                     <button><MdDelete /></button>

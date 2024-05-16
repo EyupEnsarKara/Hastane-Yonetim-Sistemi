@@ -228,7 +228,8 @@ app.post('/getMedicalReports', authenticateToken, (req, res) => {
             DoctorPerson.name AS doctorName, 
             DoctorPerson.surname AS doctorSurname, 
             MedicalReports.reportUrl,
-            MedicalReports.reportID
+            MedicalReports.reportID,
+            MedicalReports.reportDate
         FROM MedicalReports
         INNER JOIN Patients ON MedicalReports.patientID = Patients.patientID
         INNER JOIN Persons ON Patients.personID = Persons.personID
