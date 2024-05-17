@@ -9,7 +9,7 @@ import axiosInstance from '../../axiosInstance';
 //icons
 import { BiShow } from "react-icons/bi";
 import ViewReportModal from '../../Components/ViewReportModal';
-import AddMedicalReport from '../../Components/AddMedicalReport';
+import AddMedicalReportModal from '../../Components/AddMedicalReportModal';
 import EditMedicalReportModal from '../../Components/EditMedicalReportModal';
 
 function AdminMedicalReports() {
@@ -123,7 +123,7 @@ function AdminMedicalReports() {
                     ))}
                 </div>
                 {viewReportModalState && <ViewReportModal modalfunc={toggleViewReportState} />}
-                {addReportModalState && <AddMedicalReport modalfunc={setAddReportModalState} />}
+                {addReportModalState && <AddMedicalReportModal modalfunc={setAddReportModalState} />}
                 {editModalState && <EditMedicalReportModal modalfunc={toggleEditModalState} report={selectedReport} />}
             </div>
 

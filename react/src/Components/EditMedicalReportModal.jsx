@@ -37,4 +37,4 @@ function EditMedicalReportModal({ report, modalfunc }) {
     );
 }
 
-export default EditReporteditedReportModal;
+export default EditMedicalReportModal;

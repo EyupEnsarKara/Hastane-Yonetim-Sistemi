@@ -21,7 +21,7 @@ function LoginContainer() {
             "username": name,
             "password": password
         }
-        axios.post(`https://${host}:${port}/checkLogin`, paramaters).then((res) => {
+        axios.post(`${host}:${port}/checkLogin`, paramaters).then((res) => {
             //console.log(res.data)
             if (res.data) {
                 localStorage.setItem('userType', active);
