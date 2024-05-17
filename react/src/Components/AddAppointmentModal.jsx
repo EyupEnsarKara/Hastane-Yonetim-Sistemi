@@ -12,6 +12,7 @@ function AddAppointmentModal({ modalfunc }) {
     const [patients, setPatients] = useState([]);
     const [doctors, setDoctors] = useState([]);
     const [confirmationMessage, setConfirmationMessage] = useState('');
+    const [image, setimage] = useState();
 
     useEffect(() => {
         axiosInstance.get(`/getDoctors`)
@@ -127,6 +128,16 @@ function AddAppointmentModal({ modalfunc }) {
                     options={patientOptions}
                     onChange={handlePatientChange}
                     placeholder="Select a patient"
+                />
+                <h1>test</h1>
+                <label htmlFor="img">Image:</label>
+                <input
+                    type="file"
+                    id="img"
+                    accept="image/*"
+                    onChange={() => {
+                        setimage(e.target.files[0]);
+                    }}
                 />
 
                 <button className="login-button" onClick={handleAddAppointment}>Add</button>

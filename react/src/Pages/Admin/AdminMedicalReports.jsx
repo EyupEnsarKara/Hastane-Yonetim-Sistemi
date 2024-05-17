@@ -9,7 +9,7 @@ import axiosInstance from '../../axiosInstance';
 //icons
 import { BiShow } from "react-icons/bi";
 import ViewReportModal from '../../Components/ViewReportModal';
-import AddMedicalReport from '../../Components/AddMedicalReport';
+import AddMedicalReportModal from '../../Components/AddMedicalReportModal';
 
 function AdminMedicalReports() {
     const [medicalReports, setMedicalReports] = useState([]);
@@ -40,7 +40,7 @@ function AdminMedicalReports() {
         setViewReportModalState(!viewReportModalState);
     }
     const toggleAddReportState = () => {
-        setAddReportModalState(!viewReportModalState);
+        setAddReportModalState(!addReportModalState);
     }
 
     const handleDelete = (id) => {
@@ -55,6 +55,7 @@ function AdminMedicalReports() {
             })
 
     }
+    
 
 
     return (
@@ -99,10 +100,11 @@ function AdminMedicalReports() {
                         </button>
                     ))}
                 </div>
+                <button onClick={toggleAddReportState}>Add Medical Report</button>
 
             </div>
             {viewReportModalState && <ViewReportModal modalfunc={toggleViewReportState} />}
-            {addReportModalState && <AddMedicalReport modalfunc={setAddReportModalState} />}
+            {addReportModalState && <AddMedicalReportModal modalfunc={toggleAddReportState} />}
 
 
         </Dashboard>
