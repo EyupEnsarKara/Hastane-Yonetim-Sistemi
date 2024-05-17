@@ -10,6 +10,7 @@ import axiosInstance from '../../axiosInstance';
 import { BiShow } from "react-icons/bi";
 import ViewReportModal from '../../Components/ViewReportModal';
 import AddMedicalReport from '../../Components/AddMedicalReport';
+import EditMedicalReportModal from '../../Components/EditMedicalReportModal';
 
 function AdminMedicalReports() {
     const [medicalReports, setMedicalReports] = useState([]);
@@ -17,8 +18,13 @@ function AdminMedicalReports() {
     const [itemsPerPage] = useState(10);
     const [viewReportModalState, setViewReportModalState] = useState(false);
     const [addReportModalState, setAddReportModalState] = useState(false);
+    const [effect, updateEffect] = useState(false);
+    const [editModalState, setEditModalState] = useState(false);
+    const [selectedReport, setSelectedReport] = useState();
 
-    useState(() => {
+
+
+    useEffect(() => {
 
         axiosInstance.post('/getMedicalReports')
             .then((res) => {
@@ -26,7 +32,7 @@ function AdminMedicalReports() {
                 setMedicalReports(res.data.result);
             })
             .catch(err => console.log(err))
-    }, [ViewReportModal, addReportModalState])
+    }, [ViewReportModal, addReportModalState, effect, editModalState])
 
     const lastIndex = currentPage * itemsPerPage;
     const firstIndex = lastIndex - itemsPerPage;
@@ -42,6 +48,9 @@ function AdminMedicalReports() {
     const toggleAddReportState = () => {
         setAddReportModalState(!viewReportModalState);
     }
+    const toggleEditModalState = () => {
+        setEditModalState(!editModalState);
+    };
 
     const handleDelete = (id) => {
         axiosInstance.post(`/deleteMedicalReport`, { id: id })
@@ -84,7 +93,20 @@ function AdminMedicalReports() {
                                 </td>
                                 <td>{new Date(report.reportDate).toLocaleDateString()}</td>
                                 <td>
-                                    <button ><AiOutlineEdit /></button>
+                                    <AiOutlineEdit className='icon' onClick={() => {
+                                        const tempReport = {
+                                            reportID: report.reportID,
+                                            reportPatientName: report.patientName + " " + report.patientSurname,
+                                            reportDoctorName: report.doctorName + " " + report.doctorSurname,
+                                            reportUrl: report.reportUrl
+
+
+                                        }
+                                        setSelectedReport(tempReport);
+                                        toggleEditModalState();
+                                    }}
+
+                                    />
                                     <MdDelete className='icon' onClick={() => { handleDelete(report.reportID) }} />
                                 </td>
                             </tr>
@@ -99,10 +121,11 @@ function AdminMedicalReports() {
                         </button>
                     ))}
                 </div>
-
+                {viewReportModalState && <ViewReportModal modalfunc={toggleViewReportState} />}
+                {addReportModalState && <AddMedicalReport modalfunc={setAddReportModalState} />}
+                {editModalState && <EditMedicalReportModal modalfunc={toggleEditModalState} report={selectedReport} />}
             </div>
-            {viewReportModalState && <ViewReportModal modalfunc={toggleViewReportState} />}
-            {addReportModalState && <AddMedicalReport modalfunc={setAddReportModalState} />}
+
 
 
         </Dashboard>

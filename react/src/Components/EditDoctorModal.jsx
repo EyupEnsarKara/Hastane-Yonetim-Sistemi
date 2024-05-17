@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { host, port } from '../../config.json';
 import axiosInstance from '../axiosInstance';
 import '../css/EditDoctorModal.css';
 
