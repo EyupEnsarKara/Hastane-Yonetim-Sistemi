@@ -46,7 +46,7 @@ function AdminMedicalReports() {
         setViewReportModalState(!viewReportModalState);
     }
     const toggleAddReportState = () => {
-        setAddReportModalState(!viewReportModalState);
+        setAddReportModalState(!addReportModalState);
     }
     const toggleEditModalState = () => {
         setEditModalState(!editModalState);
@@ -64,6 +64,7 @@ function AdminMedicalReports() {
             })
 
     }
+
 
 
     return (
