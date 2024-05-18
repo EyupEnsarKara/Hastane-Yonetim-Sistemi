@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { SquareLoader } from 'react-spinners';
+import { FadeLoader } from 'react-spinners';
 
 function ViewReportModal({ modalfunc, report }) {
     const [loading, setloading] = useState(true);
@@ -13,7 +13,7 @@ function ViewReportModal({ modalfunc, report }) {
             <div className="modal-content">
                 <button className="close-modal" onClick={modalfunc}>✖</button>
                 <img src={reportUrl} alt="ss" onLoad={() => (setloading(false))} />
-                {loading && <SquareLoader color="#36d7b7" />}
+                {loading && <FadeLoader color="#36d7b7" />}
 
 
 

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import axiosInstance from '../axiosInstance';
 import { goFileUploadFolderId } from '../../config.json'
 import axios from 'axios';
-import { SquareLoader } from 'react-spinners'
+import { FadeLoader } from 'react-spinners'
 
 function EditMedicalReportModal({ report, modalfunc }) {
     const [loading, setloading] = useState(true);
@@ -75,7 +75,7 @@ function EditMedicalReportModal({ report, modalfunc }) {
                 <div className="form-group">
                     <label>Report Url:</label>
                     <img src={report.reportUrl} alt='Not Found' onLoad={() => (setloading(false))} onError={() => (setloading(false))} />
-                    {loading && <SquareLoader color="#36d7b7" />}
+                    {loading && <FadeLoader color="#36d7b7" />}
                     <input
                         type="file"
                         id="img"
