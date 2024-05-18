@@ -134,7 +134,7 @@ class MedicalReportClass {
     this.reportUrl = reportUrl;
   }
   addToDatabase() {
-    const sql = `INSERT INTO MedicalReports (patientID, doctorID,reportUrl,reportDate, content) VALUES (${this.patientID}, ${this.doctorID},'${this.reportUrl}', '${this.reportDate}', '${this.content}')`;
+    const sql = `INSERT INTO MedicalReports (patientID, doctorID,reportUrl,reportDate, reportContent) VALUES (${this.patientID}, ${this.doctorID},'${this.reportUrl}', '${this.reportDate}', '${this.content}')`;
     this.connection.query(sql, (err, result) => {
       if (err) throw err;
       console.log("MedicalReport eklendi!");
