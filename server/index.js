@@ -252,6 +252,14 @@ app.post('/getMedicalReports', authenticateToken, (req, res) => {
 
     })
 })
+
+app.get('/getMyAppoinments', authenticateToken, (req, res) => {
+    const { userType, id } = req.body;
+    if (userType = 'patient') PatientClass.getMyAppoinments(id, res);
+    else if (userType = 'doctor') DoctorClass.getMyAppointments(id, res);
+
+})
+
 app.get('/checkToken', (req, res) => {
     const authHeader = req.headers['authorization'];
     const token = authHeader && authHeader.split(' ')[1];
@@ -269,12 +277,8 @@ app.post('/deletePatient'), authenticateToken, (req, res) => {
     Manager.deletePatient(connection, id)
 }
 
-//const server = htpps.createServer(certOptions, app);
+const server = htpps.createServer(certOptions, app);
 
-
-
-
-
-app.listen(port, () => {
+server.listen(port, () => {
     console.log("htpps Server Started in port:" + port);
 });

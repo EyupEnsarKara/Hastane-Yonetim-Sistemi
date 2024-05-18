@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react'
 import PatientDashboard from './Patient/PatientDashboard';
+import PatientAppointments from './Patient/PatientAppointments';
 import { useLocation, useNavigate } from 'react-router-dom';
+
 
 
 function Patient() {
@@ -20,7 +22,7 @@ function Patient() {
                 break;
             case '/patient/appointments':
 
-                setElement(<div>patient appointments</div>);
+                setElement(<PatientAppointments />);
 
                 break;
             case '/patient/results':
