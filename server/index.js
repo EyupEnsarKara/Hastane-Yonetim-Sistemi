@@ -269,12 +269,12 @@ app.post('/deletePatient'), authenticateToken, (req, res) => {
     Manager.deletePatient(connection, id)
 }
 
-//const server = htpps.createServer(certOptions, app);
+const server = htpps.createServer(certOptions, app);
 
 
 
 
 
-app.listen(port, () => {
+server.listen(port, () => {
     console.log("htpps Server Started in port:" + port);
 });
