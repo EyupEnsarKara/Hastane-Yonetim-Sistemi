@@ -90,7 +90,19 @@ function AdminMedicalReports() {
                                 <td>{report.doctorName + " " + report.doctorSurname}</td>
                                 <td>
                                     <div>{report.reportUrl}</div>
-                                    <BiShow className='icon' onClick={toggleViewReportState} />
+                                    <BiShow className='icon' onClick={() => {
+                                        const tempReport = {
+                                            reportID: report.reportID,
+                                            reportPatientName: report.patientName + " " + report.patientSurname,
+                                            reportDoctorName: report.doctorName + " " + report.doctorSurname,
+                                            reportUrl: report.reportUrl,
+                                            reportDate: new Date(report.reportDate).toLocaleDateString()
+
+
+                                        }
+                                        setSelectedReport(tempReport);
+                                        toggleViewReportState()
+                                    }} />
                                 </td>
                                 <td>{new Date(report.reportDate).toLocaleDateString()}</td>
                                 <td>
@@ -99,7 +111,8 @@ function AdminMedicalReports() {
                                             reportID: report.reportID,
                                             reportPatientName: report.patientName + " " + report.patientSurname,
                                             reportDoctorName: report.doctorName + " " + report.doctorSurname,
-                                            reportUrl: report.reportUrl
+                                            reportUrl: report.reportUrl,
+                                            reportDate: new Date(report.reportDate).toLocaleDateString()
 
 
                                         }
@@ -122,8 +135,9 @@ function AdminMedicalReports() {
                         </button>
                     ))}
                 </div>
-                {viewReportModalState && <ViewReportModal modalfunc={toggleViewReportState} />}
-                {addReportModalState && <AddMedicalReportModal modalfunc={setAddReportModalState} />}
+                <button onClick={toggleAddReportState}>Add Medical Report</button>
+                {viewReportModalState && <ViewReportModal modalfunc={toggleViewReportState} report={selectedReport} />}
+                {addReportModalState && <AddMedicalReportModal modalfunc={toggleAddReportState} />}
                 {editModalState && <EditMedicalReportModal modalfunc={toggleEditModalState} report={selectedReport} />}
             </div>
 

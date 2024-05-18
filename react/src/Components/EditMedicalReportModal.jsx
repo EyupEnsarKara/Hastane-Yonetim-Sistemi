@@ -4,6 +4,8 @@ import axiosInstance from '../axiosInstance';
 
 function EditMedicalReportModal({ report, modalfunc }) {
     const [editedReport, setEditedReport] = useState(report);
+    const [loading, setloading] = useState(true);
+    console.log(editedReport)
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -26,21 +28,24 @@ function EditMedicalReportModal({ report, modalfunc }) {
             <div className="modal-content">
                 <span className="close" onClick={modalfunc}>×</span>
                 <h2>Edit Report Information - ID: {editedReport.id}</h2>
-                <div className="form-group">
-                    <label>Report Url:</label>
-                    <input type="text" name="name" value={editedReport.name} onChange={handleChange} />
-                </div>
+
                 <div className="form-group">
                     <label>Patient Name:</label>
-                    <input type="text" name="surname" value={editedReport.surname} onChange={handleChange} />
+                    <span>{editedReport.reportPatientName}</span>
                 </div>
                 <div className="form-group">
                     <label>Doctor Name:</label>
-                    <span>{editedReport.}</span>
+                    <span>{editedReport.reportDoctorName}</span>
                 </div>
                 <div className="form-group">
                     <label>Creation Date:</label>
                     <span>{editedReport.reportDate}</span>
+                </div>
+                <div className="form-group">
+                    <label>Report Url:</label>
+                    <img src={editedReport.reportUrl} alt='Not Found' onLoad={() => (setloading(false))} onError={() => (setloading(false))} />
+                    {loading && <img src='' alt='Yükleniyo' />}
+
                 </div>
 
 

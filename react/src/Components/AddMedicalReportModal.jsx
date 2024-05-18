@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import Select from 'react-select';
 import axiosInstance from '../axiosInstance';
 import axios from 'axios';
+import { goFileUploadFolderId } from '../../config.json'
 
 function AddMedicalReportModal({ modalfunc }) {
     const [doctorId, setDoctorId] = useState('');
@@ -10,6 +11,8 @@ function AddMedicalReportModal({ modalfunc }) {
     const [doctors, setDoctors] = useState([]);
     const [image, setimage] = useState();
     const [uploadedFileUrl, setUploadedFileUrl] = useState();
+    const [uploading, setUploading] = useState(false); // New state variable for upload status
+
     useEffect(() => {
         axiosInstance.get(`/getDoctors`)
             .then(res => {
@@ -38,27 +41,30 @@ function AddMedicalReportModal({ modalfunc }) {
             });
 
     }, []);
+
     const doctorOptions = doctors.map((doctor) => ({
         value: doctor.doctorID,
         label: doctor.name,
     }));
+
     const patientOptions = patients.map((patient) => ({
         value: patient.patientID,
         label: patient.name,
-
     }));
+
     const handlePatientChange = (selectedOption) => {
         setPatientId(selectedOption.value);
-
     };
+
     const handleDoctorChange = (selectedOption) => {
         setDoctorId(selectedOption.value);
     };
 
-    const uploadFileToGoFile = () => {
+    const uploadFileToGoFile = (item) => {
+        setUploading(true); // Set uploading to true when the upload starts
         const formData = new FormData();
-        formData.append("file", image);
-        formData.append("folderId", "bfbee521-6d40-4df1-bfa9-debdf88a8d89");
+        formData.append("file", item);
+        formData.append("folderId", goFileUploadFolderId);
 
         axios.post('https://store10.gofile.io/contents/uploadfile', formData, {
             headers: {
@@ -67,21 +73,45 @@ function AddMedicalReportModal({ modalfunc }) {
             }
         })
             .then(response => {
-
                 const { fileId, fileName } = response.data.data;
                 setUploadedFileUrl(`https://store5.gofile.io/download/web/${fileId}/thumb_${fileName}`);
-
+                setUploading(false); // Set uploading to false when the upload is done
             })
             .catch(error => {
                 console.error(error);
+                setUploading(false); // Set uploading to false if an error occurs
             });
     }
 
+    let count = 0;
+
     const handleAddReport = () => {
-        if (uploadedFileUrl) console.log(uploadedFileUrl)
+        if (!uploadedFileUrl) {
+            count++;
+            if (count === 1) { // Fix condition to check equality
+                alert("Resim dosyası bozuk yada okunamaz halde tekrar deneyiniz.");
+                modalfunc();
+            }
+            return; // Prevent further execution if the file URL is not set
+        }
+
+        const axiosData = {
+            'patientID': patientId,
+            'doctorID': doctorId,
+            'reportUrl': uploadedFileUrl
+        }
+
+        axiosInstance.post('/addMedicalReport', axiosData).then(res => {
+            if (res.data.status) {
+                alert("Medical Report successfully added.");
+                modalfunc();
+            }
+        }).catch(err => {
+            console.log(err);
+            alert(err);
+            modalfunc();
+        });
     }
-
-
 
     return (
         <div className="modal">
@@ -113,12 +143,17 @@ function AddMedicalReportModal({ modalfunc }) {
                         uploadFileToGoFile(e.target.files[0]);
                     }}
                 />
-                <button className="login-button" onClick={handleAddReport}>Add</button>
-
-
+                <button
+                    className="login-button"
+                    onClick={handleAddReport}
+                    disabled={uploading} // Disable button while uploading
+                    style={{ backgroundColor: uploading ? 'red' : 'initial' }} // Change button color
+                >
+                    {uploading ? 'Uploading...' : 'Add'}
+                </button>
             </div>
         </div>
     );
 }
 
-export default AddMedicalReportModal
+export default AddMedicalReportModal;

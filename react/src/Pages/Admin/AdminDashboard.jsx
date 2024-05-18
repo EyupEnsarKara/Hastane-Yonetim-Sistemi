@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import '../../css/AdminDashboard.css'
 import Dashboard from '../../Components/Dashboard'
 import axios from 'axios';
+import { goFileUploadFolderId } from '../../../config.json'
 
 function AdminDashboard() {
     const [count, setCount] = useState(0);
@@ -14,7 +15,7 @@ function AdminDashboard() {
     const handleUpload = () => {
         const formData = new FormData();
         formData.append("file", file);
-        formData.append("folderId", "30abaf64-0d13-4d98-999c-60e5517dc1db");
+        formData.append("folderId", goFileUploadFolderId);
 
         axios.post('https://store10.gofile.io/contents/uploadfile', formData, {
             headers: {
@@ -32,7 +33,7 @@ function AdminDashboard() {
     const handleCheck = () => {
 
 
-        axios.get('https://api.gofile.io/contents/ce93cb51-f4f1-4bcf-a810-01139ecf9bb1', {
+        axios.get('https://api.gofile.io/servers', {
             headers: {
                 'Authorization': 'Bearer KOHEmxwonfmF3LtUJigY9aiePLis53jw'
             }

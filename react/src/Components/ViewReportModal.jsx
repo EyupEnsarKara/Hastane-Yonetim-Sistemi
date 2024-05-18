@@ -1,8 +1,9 @@
 import React, { useState } from 'react'
 
-function ViewReportModal({ modalfunc }) {
+function ViewReportModal({ modalfunc, report }) {
     const [loading, setloading] = useState(true);
-
+    const { reportUrl } = report
+    console.log(reportUrl)
 
 
     return (
@@ -10,7 +11,7 @@ function ViewReportModal({ modalfunc }) {
             <div className="modal-overlay" onClick={modalfunc}></div>
             <div className="modal-content">
                 <button className="close-modal" onClick={modalfunc}>✖</button>
-                <img src="https://store5.gofile.io/download/web/204fb917-d064-48f3-a870-8738c2b1b889/thumb_image (4).png" alt="ss" onLoad={() => (setloading(false))} />
+                <img src={reportUrl} alt="ss" onLoad={() => (setloading(false))} />
                 {loading && <img src="" alt="yükleniyo" />}
 
 
