@@ -5,7 +5,7 @@ import axiosInstance from '../../axiosInstance'
 
 
 
-function PatientAppointment() {
+function PatientAppoinments() {
     const [myAppointments, setMyAppointments] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
     const [itemsPerPage] = useState(10);
@@ -42,15 +42,9 @@ function PatientAppointment() {
                         </tr>
                     </thead>
                     <tbody>
-                        {currentItems.map(hasta => (
-                            <tr key={hasta.personID}>
-                                <td>{hasta.personID}</td>
-                                <td>{hasta.name}</td>
-                                <td>{hasta.surname}</td>
-                                <td>{hasta.phoneNumber}</td>
-                                <td>{new Date(hasta.birthDate).toLocaleDateString()}</td>
-                                <td>{hasta.gender}</td>
-                                <td>{hasta.address}</td>
+                        {currentItems.map(appointment => (
+                            <tr key={appointment.personID}>
+
                                 <td className='iconstab'>
                                     <AiOutlineEdit className='icon' onClick={() => {
                                         const pati = {
@@ -87,4 +81,4 @@ function PatientAppointment() {
     );
 }
 
-export default AdminPatients;
+export default PatientAppoinments;
