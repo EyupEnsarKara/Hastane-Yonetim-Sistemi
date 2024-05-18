@@ -48,6 +48,19 @@ class PatientClass {
       });
     });
   }
+  getMyAppointment(connection, id, res) {
+    const sql = `Select * From appointments WHERE patientID=${id}`
+    connection.query(sql, (err, result) => {
+      if (err) {
+        console.log("Error get appoinmetnt", err);
+        throw err;
+      }
+      else res.status(200).json({ result: result });
+
+
+    });
+
+  }
 
 }
 
@@ -94,6 +107,19 @@ class DoctorClass {
         console.log("Doctor updated successfully!");
       });
     });
+  }
+  getMyAppointment(connection, id, res) {
+    const sql = `Select * From appointments WHERE doctorID=${id}`
+    connection.query(sql, (err, result) => {
+      if (err) {
+        console.log("Error get appoinmetnt", err);
+        throw err;
+      }
+      else res.status(200).json({ result: result });
+
+
+    });
+
   }
 
 }
