@@ -68,7 +68,7 @@ const createTables = () => {
             patientID INT,
             doctorID INT, 
             reportDate DATE NOT NULL,
-            reportContent TEXT,
+            reportContent JSON DEFAULT NULL,
             reportURL VARCHAR(255),
             FOREIGN KEY (patientID) REFERENCES Patients(patientID),
             FOREIGN KEY (doctorID) REFERENCES Doctors(doctorID)

@@ -85,10 +85,14 @@ app.post('/addAppointment', authenticateToken, (req, res) => {
 
 // /addMedicalReport endpoint'i
 app.post('/addMedicalReport', authenticateToken, (req, res) => {
-    const { connection, patientID, doctorID, report } = req.body;
-    const medicalReport = new MedicalReportClass(connection, patientID, doctorID, report);
+    const { patientID, doctorID, reportUrl } = req.body;
+    const reportDate = new Date().toISOString().slice(0, 19).replace('T', ' ');
+    const content = {};  // Example content, should be valid JSON
+    const reportContent = JSON.stringify(content);  // Serialize to JSON string
+
+    const medicalReport = new MedicalReportClass(connection, patientID, doctorID, reportUrl, reportDate, reportContent);
     medicalReport.addToDatabase();
-    //res.status(200).json({ message: 'Tıbbi rapor başarıyla eklendi.' });
+    res.status(200).json({ status: 'ok' });
 });
 
 app.post('/checkLogin', (req, res) => {
@@ -265,12 +269,12 @@ app.post('/deletePatient'), authenticateToken, (req, res) => {
     Manager.deletePatient(connection, id)
 }
 
-const server = htpps.createServer(certOptions, app);
+//const server = htpps.createServer(certOptions, app);
 
 
 
 
 
-server.listen(port, () => {
+app.listen(port, () => {
     console.log("htpps Server Started in port:" + port);
 });
