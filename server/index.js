@@ -90,7 +90,7 @@ app.post('/addMedicalReport', authenticateToken, (req, res) => {
     const content = {};
     const medicalReport = new MedicalReportClass(connection, patientID, doctorID, reportUrl, reportDate, content);
     medicalReport.addToDatabase();
-    //res.status(200).json({ message: 'Tıbbi rapor başarıyla eklendi.' });
+    res.status(200).json({ status: 'ok' });
 });
 
 app.post('/checkLogin', (req, res) => {
