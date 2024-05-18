@@ -11,7 +11,7 @@ function AddMedicalReportModal({ modalfunc }) {
     const [doctors, setDoctors] = useState([]);
     const [image, setimage] = useState();
     const [uploadedFileUrl, setUploadedFileUrl] = useState();
-    const [uploading, setUploading] = useState(false); // New state variable for upload status
+    const [uploading, setUploading] = useState(false);
 
     useEffect(() => {
         axiosInstance.get(`/getDoctors`)

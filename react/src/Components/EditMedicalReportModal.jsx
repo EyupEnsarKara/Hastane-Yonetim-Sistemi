@@ -7,6 +7,7 @@ function EditMedicalReportModal({ report, modalfunc }) {
     const [loading, setloading] = useState(true);
     const [uploading, setUploading] = useState(false);
     const [uploadedFileUrl, setUploadedFileUrl] = useState();
+    console.log(report)
 
 
 

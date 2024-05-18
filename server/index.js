@@ -94,6 +94,20 @@ app.post('/addMedicalReport', authenticateToken, (req, res) => {
     medicalReport.addToDatabase();
     res.status(200).json({ status: 'ok' });
 });
+app.post('/editMedicalReport', authenticateToken, (req, res) => {
+    const { id, reportUrl } = req.body;
+    const reportDate = new Date().toISOString().slice(0, 19).replace('T', ' ');
+    const query = 'UPDATE MedicalReports SET reportUrl = ?, reportDate = ? WHERE reportID = ?';
+
+    connection.query(query, [reportUrl, reportDate, id], (err, results) => {
+        if (err) {
+            console.error(err);
+            res.status(500).json({ status: 'error', message: 'Database error' });
+        } else {
+            res.status(200).json({ status: 'ok' });
+        }
+    });
+});
 
 app.post('/checkLogin', (req, res) => {
     const { username, password, userType } = req.body;
