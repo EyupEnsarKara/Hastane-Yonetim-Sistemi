@@ -71,7 +71,7 @@ function NavBar() {
                                     <a onClick={() => (navigate('/patient/appointments'))} className="navbar-link">Appointments</a>
                                 </li>
                                 <li className="navbar-item">
-                                    <a onClick={() => (navigate('/patient/results'))} className="navbar-link">Results</a>
+                                    <a onClick={() => (navigate('/patient/medical_reports'))} className="navbar-link">Medical Reports</a>
                                 </li>
                                 <li className="navbar-item">
                                     <a onClick={() => {
@@ -86,13 +86,13 @@ function NavBar() {
                         {currentPath.startsWith('/doctor') && (
                             <>
                                 <li className="navbar-item">
-                                    <a onClick={() => (navigate('/patient'))} className="navbar-link">Dashboard</a>
+                                    <a onClick={() => (navigate('/doctor'))} className="navbar-link">Dashboard</a>
                                 </li>
                                 <li className="navbar-item">
-                                    <a onClick={() => (navigate('/patient/appointments'))} className="navbar-link">Appointments</a>
+                                    <a onClick={() => (navigate('/doctor/appointments'))} className="navbar-link">Appointments</a>
                                 </li>
                                 <li className="navbar-item">
-                                    <a onClick={() => (navigate('/patient/results'))} className="navbar-link">Results</a>
+                                    <a onClick={() => (navigate('/doctor/medical_reports'))} className="navbar-link">Medical Reports</a>
                                 </li>
                                 <li className="navbar-item">
                                     <a onClick={() => {
