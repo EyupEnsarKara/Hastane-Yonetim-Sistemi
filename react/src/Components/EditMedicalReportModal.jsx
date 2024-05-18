@@ -30,6 +30,21 @@ function EditMedicalReportModal({ report, modalfunc }) {
                     <label>Report Url:</label>
                     <input type="text" name="name" value={editedReport.name} onChange={handleChange} />
                 </div>
+                <div className="form-group">
+                    <label>Patient Name:</label>
+                    <input type="text" name="surname" value={editedReport.surname} onChange={handleChange} />
+                </div>
+                <div className="form-group">
+                    <label>Doctor Name:</label>
+                    <span>{editedReport.}</span>
+                </div>
+                <div className="form-group">
+                    <label>Creation Date:</label>
+                    <span>{editedReport.reportDate}</span>
+                </div>
+
+
+
 
                 <button className="submit-button" onClick={handleSubmit}>Update</button>
             </div>
@@ -37,4 +52,4 @@ function EditMedicalReportModal({ report, modalfunc }) {
     );
 }
 
-export default EditReporteditedReportModal;
+export default EditMedicalReportModal;
