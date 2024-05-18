@@ -2,12 +2,13 @@ import React, { useState } from 'react';
 import axiosInstance from '../axiosInstance';
 import { goFileUploadFolderId } from '../../config.json'
 import axios from 'axios';
+import { SquareLoader } from 'react-spinners'
 
 function EditMedicalReportModal({ report, modalfunc }) {
     const [loading, setloading] = useState(true);
     const [uploading, setUploading] = useState(false);
     const [uploadedFileUrl, setUploadedFileUrl] = useState();
-    console.log(report)
+
 
 
 
@@ -37,7 +38,19 @@ function EditMedicalReportModal({ report, modalfunc }) {
 
 
     const handleEditReport = () => {
-        console.log(uploadedFileUrl)
+        const axiosData = {
+            'id': report.reportID,
+            'reportUrl': uploadedFileUrl
+        }
+        axiosInstance.post('/editMedicalReport', axiosData).then(res => {
+            if (res.data.status) {
+                alert("succsessfully updated");
+                modalfunc();
+            }
+        }).catch(err => {
+            alert("An error occured please try again later");
+            modalfunc();
+        })
     };
 
     return (
@@ -62,7 +75,7 @@ function EditMedicalReportModal({ report, modalfunc }) {
                 <div className="form-group">
                     <label>Report Url:</label>
                     <img src={report.reportUrl} alt='Not Found' onLoad={() => (setloading(false))} onError={() => (setloading(false))} />
-                    {loading && <img src='' alt='Yükleniyo' />}
+                    {loading && <SquareLoader color="#36d7b7" />}
                     <input
                         type="file"
                         id="img"
