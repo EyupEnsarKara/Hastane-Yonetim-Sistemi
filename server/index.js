@@ -85,10 +85,10 @@ app.post('/addAppointment', authenticateToken, (req, res) => {
 
 // /addMedicalReport endpoint'i
 app.post('/addMedicalReport', authenticateToken, (req, res) => {
-    const { patientID, doctorID } = req.body;
+    const { patientID, doctorID, reportUrl } = req.body;
     const reportDate = new Date();
     const content = {};
-    const medicalReport = new MedicalReportClass(connection, patientID, doctorID, reportDate, content);
+    const medicalReport = new MedicalReportClass(connection, patientID, doctorID, reportUrl, reportDate, content);
     medicalReport.addToDatabase();
     //res.status(200).json({ message: 'Tıbbi rapor başarıyla eklendi.' });
 });

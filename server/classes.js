@@ -125,17 +125,16 @@ class AppointmentClass {
 }
 
 class MedicalReportClass {
-  constructor(connection, reportID, patientID, doctorID, reportDate, content, result) {
+  constructor(connection, patientID, doctorID, reportUrl, reportDate, content) {
     this.connection = connection;
-    this.reportID = reportID;
     this.patientID = patientID;
     this.doctorID = doctorID;
     this.reportDate = reportDate;
     this.content = content;
-
+    this.reportUrl = reportUrl;
   }
   addToDatabase() {
-    const sql = `INSERT INTO MedicalReports (reportID, patientID, doctorID, reportDate, content) VALUES (${this.reportID}, ${this.patientID}, ${this.doctorID}, '${this.reportDate}', '${this.content}', '${this.result}')`;
+    const sql = `INSERT INTO MedicalReports (patientID, doctorID,reportUrl,reportDate, content) VALUES (${this.patientID}, ${this.doctorID},'${this.reportUrl}', '${this.reportDate}', '${this.content}')`;
     this.connection.query(sql, (err, result) => {
       if (err) throw err;
       console.log("MedicalReport eklendi!");
