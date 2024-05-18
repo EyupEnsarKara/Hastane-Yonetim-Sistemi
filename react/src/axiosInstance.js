@@ -2,7 +2,7 @@ import axios from 'axios';
 import { host, port } from '../config.json';
 
 const axiosInstance = axios.create({
-    baseURL: `https://${host}:${port}`
+    baseURL: `${host}:${port}`
 });
 
 axiosInstance.interceptors.request.use(config => {

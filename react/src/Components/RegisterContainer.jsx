@@ -17,7 +17,7 @@ function RegisterContainer() {
 
 
     const CreateAnAccount = () => {
-        axios.post(`https://${host}:${port}/registerPatient`, {
+        axios.post(`${host}:${port}/registerPatient`, {
             name: name,
             birthDate: birthDate,
             surName: surName,
