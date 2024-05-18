@@ -132,10 +132,10 @@ class MedicalReportClass {
     this.doctorID = doctorID;
     this.reportDate = reportDate;
     this.content = content;
-    this.result = result;
+
   }
   addToDatabase() {
-    const sql = `INSERT INTO MedicalReports (reportID, patientID, doctorID, reportDate, content, result) VALUES (${this.reportID}, ${this.patientID}, ${this.doctorID}, '${this.reportDate}', '${this.content}', '${this.result}')`;
+    const sql = `INSERT INTO MedicalReports (reportID, patientID, doctorID, reportDate, content) VALUES (${this.reportID}, ${this.patientID}, ${this.doctorID}, '${this.reportDate}', '${this.content}', '${this.result}')`;
     this.connection.query(sql, (err, result) => {
       if (err) throw err;
       console.log("MedicalReport eklendi!");
