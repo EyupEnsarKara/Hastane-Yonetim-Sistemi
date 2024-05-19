@@ -58,18 +58,18 @@ function AdminPatients() {
     return (
         <Dashboard>
             <div className="container">
-                <h2>Hasta Listesi</h2>
+                <h2>Patients</h2>
                 <table>
                     <thead>
                         <tr>
                             <th>Person ID</th>
-                            <th>Ad</th>
-                            <th>Soyad</th>
-                            <th>Telefon Numarası</th>
-                            <th>Doğum Tarihi</th>
-                            <th>Cinsiyet</th>
-                            <th>Hastalık Geçmişi</th>
-                            <th>İşlemler</th>
+                            <th>Name</th>
+                            <th>Surname</th>
+                            <th>Phone Number</th>
+                            <th>Birthdate</th>
+                            <th>Gender</th>
+                            <th>Address</th>
+                            <th>Actions</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -110,7 +110,7 @@ function AdminPatients() {
                         </button>
                     ))}
                 </div>
-                <button onClick={toggleModalState}>Hasta Ekle</button>
+                <button onClick={toggleModalState}>Add Patient</button>
                 {modalState && <AddPatientModal modalfunc={toggleModalState} />}
                 {editModalState && <EditPatientModal modalfunc={toggleEditModalState} patient={selectedPatient} />}
             </div>

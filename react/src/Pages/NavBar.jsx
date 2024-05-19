@@ -92,7 +92,7 @@ function NavBar() {
                                     <a onClick={() => (navigate('/doctor/appointments'))} className="navbar-link">Appointments</a>
                                 </li>
                                 <li className="navbar-item">
-                                    <a onClick={() => (navigate('/doctor/medical_reports'))} className="navbar-link">Medical Reports</a>
+                                    <a onClick={() => (navigate('/doctor/myPatients'))} className="navbar-link">Medical Reports</a>
                                 </li>
                                 <li className="navbar-item">
                                     <a onClick={() => {
@@ -115,10 +115,3 @@ function NavBar() {
 
 export default NavBar;
 
-
-{/* <li className="navbar-item">
-                        <a onClick={() => (navigate('/login'))} className="navbar-link">Login</a>
-                    </li>
-                    <li className="navbar-item">
-                        <a onClick={() => (navigate('/register'))} className="navbar-link">Sign up</a>
-                    </li> */}

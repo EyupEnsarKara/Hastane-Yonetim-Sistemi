@@ -24,10 +24,8 @@ class PatientClass {
       const patientSql = `INSERT INTO Patients (personID, birthDate, gender, phoneNumber, address) VALUES (${personID}, '${this.birthDate}', '${this.gender}', '${this.phoneNumber}', '${this.address}')`;
       this.connection.query(patientSql, (err, result) => {
         if (err) {
-          console.error("Error adding patient:", err);
           throw err;
         }
-        console.log("Patient added successfully!");
       });
     });
   }
@@ -44,7 +42,7 @@ class PatientClass {
           console.error("Error updating patient:", err);
           throw err;
         }
-        console.log("Patient updated successfully!");
+
       });
     });
   }
@@ -68,7 +66,7 @@ WHERE
 `
     this.connection.query(sql, (err, result) => {
       if (err) {
-        console.log("Error get appoinmetnt", err);
+
         throw err;
       }
       else res.status(200).json({ result: result });
@@ -103,7 +101,6 @@ class DoctorClass {
           console.error("Error adding doctor:", err);
           throw err;
         }
-        console.log("Doctor added successfully!");
       });
     });
   }
@@ -199,14 +196,24 @@ class MedicalReportClass {
     this.reportUrl = reportUrl;
   }
   addToDatabase() {
-    const sql = `INSERT INTO MedicalReports(patientID, doctorID, reportUrl, reportDate, reportContent) VALUES(${this.patientID}, ${this.doctorID}, '${this.reportUrl}', '${this.reportDate}', '${this.content}')`;
+    const sql = `
+        INSERT INTO MedicalReports(patientID, doctorID, reportUrl, reportDate, reportContent) 
+        VALUES (
+            (SELECT patientID FROM Patients WHERE personID = ${this.patientID}),
+            (SELECT doctorID FROM Doctors WHERE personID = ${this.doctorID}),
+            '${this.reportUrl}', 
+            '${this.reportDate}', 
+            '${this.content}'
+        )
+    `;
     this.connection.query(sql, (err, result) => {
-      if (err) throw err;
+      if (err) console.log(err);
       console.log("MedicalReport eklendi!");
     });
   }
-
 }
+
+
 class Manager {
   static deletePatient(connection, id, res) { //patient id yollanacak
     const sql = `DELETE FROM patients WHERE patientID = ${id} `

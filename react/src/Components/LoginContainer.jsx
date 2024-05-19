@@ -27,6 +27,7 @@ function LoginContainer() {
                 localStorage.setItem('userType', active);
                 localStorage.setItem('token', res.data.token)
                 localStorage.setItem('personID', res.data.personID)
+                localStorage.setItem('specID', res.data.specId)
 
                 switch (active) {
                     case 'admin':
@@ -44,7 +45,7 @@ function LoginContainer() {
             }
             else console.log("yok")
         }).catch(err => {
-            alert("geçersiz kullanıcı bilgileri");
+            alert("Invalid user");
         })
 
     };

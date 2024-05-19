@@ -16,7 +16,7 @@ function EditPatientModal({ patient, modalfunc }) {
 
     const handleSubmit = () => {
         axiosInstance.post(`/editPatient`, { editedPatient }).then((res) => {
-            alert("Bilgiler başarıyla güncellendi.");
+            alert("Informations succsessfully updated.");
             modalfunc(); // Modalı kapat
         });
     };
