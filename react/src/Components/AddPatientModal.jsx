@@ -24,7 +24,7 @@ function AddPatientModal({ modalfunc }) {
             address: address
         }).then(res => {
             if (res.data.status === "ok") {
-                alert("Kullanıcı ekleme başarılı");
+                alert("Add process succsessful.");
                 modalfunc();
             }
         });
@@ -44,7 +44,7 @@ function AddPatientModal({ modalfunc }) {
             <div className="modal-overlay" onClick={modalfunc}></div>
             <div className="modal-content">
                 <button className="close-modal" onClick={modalfunc}>✖</button>
-                <h2>Hasta Ekle</h2>
+                <h2>Add Patient</h2>
                 <div className="modal-body">
                     <input className='input-field' type="text" placeholder='Name' value={name} onChange={(e) => setName(e.target.value)} />
                     <input className='input-field' type="text" placeholder='Surname' value={surName} onChange={(e) => setSurName(e.target.value)} />
@@ -62,7 +62,7 @@ function AddPatientModal({ modalfunc }) {
                     <input className='input-field' type="text" placeholder='Address' value={address} onChange={(e) => setAddress(e.target.value)} />
                 </div>
                 <div className="modal-footer">
-                    <button className='submit-button' onClick={addPatient}>Ekle</button>
+                    <button className='submit-button' onClick={addPatient}>Add</button>
                 </div>
             </div>
         </div>

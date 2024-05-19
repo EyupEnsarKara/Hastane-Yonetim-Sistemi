@@ -1,8 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import axiosInstance from '../axiosInstance';
 import { BiShow } from "react-icons/bi";
+import { MdDelete } from "react-icons/md";
 import '../css/PatientsModal.css';
 import AddMedicalReportModal from './AddMedicalReportModal';
+import ViewReportModal from './ViewReportModal';
+
+
+
 function PatientsModal({ modalfunc, patient }) {
     const doctorId = localStorage.getItem('specID');
     console.log(patient)
@@ -11,6 +16,9 @@ function PatientsModal({ modalfunc, patient }) {
     const [currentPage, setCurrentPage] = useState(1);
     const [itemsPerPage] = useState(10);
     const [addModalState, setAddModalState] = useState(false);
+    const [viewReportState, setViewReportState] = useState(false);
+    const [selectedReport, setSelectedReport] = useState();
+    const [effect, setEffect] = useState(false);
 
     useEffect(() => {
         axiosInstance.post('/getPatientMedicalReports', { 'patientId': patientId })
@@ -24,7 +32,7 @@ function PatientsModal({ modalfunc, patient }) {
 
 
 
-    }, [addModalState]);
+    }, [addModalState, effect]);
 
     const toggleAddModalState = () => {
         console.log(
@@ -32,8 +40,22 @@ function PatientsModal({ modalfunc, patient }) {
         )
         setAddModalState(!addModalState);
     };
+    const toggleViewReportState = () => {
+        setViewReportState(!viewReportState)
+    }
 
+    const handleDelete = (id) => {
+        axiosInstance.post(`/deleteMedicalReport`, { id: id })
+            .then(res => {
+                if (res.data.result && res.data.result.affectedRows > 0) {
+                    alert('Rapor başarıyla silindi.');
+                    setEffect(!effect);
+                } else if (res.data.message) {
+                    alert(res.data.message.sqlMessage)
+                }
+            })
 
+    }
 
     const lastIndex = currentPage * itemsPerPage;
     const firstIndex = lastIndex - itemsPerPage;
@@ -68,16 +90,6 @@ function PatientsModal({ modalfunc, patient }) {
                                     <td>{report.name + " " + report.surname}</td>
                                     <td>
                                         <div>{report.reportURL}</div>
-                                        <BiShow className='icon' onClick={() => {
-                                            const tempReport = {
-                                                reportID: report.reportID,
-                                                reportDoctorName: report.name + " " + report.surname,
-                                                reportUrl: report.reportURL,
-                                                reportDate: new Date(report.reportDate).toLocaleDateString()
-                                            }
-                                            setSelectedReport(tempReport);
-                                            toggleViewReportState();
-                                        }} />
                                     </td>
                                     <td>{new Date(report.reportDate).toLocaleDateString()}</td>
                                     <td>
@@ -91,14 +103,23 @@ function PatientsModal({ modalfunc, patient }) {
                                             setSelectedReport(tempReport);
                                             toggleViewReportState();
                                         }} />
+                                        <MdDelete className='icon' onClick={() => { handleDelete(report.reportID) }} />
                                     </td>
                                 </tr>
                             )
                         ))}
                     </tbody>
                 </table>
+                <div>
+                    {Array(totalPages).fill().map((_, index) => (
+                        <button key={index + 1} id={index + 1} onClick={handleClick}>
+                            {index + 1}
+                        </button>
+                    ))}
+                </div>
                 <button onClick={toggleAddModalState}>Add Report</button>
                 {addModalState && <AddMedicalReportModal modalfunc={toggleAddModalState} patient={patient} />}
+                {viewReportState && <ViewReportModal modalfunc={toggleViewReportState} report={selectedReport} />}
             </div>
         </div>
 

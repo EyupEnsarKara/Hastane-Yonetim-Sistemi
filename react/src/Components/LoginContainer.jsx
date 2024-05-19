@@ -45,7 +45,7 @@ function LoginContainer() {
             }
             else console.log("yok")
         }).catch(err => {
-            alert("geçersiz kullanıcı bilgileri");
+            alert("Invalid user");
         })
 
     };

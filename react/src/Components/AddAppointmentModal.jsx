@@ -173,7 +173,7 @@ function AddAppointmentModal({ modalfunc }) {
             <div className="overlay" onClick={() => modalfunc()}></div>
             <div className="modal-content">
                 <button className="close-modal" onClick={() => modalfunc()}>&times;</button>
-                <h2>Randevu Oluştur</h2>
+                <h2>Add Appointment</h2>
 
 
                 {userType != 'patient' ?

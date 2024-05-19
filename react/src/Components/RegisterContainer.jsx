@@ -27,7 +27,7 @@ function RegisterContainer() {
             address: address
         }).then(res => {
             if (res.data.status == "ok") {
-                alert("kullanıcı ekleme başarılı");
+                alert("Registarion status succsess");
             }
         })
     };

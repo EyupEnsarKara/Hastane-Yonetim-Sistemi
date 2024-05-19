@@ -98,7 +98,7 @@ function AddMedicalReportModal({ modalfunc, patient }) {
         if (!uploadedFileUrl) {
             count++;
             if (count === 1) {
-                alert("Resim dosyası bozuk yada okunamaz halde tekrar deneyiniz.");
+                alert("Invalid input type");
                 modalfunc();
             }
             return;

@@ -42,7 +42,7 @@ function EditAppointmentModal({ appointment, modalfunc }) {
     const handleSubmit = () => {
         console.log(editedAppointment);
         axiosInstance.post('/editAppointment', { editedAppointment }).then(() => {
-            alert('Bilgiler başarıyla güncellendi.');
+            alert('Informations succsessfully updated.');
             modalfunc();
         });
     };

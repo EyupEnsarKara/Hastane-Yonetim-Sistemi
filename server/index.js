@@ -118,7 +118,7 @@ app.post('/checkLogin', (req, res) => {
 
     if (userType === 'patient') {
         connection.query('SELECT * FROM persons p JOIN patients pt ON p.personID = pt.personID WHERE p.name = ?', [username], async (err, results) => {
-            if (results.length > 0) {
+            if (results?.length > 0) {
                 const user = results[0];
                 const match = await bcrypt.compare(password, user.password);
                 if (match) {
@@ -134,7 +134,7 @@ app.post('/checkLogin', (req, res) => {
         });
     } else if (userType === 'doctor') {
         connection.query('SELECT * FROM persons p JOIN doctors d ON p.personID = d.personID WHERE p.name = ?', [username], async (err, results) => {
-            if (results.length > 0) {
+            if (results?.length > 0) {
                 console.log(results)
                 const user = results[0];
                 const match = await bcrypt.compare(password, user.password);
@@ -152,7 +152,7 @@ app.post('/checkLogin', (req, res) => {
         });
     } else if (userType === 'admin') {
         connection.query('SELECT * FROM persons p JOIN managers m ON p.personID = m.personID WHERE p.name = ? AND p.password = ?', [username, password], (err, results) => {
-            if (results.length > 0) {
+            if (results?.length > 0) {
                 const user = results[0];
                 const token = jwt.sign({ userID: user.personID, userType: 'admin' }, secretKey, { expiresIn: '1h' });
                 res.status(200).json({ user, token });
@@ -339,9 +339,8 @@ app.post('/getDoctorInfoForSpec', authenticateToken, (req, res) => {
 
 app.post('/getPatientMedicalReports', authenticateToken, (req, res) => {
     console.log(req.body)
-    const patientId = req.body.id;
-    let selectedId;
-    let queryString = `personID = ${selectedId}`
+    const patientId = req.body.id;;
+    let queryString = `personID = ${patientId}`
     if (!patientId) {
         selectedId = req.body.patientId;
         queryString = `patientID = ${selectedId}`
