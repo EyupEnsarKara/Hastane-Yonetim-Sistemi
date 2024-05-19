@@ -1,23 +1,31 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-import { host, port } from '../../config.json';
 import '../css/AddAppointmentModal.css';
 import axiosInstance from '../axiosInstance';
 import Select from 'react-select';
 
 function AddAppointmentModal({ modalfunc }) {
+    const userType = localStorage.getItem('userType');
+    const personID = localStorage.getItem('personID');
     const [appointmentDateTime, setAppointmentDateTime] = useState('');
-    const [doctorId, setDoctorId] = useState('');
-    const [patientId, setPatientId] = useState('');
+    const [doctorPersonID, setDoctorPersonId] = useState(personID);
+    const [patientPersonID, setPatientPersonId] = useState(personID);
     const [patients, setPatients] = useState([]);
     const [doctors, setDoctors] = useState([]);
     const [confirmationMessage, setConfirmationMessage] = useState('');
     const [image, setimage] = useState();
+    const [spec, setSpec] = useState([]);
+    const [doctorInfoForSpec, setDoctorInfoForSpec] = useState([]);
+    const [selectedSpec, setSelectedSpec] = useState();
+    const [specDoctorOptions, setSpecDoctorOptions] = useState([]);
+    const [selectedSpecDoctor, setSelectedSpecDoctor] = useState(null);
+
+
 
     useEffect(() => {
         axiosInstance.get(`/getDoctors`)
             .then(res => {
                 if (res.data.result) {
+
                     setDoctors(res.data.result);
                 } else {
                     alert("An error occurred while fetching doctors.");
@@ -32,6 +40,7 @@ function AddAppointmentModal({ modalfunc }) {
             .then(res => {
                 if (res.data.result) {
                     setPatients(res.data.result);
+
                 } else {
                     alert("An error occurred while fetching patients.");
                 }
@@ -41,22 +50,64 @@ function AddAppointmentModal({ modalfunc }) {
                 alert("An error occurred while fetching patients.");
             });
 
+
+
     }, []);
 
+    useEffect(() => {
+        axiosInstance.get(`/getSpec`)
+            .then(res => {
+                if (res.data.result) {
+
+                    setSpec(res.data.result);
+                } else {
+                    alert("An error occurred while fetching specs.");
+                }
+            })
+            .catch(err => {
+                console.error("Error fetching specs:", err);
+                alert("An error occurred while fetching specs.");
+            });
+
+
+
+    }, [selectedSpec])
+    useEffect(() => {
+        if (selectedSpec) {
+            axiosInstance.post(`/getDoctorInfoForSpec`, { 'selectedSpec': selectedSpec })
+                .then(res => {
+                    if (res.data.result) {
+                        console.log(res.data.result)
+                        const newSpecDoctorOptions = res.data.result.map((specDoctor) => ({
+                            value: specDoctor.personID,
+                            label: specDoctor.name
+                        }));
+                        setSpecDoctorOptions(newSpecDoctorOptions);
+                        setDoctorInfoForSpec(res.data.result);
+                    } else {
+                        alert("An error occurred while fetching specs.");
+                    }
+                })
+                .catch(err => {
+                    console.error("Error fetching specs:", err);
+                    alert("An error occurred while fetching specs.");
+                });
+        }
+
+    }, [selectedSpec])
 
     const handleAddAppointment = () => {
-        console.log(appointmentDateTime);
-        console.log(doctorId);
-        console.log(patientId);
-        if (!appointmentDateTime || !doctorId || !patientId) {
+
+        if (!appointmentDateTime || !doctorPersonID || (!patientPersonID && userType != 'patient')) {
+            console.log(appointmentDateTime, doctorPersonID, patientPersonID, userType);
             alert("Please fill in all fields.");
             return;
         }
 
         const newAppointment = {
             date: appointmentDateTime,
-            doctorID: doctorId,
-            patientID: patientId
+            doctorPersonID: doctorPersonID,
+            patientPersonID: patientPersonID
         };
 
         axiosInstance.post(`/addAppointment`, newAppointment)
@@ -83,22 +134,39 @@ function AddAppointmentModal({ modalfunc }) {
         setAppointmentDateTime(formattedDateTime);
     };
     const handleDoctorChange = (selectedOption) => {
-        setDoctorId(selectedOption.value);
+        setDoctorPersonId(selectedOption.value);
     };
 
     const doctorOptions = doctors.map((doctor) => ({
-        value: doctor.doctorID,
+        value: doctor.doctorPersonID,
         label: doctor.name,
     }));
     const handlePatientChange = (selectedOption) => {
-        setPatientId(selectedOption.value);
+
+        setPatientPersonId(selectedOption.value);
+
+
 
     };
     const patientOptions = patients.map((patient) => ({
-        value: patient.patientID,
+        value: patient.personID,
         label: patient.name,
 
     }));
+    const handleSpecChange = (selectedOption) => {
+        setSelectedSpec(selectedOption.value);
+
+    }
+    const specOptions = spec.map((spec) => ({
+        value: spec.specialization,
+        label: spec.specialization
+    }));
+    const handleSpecDoctorsChange = (selectedOption) => {
+        setSelectedSpec(selectedOption.value);
+        setDoctorPersonId(selectedOption.value);
+
+    }
+
 
     return (
         <div className="modal">
@@ -107,6 +175,66 @@ function AddAppointmentModal({ modalfunc }) {
                 <button className="close-modal" onClick={() => modalfunc()}>&times;</button>
                 <h2>Randevu Oluştur</h2>
 
+
+                {userType != 'patient' ?
+                    <div>
+                        <label htmlFor="personId">Select Patient:</label>
+                        <Select
+                            id="personId"
+                            options={patientOptions}
+                            onChange={handlePatientChange}
+                            placeholder="Select a patient"
+                        />
+                        {userType != 'doctor' ?
+                            <div>
+                                <label htmlFor="specialization">Specialization:</label>
+                                <Select
+                                    id="spec"
+                                    options={specOptions}
+                                    onChange={handleSpecChange}
+                                    placeholder="Select a specialization"
+                                />
+                                <div>
+                                    <label htmlFor="doctorId">Select Doctor:</label>
+                                    <Select
+                                        id="doctorId"
+                                        options={specDoctorOptions}
+                                        onChange={handleSpecDoctorsChange}
+
+                                        placeholder="Select a doctor"
+
+                                    />
+                                </div>
+                            </div>
+                            : <div />
+                        }
+                    </div>
+
+                    :
+                    <div>
+                        <label htmlFor="specialization">Specialization:</label>
+                        <Select
+                            id="spec"
+                            options={specOptions}
+                            onChange={handleSpecChange}
+                            placeholder="Select a specialization"
+                        />
+                        <div>
+                            <label htmlFor="doctorId">Select Doctor:</label>
+                            <Select
+                                id="doctorId"
+                                options={specDoctorOptions}
+                                onChange={handleSpecDoctorsChange}
+
+                                placeholder="Select a doctor"
+
+                            />
+                        </div>
+                    </div>
+                }
+
+
+
                 <label htmlFor="appointmentDateTime">Appointment Date & Time:</label>
                 <input
                     type="datetime-local"
@@ -114,21 +242,7 @@ function AddAppointmentModal({ modalfunc }) {
                     value={appointmentDateTime}
                     onChange={handleDateTimeChange}
                 />
-                <label htmlFor="doctorId">Select Doctor:</label>
-                <Select
-                    id="doctorId"
-                    options={doctorOptions}
-                    onChange={handleDoctorChange}
-                    placeholder="Select a doctor"
-                />
 
-                <label htmlFor="patientId">Select Patient:</label>
-                <Select
-                    id="patientId"
-                    options={patientOptions}
-                    onChange={handlePatientChange}
-                    placeholder="Select a patient"
-                />
 
                 <button className="login-button" onClick={handleAddAppointment}>Add</button>
             </div>

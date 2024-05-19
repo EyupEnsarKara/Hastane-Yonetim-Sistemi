@@ -77,8 +77,8 @@ app.post('/addDoctor', authenticateToken, async (req, res) => {
 
 // /addAppointment endpoint'i
 app.post('/addAppointment', authenticateToken, (req, res) => {
-    const { patientID, doctorID, date } = req.body;
-    const appointment = new AppointmentClass(connection, patientID, doctorID, date);
+    const { patientPersonID, doctorPersonID, date } = req.body;
+    const appointment = new AppointmentClass(connection, patientPersonID, doctorPersonID, date);
     appointment.addToDatabase();
     res.status(200).json({ status: "ok" });
 });
@@ -119,7 +119,8 @@ app.post('/checkLogin', (req, res) => {
                 const match = await bcrypt.compare(password, user.password);
                 if (match) {
                     const token = jwt.sign({ userID: user.personID, userType: 'patient' }, secretKey, { expiresIn: '1h' });
-                    res.status(200).json({ user, token });
+                    const personID = user.personID;
+                    res.status(200).json({ personID, token });
                 } else {
                     res.status(401).json({ message: 'Invalid credentials' });
                 }
@@ -134,7 +135,8 @@ app.post('/checkLogin', (req, res) => {
                 const match = await bcrypt.compare(password, user.password);
                 if (match) {
                     const token = jwt.sign({ userID: user.personID, userType: 'doctor' }, secretKey, { expiresIn: '1h' });
-                    res.status(200).json({ user, token });
+                    const personID = user.personID;
+                    res.status(200).json({ personID, token });
                 } else {
                     res.status(401).json({ message: 'Invalid credentials' });
                 }
@@ -174,7 +176,7 @@ app.post('/editDoctor', authenticateToken, (req, res) => {
 
 });
 app.post('/editAppointment', authenticateToken, (req, res) => {
-    console.log(req.body.editedAppointment.id)
+    //console.log(req.body.editedAppointment.id)
     const { id, patientId, doctorId, appointmentDateTime } = req.body.editedAppointment;
 
     const appointment = new AppointmentClass(connection, patientId, doctorId, appointmentDateTime);
@@ -261,17 +263,44 @@ app.post('/getMedicalReports', authenticateToken, (req, res) => {
     `;
     connection.query(query, (err, results) => {
         res.status(200).json({ result: results });
-        console.log(results);
-        console.log(err);
+        //console.log(results);
+        //console.log(err);
 
     })
 })
 
-app.get('/getMyAppoinments', authenticateToken, (req, res) => {
-    const { userType, id } = req.body;
-    if (userType = 'patient') PatientClass.getMyAppoinments(id, res);
-    else if (userType = 'doctor') DoctorClass.getMyAppointments(id, res);
+app.post('/getMyAppointments', authenticateToken, (req, res) => {
 
+    const { userType, id } = req.body;
+    //console.log(req.body);
+    if (userType == 'patient') PatientClass.getMyAppointments(connection, id, res);
+    else if (userType == 'doctor') DoctorClass.getMyAppointments(connection, id, res);
+
+})
+app.get('/getSpec', authenticateToken, (req, res) => {
+    const query = `
+        SELECT distinct specialization FROM doctors;
+    `;
+
+    connection.query(query, (err, results) => {
+        //console.log(results);
+        res.status(200).json({ result: results });
+    })
+})
+app.post('/getDoctorInfoForSpec', authenticateToken, (req, res) => {
+    console.log(req.body)
+    const { selectedSpec } = req.body;
+    const query = `
+    SELECT d.doctorID, p.personID,p.name , p.surname
+    FROM Doctors d 
+    JOIN Persons p ON d.personID = p.personID 
+    WHERE specialization='${selectedSpec}';
+    `;
+    connection.query(query, (err, results) => {
+        console.log("query")
+        console.log(results)
+        res.status(200).json({ result: results });
+    })
 })
 
 app.get('/checkToken', (req, res) => {

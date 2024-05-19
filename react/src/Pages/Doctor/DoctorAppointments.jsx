@@ -16,6 +16,7 @@ function PatientAppoinments() {
         const userType = localStorage.getItem('userType')
         axiosInstance.post(`/getMyAppointments`, { 'id': personID, 'userType': userType })
             .then(res => {
+                console.log(res.data.result)
                 setMyAppointments(res.data.result);
             })
             .catch(err => console.log(err))

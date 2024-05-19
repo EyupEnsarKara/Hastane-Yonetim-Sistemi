@@ -48,9 +48,25 @@ class PatientClass {
       });
     });
   }
-  getMyAppointment(connection, id, res) {
-    const sql = `Select * From appointments WHERE patientID=${id}`
-    connection.query(sql, (err, result) => {
+  static getMyAppointments(connection, id, res) {
+    this.connection = connection;
+    const sql = `SELECT
+    a.appointmentID,
+    d.specialization AS doctorSpecialization,
+    p.name AS doctorName,
+    a.appointmentDateTime
+FROM 
+    Appointments a
+JOIN 
+    Doctors d ON a.doctorID = d.doctorID
+JOIN 
+    Persons p ON d.personID = p.personID
+JOIN
+    Patients pt ON a.patientID = pt.patientID
+WHERE
+    pt.personID = ${id};
+`
+    this.connection.query(sql, (err, result) => {
       if (err) {
         console.log("Error get appoinmetnt", err);
         throw err;
@@ -108,8 +124,26 @@ class DoctorClass {
       });
     });
   }
-  getMyAppointment(connection, id, res) {
-    const sql = `Select * From appointments WHERE doctorID=${id}`
+  static getMyAppointments(connection, id, res) {
+    const sql = `
+    SELECT
+        a.appointmentID,
+        p_patient.name AS patientName,
+        a.appointmentDateTime
+    FROM 
+        Appointments a
+    JOIN 
+        Doctors d ON a.doctorID = d.doctorID
+    JOIN 
+        Patients pt ON a.patientID = pt.patientID
+    JOIN 
+        Persons p_patient ON pt.personID = p_patient.personID
+    WHERE
+        d.personID = ${id};
+    `;
+
+
+
     connection.query(sql, (err, result) => {
       if (err) {
         console.log("Error get appoinmetnt", err);
@@ -125,15 +159,20 @@ class DoctorClass {
 }
 
 class AppointmentClass {
-  constructor(connection, patientID, doctorID, date) {
-    //console.log("Values:", patientID, doctorID, date);
+  constructor(connection, patientPersonID, doctorPersonID, date) {
     this.connection = connection;
-    this.patientID = patientID;
-    this.doctorID = doctorID;
+    this.patientPersonID = patientPersonID;
+    this.doctorPersonID = doctorPersonID;
     this.date = date;
   }
   addToDatabase() {
-    const sql = `INSERT INTO Appointments (patientID, doctorID,appointmentDateTime) VALUES ( ${this.patientID}, ${this.doctorID}, '${this.date}')`;
+    const sql = `INSERT INTO Appointments (patientID, doctorID, appointmentDateTime)
+    VALUES (
+        (SELECT patientID FROM Patients WHERE personID = ${this.patientPersonID}),
+        (SELECT doctorID FROM Doctors WHERE personID = ${this.doctorPersonID}),
+        '${this.date}'
+    );
+    `;
     this.connection.query(sql, (err, result) => {
       if (err) throw err;
       console.log("Appointment eklendi!");
@@ -141,7 +180,7 @@ class AppointmentClass {
   }
   updateInDatabase(appointmentID) {
 
-    const updateSql = `UPDATE Appointments SET patientID=${this.patientID}, doctorID=${this.doctorID}, appointmentDateTime='${this.date}' WHERE appointmentID=${appointmentID}`;
+    const updateSql = `UPDATE Appointments SET patientID = ${this.patientID}, doctorID = ${this.doctorID}, appointmentDateTime = '${this.date}' WHERE appointmentID = ${appointmentID} `;
     this.connection.query(updateSql, (err, result) => {
       if (err) throw err;
       console.log("Appointment updated successfully!");
@@ -160,7 +199,7 @@ class MedicalReportClass {
     this.reportUrl = reportUrl;
   }
   addToDatabase() {
-    const sql = `INSERT INTO MedicalReports (patientID, doctorID,reportUrl,reportDate, reportContent) VALUES (${this.patientID}, ${this.doctorID},'${this.reportUrl}', '${this.reportDate}', '${this.content}')`;
+    const sql = `INSERT INTO MedicalReports(patientID, doctorID, reportUrl, reportDate, reportContent) VALUES(${this.patientID}, ${this.doctorID}, '${this.reportUrl}', '${this.reportDate}', '${this.content}')`;
     this.connection.query(sql, (err, result) => {
       if (err) throw err;
       console.log("MedicalReport eklendi!");
@@ -170,7 +209,7 @@ class MedicalReportClass {
 }
 class Manager {
   static deletePatient(connection, id, res) { //patient id yollanacak
-    const sql = `DELETE FROM patients WHERE patientID=${id}`
+    const sql = `DELETE FROM patients WHERE patientID = ${id} `
 
     connection.query(sql, (err, result) => {
       if (err) {
@@ -181,7 +220,7 @@ class Manager {
   }
   static deleteDoctor(connection, id, res) { //doctor id yollanacak
     // Önce Persons tablosundan ilgili kişiyi sileceğiz
-    const sql = `DELETE FROM Doctors WHERE doctorID=${id}`
+    const sql = `DELETE FROM Doctors WHERE doctorID = ${id} `
 
     connection.query(sql, (err, result) => {
       if (err) {
@@ -191,7 +230,7 @@ class Manager {
     });
   }
   static deleteAppointment(connection, id, res) { //appointment id yollanacak
-    const sql = `DELETE FROM Appointments WHERE appointmentID=${id}`
+    const sql = `DELETE FROM Appointments WHERE appointmentID = ${id} `
 
     connection.query(sql, (err, result) => {
       if (err) {
@@ -201,7 +240,7 @@ class Manager {
     });
   }
   static deleteMedicalReport(connection, id, res) {
-    const sql = `DELETE FROM MedicalReports WHERE reportID=${id}`
+    const sql = `DELETE FROM MedicalReports WHERE reportID = ${id} `
     connection.query(sql, (err, result) => {
       if (err) {
         res.status(200).json({ message: err });

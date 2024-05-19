@@ -26,6 +26,8 @@ function LoginContainer() {
             if (res.data) {
                 localStorage.setItem('userType', active);
                 localStorage.setItem('token', res.data.token)
+                localStorage.setItem('personID', res.data.personID)
+
                 switch (active) {
                     case 'admin':
                         navigate('admin/Dashboard');
