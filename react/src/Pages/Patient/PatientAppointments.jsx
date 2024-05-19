@@ -3,6 +3,7 @@ import Dashboard from '../../Components/Dashboard';
 import "../../css/AdminPatients.css";
 import axiosInstance from '../../axiosInstance'
 import AddAppointmentModal from '../../Components/AddAppointmentModal';
+import { MdDelete } from "react-icons/md";
 
 
 function PatientAppoinments() {
@@ -10,6 +11,7 @@ function PatientAppoinments() {
     const [myAppointments, setMyAppointments] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
     const [itemsPerPage] = useState(10);
+    const [effect, setEffect] = useState(false);
 
     useEffect(() => {
         const personID = localStorage.getItem('personID')
@@ -19,7 +21,7 @@ function PatientAppoinments() {
                 setMyAppointments(res.data.result);
             })
             .catch(err => console.log(err))
-    }, [addAppointmentModalState])
+    }, [addAppointmentModalState, effect])
 
     const lastIndex = currentPage * itemsPerPage;
     const firstIndex = lastIndex - itemsPerPage;
@@ -34,6 +36,17 @@ function PatientAppoinments() {
         setAddAppoinmentModalState(!addAppointmentModalState);
     }
 
+    const handleDelete = (id) => {
+        axiosInstance.post(`/deleteAppointment`, { id: id })
+            .then(res => {
+                if (res.data.result && res.data.result.affectedRows > 0) {
+                    alert('Appointment successfully deleted.');
+                    setEffect(!effect)
+                } else if (res.data.message) {
+                    alert(res.data.message.sqlMessage);
+                }
+            });
+    };
 
     return (
         <Dashboard>
@@ -42,9 +55,10 @@ function PatientAppoinments() {
                 <table>
                     <thead>
                         <tr>
-                            <th>Randevu ID</th>
-                            <th>Hasta Adı</th>
-                            <th>Randevu Tarihi</th>
+                            <th>Appointment ID</th>
+                            <th>Patient Id</th>
+                            <th>Appointment Date</th>
+                            <th>Actions</th>
 
                         </tr>
                     </thead>
@@ -54,6 +68,13 @@ function PatientAppoinments() {
                                 <td>{appointment.appointmentID}</td>
                                 <td>{appointment.patientName}</td>
                                 <td>{new Date(appointment.appointmentDateTime).toLocaleString()}</td>
+                                <td>
+                                    <MdDelete className='icon' onClick={() => {
+                                        handleDelete(appointment.appointmentID);
+
+                                    }} />
+                                </td>
+
                             </tr>
                         ))}
                     </tbody>
