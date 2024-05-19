@@ -8,14 +8,16 @@ import { BiShow } from "react-icons/bi";
 import { IoIosDocument } from "react-icons/io";
 import ViewReportModal from '../../Components/ViewReportModal';
 import AddMedicalReportModal from '../../Components/AddMedicalReportModal';
+import PatientsModal from '../../Components/PatientsModal';
 
 function DoctorPatients() {
     const [medicalReports, setMedicalReports] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
     const [itemsPerPage] = useState(10);
     const [viewReportModalState, setViewReportModalState] = useState(false);
-    const [selectedReport, setSelectedReport] = useState();
+    const [selectedPatient, setSelectedPatient] = useState();
     const [addModalState, setAddModalState] = useState(false);
+    const [doctorReportsModalState, setDoctorReportsModalState] = useState(false);
 
     useEffect(() => {
         const personID = localStorage.getItem('personID');
@@ -44,6 +46,9 @@ function DoctorPatients() {
     const toggleAddModalState = () => {
         setAddModalState(!addModalState);
     };
+    const toggleDoctorReportsModalState = () => {
+        setDoctorReportsModalState(!doctorReportsModalState);
+    }
 
     return (
         <Dashboard>
@@ -62,7 +67,11 @@ function DoctorPatients() {
                             <tr key={report.patientID}>
                                 <td>{report.patientID}</td>
                                 <td>{report.name + " " + report.surname}</td>
-                                <td className='icon'><IoIosDocument /></td>
+                                <td className='icon' onClick={() => {
+                                    setSelectedPatient(report);
+                                    toggleDoctorReportsModalState();
+
+                                }}><IoIosDocument /></td>
                             </tr>
                         ))}
                     </tbody>
@@ -75,9 +84,7 @@ function DoctorPatients() {
                         </button>
                     ))}
                 </div>
-                <button onClick={toggleAddModalState}>Add Report</button>
-                {viewReportModalState && <ViewReportModal modalfunc={toggleViewReportState} report={selectedReport} />}
-                {addModalState && <AddMedicalReportModal modalfunc={toggleAddModalState} />}
+                {doctorReportsModalState && <PatientsModal modalfunc={toggleDoctorReportsModalState} patient={selectedPatient} />}
             </div>
         </Dashboard>
     )

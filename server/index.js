@@ -87,7 +87,7 @@ app.post('/addAppointment', authenticateToken, (req, res) => {
 
 // /addMedicalReport endpoint'i
 app.post('/addMedicalReport', authenticateToken, (req, res) => {
-    console.log(req.body)
+    console.log("medical body", req.body)
     const { patientID, doctorID, reportUrl } = req.body;
     const reportDate = new Date().toISOString().slice(0, 19).replace('T', ' ');
     const content = {};  // Example content, should be valid JSON
@@ -135,12 +135,14 @@ app.post('/checkLogin', (req, res) => {
     } else if (userType === 'doctor') {
         connection.query('SELECT * FROM persons p JOIN doctors d ON p.personID = d.personID WHERE p.name = ?', [username], async (err, results) => {
             if (results.length > 0) {
+                console.log(results)
                 const user = results[0];
                 const match = await bcrypt.compare(password, user.password);
                 if (match) {
                     const token = jwt.sign({ userID: user.personID, userType: 'doctor' }, secretKey, { expiresIn: '1h' });
                     const personID = user.personID;
-                    res.status(200).json({ personID, token });
+                    const specId = user.doctorID;
+                    res.status(200).json({ personID, token, specId });
                 } else {
                     res.status(401).json({ message: 'Invalid credentials' });
                 }
@@ -288,6 +290,7 @@ app.post('/getMyPatients', authenticateToken, (req, res) => {
     Patients.patientID,
     Persons.name,
     Persons.surname,
+    Persons.personId,
     Patients.birthDate,
     Patients.gender,
     Patients.phoneNumber,
@@ -337,8 +340,13 @@ app.post('/getDoctorInfoForSpec', authenticateToken, (req, res) => {
 app.post('/getPatientMedicalReports', authenticateToken, (req, res) => {
     console.log(req.body)
     const patientId = req.body.id;
+    let selectedId;
+    let queryString = `personID = ${selectedId}`
     if (!patientId) {
-        return res.status(400).send({ error: 'Missing patient id' });
+        selectedId = req.body.patientId;
+        queryString = `patientID = ${selectedId}`
+        //return res.status(400).send({ error: 'Missing patient id' });
+        if (!selectedId) return res.status(400).send({ error: 'Missing patient id' });
     }
 
     const query = `
@@ -347,7 +355,7 @@ app.post('/getPatientMedicalReports', authenticateToken, (req, res) => {
     INNER JOIN Patients ON MedicalReports.patientID = Patients.patientID 
     INNER JOIN Doctors ON MedicalReports.doctorID = Doctors.doctorID
     INNER JOIN Persons ON Doctors.personID = Persons.personID
-    WHERE Patients.personID = ${patientId}
+    WHERE Patients.${queryString};
 `;
 
     connection.query(query, (err, results) => {

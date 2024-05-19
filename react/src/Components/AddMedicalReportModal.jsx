@@ -4,7 +4,7 @@ import axiosInstance from '../axiosInstance';
 import axios from 'axios';
 import { goFileUploadFolderId } from '../../config.json';
 
-function AddMedicalReportModal({ modalfunc }) {
+function AddMedicalReportModal({ modalfunc, patient }) {
     const userType = localStorage.getItem('userType');
     const personID = localStorage.getItem('personID');
     const [doctorId, setDoctorId] = useState(userType === 'doctor' ? personID : '');
@@ -15,6 +15,10 @@ function AddMedicalReportModal({ modalfunc }) {
     const [uploading, setUploading] = useState(false);
 
     useEffect(() => {
+        console.log("patient", patient)
+        if (patient) {
+            setPatientId(patient.personId);
+        }
         if (userType !== 'doctor') {
             axiosInstance.get(`/getDoctors`)
                 .then(res => {
@@ -102,7 +106,7 @@ function AddMedicalReportModal({ modalfunc }) {
 
         const axiosData = {
             'patientID': parseInt(patientId),
-            'doctorID': doctorId,
+            'doctorID': parseInt(doctorId),
             'reportUrl': uploadedFileUrl
         }
         console.log(axiosData)
