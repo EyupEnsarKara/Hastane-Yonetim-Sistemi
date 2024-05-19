@@ -1,54 +1,58 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react';
 import Select from 'react-select';
 import axiosInstance from '../axiosInstance';
 import axios from 'axios';
-import { goFileUploadFolderId } from '../../config.json'
+import { goFileUploadFolderId } from '../../config.json';
 
 function AddMedicalReportModal({ modalfunc }) {
-    const [doctorId, setDoctorId] = useState('');
-    const [patientId, setPatientId] = useState('');
+    const userType = localStorage.getItem('userType');
+    const personID = localStorage.getItem('personID');
+    const [doctorId, setDoctorId] = useState(userType === 'doctor' ? personID : '');
+    const [patientId, setPatientId] = useState(userType === 'patient' ? personID : '');
     const [patients, setPatients] = useState([]);
     const [doctors, setDoctors] = useState([]);
-    const [image, setimage] = useState();
     const [uploadedFileUrl, setUploadedFileUrl] = useState();
     const [uploading, setUploading] = useState(false);
 
     useEffect(() => {
-        axiosInstance.get(`/getDoctors`)
-            .then(res => {
-                if (res.data.result) {
-                    setDoctors(res.data.result);
-                } else {
+        if (userType !== 'doctor') {
+            axiosInstance.get(`/getDoctors`)
+                .then(res => {
+                    if (res.data.result) {
+                        setDoctors(res.data.result);
+                    } else {
+                        alert("An error occurred while fetching doctors.");
+                    }
+                })
+                .catch(err => {
+                    console.error("Error fetching doctors:", err);
                     alert("An error occurred while fetching doctors.");
-                }
-            })
-            .catch(err => {
-                console.error("Error fetching doctors:", err);
-                alert("An error occurred while fetching doctors.");
-            });
+                });
+        }
 
-        axiosInstance.get(`/getPatients`)
-            .then(res => {
-                if (res.data.result) {
-                    setPatients(res.data.result);
-                } else {
+        if (userType !== 'doctor' && userType !== 'patient') {
+            axiosInstance.get(`/getPatients`)
+                .then(res => {
+                    if (res.data.result) {
+                        setPatients(res.data.result);
+                    } else {
+                        alert("An error occurred while fetching patients.");
+                    }
+                })
+                .catch(err => {
+                    console.error("Error fetching patients:", err);
                     alert("An error occurred while fetching patients.");
-                }
-            })
-            .catch(err => {
-                console.error("Error fetching patients:", err);
-                alert("An error occurred while fetching patients.");
-            });
-
-    }, []);
+                });
+        }
+    }, [userType]);
 
     const doctorOptions = doctors.map((doctor) => ({
-        value: doctor.doctorID,
+        value: doctor.personID,
         label: doctor.name,
     }));
 
     const patientOptions = patients.map((patient) => ({
-        value: patient.patientID,
+        value: patient.personID,
         label: patient.name,
     }));
 
@@ -61,7 +65,7 @@ function AddMedicalReportModal({ modalfunc }) {
     };
 
     const uploadFileToGoFile = (item) => {
-        setUploading(true); // Set uploading to true when the upload starts
+        setUploading(true);
         const formData = new FormData();
         formData.append("file", item);
         formData.append("folderId", goFileUploadFolderId);
@@ -75,32 +79,33 @@ function AddMedicalReportModal({ modalfunc }) {
             .then(response => {
                 const { fileId, fileName } = response.data.data;
                 setUploadedFileUrl(`https://store5.gofile.io/download/web/${fileId}/thumb_${fileName}`);
-                setUploading(false); // Set uploading to false when the upload is done
+                setUploading(false);
             })
             .catch(error => {
                 console.error(error);
-                setUploading(false); // Set uploading to false if an error occurs
+                setUploading(false);
             });
     }
 
     let count = 0;
 
     const handleAddReport = () => {
+
         if (!uploadedFileUrl) {
             count++;
-            if (count === 1) { // Fix condition to check equality
+            if (count === 1) {
                 alert("Resim dosyası bozuk yada okunamaz halde tekrar deneyiniz.");
                 modalfunc();
             }
-            return; // Prevent further execution if the file URL is not set
+            return;
         }
 
         const axiosData = {
-            'patientID': patientId,
+            'patientID': parseInt(patientId),
             'doctorID': doctorId,
             'reportUrl': uploadedFileUrl
         }
-
+        console.log(axiosData)
         axiosInstance.post('/addMedicalReport', axiosData).then(res => {
             if (res.data.status) {
                 alert("Medical Report successfully added.");
@@ -119,21 +124,31 @@ function AddMedicalReportModal({ modalfunc }) {
             <div className="modal-content">
                 <button className="close-modal" onClick={modalfunc}>✖</button>
                 <h2>Add Medical Report</h2>
-                <label htmlFor="doctorId">Select Doctor:</label>
-                <Select
-                    id="doctorId"
-                    options={doctorOptions}
-                    onChange={handleDoctorChange}
-                    placeholder="Select a doctor"
-                />
 
-                <label htmlFor="patientId">Select Patient:</label>
-                <Select
-                    id="patientId"
-                    options={patientOptions}
-                    onChange={handlePatientChange}
-                    placeholder="Select a patient"
-                />
+                {userType !== 'doctor' && (
+                    <div>
+                        <label htmlFor="doctorId">Select Doctor:</label>
+                        <Select
+                            id="doctorId"
+                            options={doctorOptions}
+                            onChange={handleDoctorChange}
+                            placeholder="Select a doctor"
+                        />
+                    </div>
+                )}
+
+                {userType !== 'doctor' && userType !== 'patient' && (
+                    <div>
+                        <label htmlFor="patientId">Select Patient:</label>
+                        <Select
+                            id="patientId"
+                            options={patientOptions}
+                            onChange={handlePatientChange}
+                            placeholder="Select a patient"
+                        />
+                    </div>
+                )}
+
                 <label htmlFor="img">Image:</label>
                 <input
                     type="file"
@@ -146,8 +161,8 @@ function AddMedicalReportModal({ modalfunc }) {
                 <button
                     className="login-button"
                     onClick={handleAddReport}
-                    disabled={uploading} // Disable button while uploading
-                    style={{ backgroundColor: uploading ? 'red' : 'initial' }} // Change button color
+                    disabled={uploading}
+                    style={{ backgroundColor: uploading ? 'red' : 'initial' }}
                 >
                     {uploading ? 'Uploading...' : 'Add'}
                 </button>

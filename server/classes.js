@@ -199,14 +199,24 @@ class MedicalReportClass {
     this.reportUrl = reportUrl;
   }
   addToDatabase() {
-    const sql = `INSERT INTO MedicalReports(patientID, doctorID, reportUrl, reportDate, reportContent) VALUES(${this.patientID}, ${this.doctorID}, '${this.reportUrl}', '${this.reportDate}', '${this.content}')`;
+    const sql = `
+        INSERT INTO MedicalReports(patientID, doctorID, reportUrl, reportDate, reportContent) 
+        VALUES (
+            (SELECT patientID FROM Patients WHERE personID = ${this.patientID}),
+            (SELECT doctorID FROM Doctors WHERE personID = ${this.doctorID}),
+            '${this.reportUrl}', 
+            '${this.reportDate}', 
+            '${this.content}'
+        )
+    `;
     this.connection.query(sql, (err, result) => {
-      if (err) throw err;
+      if (err) console.log(err);
       console.log("MedicalReport eklendi!");
     });
   }
-
 }
+
+
 class Manager {
   static deletePatient(connection, id, res) { //patient id yollanacak
     const sql = `DELETE FROM patients WHERE patientID = ${id} `

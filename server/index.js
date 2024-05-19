@@ -66,6 +66,8 @@ app.post('/registerPatient', async (req, res) => {
 
 });
 
+
+
 // /addDoctor endpoint'i
 app.post('/addDoctor', authenticateToken, async (req, res) => {
     const { name, surName, password, specialization, hospital } = req.body;
@@ -85,6 +87,7 @@ app.post('/addAppointment', authenticateToken, (req, res) => {
 
 // /addMedicalReport endpoint'i
 app.post('/addMedicalReport', authenticateToken, (req, res) => {
+    console.log(req.body)
     const { patientID, doctorID, reportUrl } = req.body;
     const reportDate = new Date().toISOString().slice(0, 19).replace('T', ' ');
     const content = {};  // Example content, should be valid JSON
@@ -108,6 +111,7 @@ app.post('/editMedicalReport', authenticateToken, (req, res) => {
         }
     });
 });
+
 
 app.post('/checkLogin', (req, res) => {
     const { username, password, userType } = req.body;
@@ -277,6 +281,33 @@ app.post('/getMyAppointments', authenticateToken, (req, res) => {
     else if (userType == 'doctor') DoctorClass.getMyAppointments(connection, id, res);
 
 })
+app.post('/getMyPatients', authenticateToken, (req, res) => {
+    const { id } = req.body
+
+    const query = `SELECT DISTINCT
+    Patients.patientID,
+    Persons.name,
+    Persons.surname,
+    Patients.birthDate,
+    Patients.gender,
+    Patients.phoneNumber,
+    Patients.address
+FROM MedicalReports
+INNER JOIN Patients ON MedicalReports.patientID = Patients.patientID
+INNER JOIN Persons ON Patients.personID = Persons.personID
+WHERE MedicalReports.doctorID = (
+    SELECT Doctors.doctorID
+    FROM Doctors
+    WHERE Doctors.personID =${id}
+);`
+    connection.query(query, (err, results) => {
+        res.status(200).json({ result: results });
+        //console.log(results);
+        //console.log(err);
+
+    })
+})
+
 app.get('/getSpec', authenticateToken, (req, res) => {
     const query = `
         SELECT distinct specialization FROM doctors;
@@ -302,6 +333,33 @@ app.post('/getDoctorInfoForSpec', authenticateToken, (req, res) => {
         res.status(200).json({ result: results });
     })
 })
+
+app.post('/getPatientMedicalReports', authenticateToken, (req, res) => {
+    console.log(req.body)
+    const patientId = req.body.id;
+    if (!patientId) {
+        return res.status(400).send({ error: 'Missing patient id' });
+    }
+
+    const query = `
+    SELECT MedicalReports.*, Persons.name, Persons.surname
+    FROM MedicalReports 
+    INNER JOIN Patients ON MedicalReports.patientID = Patients.patientID 
+    INNER JOIN Doctors ON MedicalReports.doctorID = Doctors.doctorID
+    INNER JOIN Persons ON Doctors.personID = Persons.personID
+    WHERE Patients.personID = ${patientId}
+`;
+
+    connection.query(query, (err, results) => {
+        if (err) {
+            console.error(err);
+            res.status(500).json({ status: 'error', message: 'Database error' });
+        } else {
+            console.log(results)
+            res.status(200).json({ 'results': results });
+        }
+    });
+});
 
 app.get('/checkToken', (req, res) => {
     const authHeader = req.headers['authorization'];
