@@ -423,15 +423,6 @@ docker exec -it hospital-system-mysql-1 mysql -uroot -prootpassword Hospital
 
 > 💡 **Not:** Docker dışında çalıştırıyorsanız, `host` değerlerini `localhost` olarak güncelleyin.
 
----
-
-## 🌐 Canlı Demo
-
-Projenin canlı versiyonuna şu adresten erişebilirsiniz:
-
-🔗 **https://hospital.velnom.xyz/**
-
----
 
 ## 📝 Notlar
 
@@ -465,23 +456,6 @@ Projenin canlı versiyonuna şu adresten erişebilirsiniz:
 
 Bu proje açık kaynaklıdır ve eğitim amaçlı geliştirilmiştir.
 
----
-
-## 👨‍💻 Geliştirici
-
-**Yunus Hanifi**
-
-- GitHub: [@yunushanifi84](https://github.com/yunushanifi84)
-
----
-
-## 📞 Destek
-
-Sorularınız veya önerileriniz için:
-- GitHub Issues kullanabilirsiniz
-- Pull Request gönderebilirsiniz
-
----
 
 ## 🎉 Teşekkürler
 
