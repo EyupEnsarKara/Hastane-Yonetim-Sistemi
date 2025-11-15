@@ -1,0 +1,8 @@
+{
+    "host": "mysql",
+    "user": "root",
+    "password": "rootpassword",
+    "database": "Hospital",
+    "port": "4444",
+    "secretKey": "nom"
+}
